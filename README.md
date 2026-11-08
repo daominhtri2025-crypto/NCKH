@@ -15,7 +15,7 @@
 ## Mô-đun
 
 - **Module 1: Sân chơi tình huống.** Đã hoàn thiện: 5 tình huống về cuộc gọi giả mạo, OTP, tin nhắn trúng thưởng, tài khoản mạo danh và trang thanh toán giả.
-- **Module 2: Thám tử không gian mạng.** Đã hoàn thiện: 12 URL (5 chính thống, 7 giả mạo theo 5 kiểu đánh lừa), có thẻ "Đọc từ phải sang trái" và giải thích sau mỗi lượt. Mọi tên miền dùng đuôi `.test` hoặc `.example`.
+- **Module 2: Thám tử không gian mạng.** Đã hoàn thiện: 12 URL (5 chính thống, 7 giả mạo theo 5 kiểu đánh lừa), có thẻ "Đọc từ phải sang trái" và giải thích sau mỗi lượt. Tên miền hư cấu: đuôi `.test`, `.example`, hoặc `.io.vn` (có dấu hiệu hư cấu "phong"). Vị trí hai nút đáp án được đảo ngẫu nhiên theo học sinh và mục.
 - **Module 3: Phòng thí nghiệm tài khoản.** Đang phát triển.
 
 ## Bắt đầu nhanh

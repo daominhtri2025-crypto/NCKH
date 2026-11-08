@@ -45,6 +45,7 @@ final class Module2Service
                 'position' => $position + 1,
                 'status' => $state === null ? 'new' : 'answered',
                 'correct' => $state['first_is_safe'] ?? null,
+                'button_order' => $this->buttonOrder((string) $participant['code'], (string) $item['id']),
             ];
         }
 
@@ -64,6 +65,17 @@ final class Module2Service
                 'accuracy_percent' => $answered > 0 ? (int) round($correct * 100 / $answered) : 0,
             ],
         ];
+    }
+
+    /**
+     * Thứ tự hai nút đáp án cho từng (học sinh, mục). Xác định bằng băm nên ổn định khi tải lại trang,
+     * không cần lưu trữ, và khác nhau giữa các học sinh để triệt tiêu thiên lệch vị trí nút.
+     * Thứ tự câu hỏi vẫn cố định; chỉ vị trí hai nút thay đổi.
+     */
+    public function buttonOrder(string $participantCode, string $itemId): string
+    {
+        $digest = hash('sha256', $participantCode . '|' . $itemId, true);
+        return (ord($digest[0]) % 2) === 0 ? 'official_first' : 'fake_first';
     }
 
     /**

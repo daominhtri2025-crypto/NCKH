@@ -12,6 +12,11 @@ interface Props {
   onNext: () => void;
 }
 
+/** Vị trí hai nút do máy chủ quyết định theo học sinh và mục, để tránh thiên lệch vị trí. */
+function verdictButtons(order: Module2Item['button_order']): Verdict[] {
+  return order === 'official_first' ? ['official', 'fake'] : ['fake', 'official'];
+}
+
 /**
  * Một lượt chơi: hiển thị URL, cho phép mở gợi ý "đọc từ phải sang trái", nhận phân loại,
  * rồi phản hồi kèm giải thích. Thời gian phản hồi đo từ lúc hiển thị lượt chơi.
@@ -89,22 +94,17 @@ export default function DetectiveRound({ item, position, total, onAnswered, onNe
 
       {result === null && (
         <div className="verdicts">
-          <button
-            type="button"
-            className="btn btn-xl verdict verdict-official"
-            onClick={() => classify('official')}
-            disabled={submitting}
-          >
-            ✅ Chính thống
-          </button>
-          <button
-            type="button"
-            className="btn btn-xl verdict verdict-fake"
-            onClick={() => classify('fake')}
-            disabled={submitting}
-          >
-            ⚠️ Giả mạo
-          </button>
+          {verdictButtons(item.button_order).map((v) => (
+            <button
+              key={v}
+              type="button"
+              className={`btn btn-xl verdict verdict-${v}`}
+              onClick={() => classify(v)}
+              disabled={submitting}
+            >
+              {v === 'official' ? '✅ Chính thống' : '⚠️ Giả mạo'}
+            </button>
+          ))}
         </div>
       )}
 

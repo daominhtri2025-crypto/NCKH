@@ -1,76 +1,76 @@
 {
   "module": 2,
-  "version": "m2-v1",
+  "version": "m2-v2",
   "title": "Thám tử không gian mạng",
   "rule": {
     "name": "Đọc từ phải sang trái",
     "steps": [
-      "Bước 1: Nhìn phần cuối cùng của địa chỉ (ví dụ .example hoặc .test). Đó là đuôi miền.",
-      "Bước 2: Đọc ngược sang trái để tìm phần gốc: tên chính do đơn vị sở hữu đăng ký, nằm ngay trước đuôi.",
+      "Bước 1: Nhìn phần cuối cùng của địa chỉ, ví dụ .io.vn hoặc .test. Đó là đuôi miền.",
+      "Bước 2: Đọc ngược sang trái để tìm phần gốc: tên do đơn vị đăng ký, đứng ngay trước đuôi. Với đuôi .io.vn, phần gốc gồm cả đuôi, ví dụ tên.io.vn.",
       "Bước 3: So phần gốc với danh sách tên chính thức. Khớp từng ký tự thì mới là chính thống; những phần đứng trước phần gốc chỉ là tên miền con và không quyết định độ tin cậy."
     ]
   },
   "official_roots": [
-    "uubnd-mophong.example",
-    "ngan-hang-mophong.example"
+    "uubnd-mophong.io.vn",
+    "ngan-hang-mophong.io.vn"
   ],
-  "reference_note": "Trong bài học này, cổng chính thức được mô phỏng bằng đuôi .example để an toàn. Ngoài đời thật, các cơ quan nhà nước Việt Nam dùng đuôi .gov.vn; ngân hàng dùng tên miền riêng đã đăng ký.",
+  "reference_note": "Trong bài học này, cổng chính thức dùng tên miền hư cấu dưới đuôi .io.vn, không phải cơ quan thật. Ngoài đời, các cơ quan nhà nước Việt Nam dùng đuôi .gov.vn; ngân hàng dùng tên miền riêng đã đăng ký.",
   "items": [
     {
       "id": "m2-01-cong-chinh-tra-cuu",
-      "url": "https://cong.uubnd-mophong.example/tra-cuu-ho-so",
-      "root_domain": "uubnd-mophong.example",
+      "url": "https://cong.uubnd-mophong.io.vn/tra-cuu-ho-so",
+      "root_domain": "uubnd-mophong.io.vn",
       "is_official": true,
       "trick": "none",
-      "explanation": "Phần gốc là uubnd-mophong.example, khớp với tên chính thức. Phần 'cong.' đứng trước chỉ là tên miền con."
+      "explanation": "Phần gốc là uubnd-mophong.io.vn, khớp với tên chính thức. Phần 'cong.' đứng trước chỉ là tên miền con."
     },
     {
       "id": "m2-02-thong-bao-chinh-thuc",
-      "url": "https://uubnd-mophong.example/thong-bao",
-      "root_domain": "uubnd-mophong.example",
+      "url": "https://uubnd-mophong.io.vn/thong-bao",
+      "root_domain": "uubnd-mophong.io.vn",
       "is_official": true,
       "trick": "none",
-      "explanation": "Phần gốc uubnd-mophong.example khớp hoàn toàn với tên chính thức, đuôi .example đúng, không có ký tự nào bị thay đổi."
+      "explanation": "Phần gốc uubnd-mophong.io.vn khớp hoàn toàn với tên chính thức, đuôi .io.vn đúng, không có ký tự nào bị thay đổi."
     },
     {
       "id": "m2-03-ngan-hang-chinh-thuc",
-      "url": "https://ebank.ngan-hang-mophong.example/dang-nhap",
-      "root_domain": "ngan-hang-mophong.example",
+      "url": "https://ebank.ngan-hang-mophong.io.vn/dang-nhap",
+      "root_domain": "ngan-hang-mophong.io.vn",
       "is_official": true,
       "trick": "none",
-      "explanation": "Phần gốc ngan-hang-mophong.example khớp với danh sách chính thức. Trang đăng nhập nằm dưới tên miền đó."
+      "explanation": "Phần gốc ngan-hang-mophong.io.vn khớp với danh sách chính thức. Trang đăng nhập nằm dưới tên miền đó."
     },
     {
       "id": "m2-04-huong-dan-thu-tuc",
-      "url": "https://cong.uubnd-mophong.example/huong-dan-thu-tuc",
-      "root_domain": "uubnd-mophong.example",
+      "url": "https://cong.uubnd-mophong.io.vn/huong-dan-thu-tuc",
+      "root_domain": "uubnd-mophong.io.vn",
       "is_official": true,
       "trick": "none",
       "explanation": "Đây là trang chính thức: phần gốc khớp đúng tên đã biết. Các trang con khác nhau không làm thay đổi độ tin cậy của tên miền."
     },
     {
       "id": "m2-05-ho-tro-ngan-hang",
-      "url": "https://ngan-hang-mophong.example/ho-tro",
-      "root_domain": "ngan-hang-mophong.example",
+      "url": "https://ngan-hang-mophong.io.vn/ho-tro",
+      "root_domain": "ngan-hang-mophong.io.vn",
       "is_official": true,
       "trick": "none",
-      "explanation": "Phần gốc ngan-hang-mophong.example khớp với tên chính thức. Không có tên miền con nào che giấu phần gốc."
+      "explanation": "Phần gốc ngan-hang-mophong.io.vn khớp với tên chính thức. Không có tên miền con nào che giấu phần gốc."
     },
     {
       "id": "m2-06-thay-ky-tu-o-thanh-0",
-      "url": "https://cong.uubnd-m0phong.example/tra-cuu-ho-so",
-      "root_domain": "uubnd-m0phong.example",
+      "url": "https://cong.uubnd-m0phong.io.vn/tra-cuu-ho-so",
+      "root_domain": "uubnd-m0phong.io.vn",
       "is_official": false,
       "trick": "thay-ky-tu",
       "explanation": "Chữ 'o' trong 'mophong' đã bị thay bằng số '0': uubnd-m0phong. Mắt nhìn lướt rất dễ bỏ qua khác biệt này. Phần gốc không khớp tên chính thức nên đây là giả mạo."
     },
     {
       "id": "m2-07-ten-chinh-lam-ten-mien-con",
-      "url": "https://uubnd-mophong.example.hoso-tra-cuu.test/tra-cuu",
+      "url": "https://uubnd-mophong.io.vn.hoso-tra-cuu.test/tra-cuu",
       "root_domain": "hoso-tra-cuu.test",
       "is_official": false,
       "trick": "ten-mien-con",
-      "explanation": "Tên chính thức uubnd-mophong.example xuất hiện ở giữa, nhưng nó chỉ là tên miền con. Phần gốc thật là hoso-tra-cuu.test, do kẻ lạ đăng ký. Đây là dạng đánh lừa phổ biến nhất."
+      "explanation": "Tên chính thức uubnd-mophong.io.vn xuất hiện ở giữa, nhưng nó chỉ là tên miền con. Phần gốc thật là hoso-tra-cuu.test, do kẻ lạ đăng ký. Đây là dạng đánh lừa phổ biến nhất."
     },
     {
       "id": "m2-08-doi-duoi-org",
@@ -78,7 +78,7 @@
       "root_domain": "uubnd-mophong.org.test",
       "is_official": false,
       "trick": "doi-duoi",
-      "explanation": "Tên miền đổi đuôi từ .example sang .org.test. Tên chính thức khác với uubnd-mophong.example, nên đây là giả mạo. Chỉ đổi đuôi không làm nó thành tên chính thức."
+      "explanation": "Tên miền đổi đuôi từ .io.vn sang .org.test. Tên chính thức khác với uubnd-mophong.io.vn, nên đây là giả mạo. Chỉ đổi đuôi không làm nó thành tên chính thức."
     },
     {
       "id": "m2-09-doi-duoi-cc",
@@ -86,19 +86,19 @@
       "root_domain": "ngan-hang-mophong.cc.test",
       "is_official": false,
       "trick": "doi-duoi",
-      "explanation": "Đuôi .cc.test không phải tên chính thức. Phần gốc ngan-hang-mophong.cc.test khác với ngan-hang-mophong.example, nên đây là giả mạo dù tên nghe rất quen."
+      "explanation": "Đuôi .cc.test không phải tên chính thức. Phần gốc ngan-hang-mophong.cc.test khác với ngan-hang-mophong.io.vn, nên đây là giả mạo dù tên nghe rất quen."
     },
     {
       "id": "m2-10-them-tu-dang-nhap",
-      "url": "https://ngan-hang-mophong-dangnhap.example/",
-      "root_domain": "ngan-hang-mophong-dangnhap.example",
+      "url": "https://ngan-hang-mophong-dangnhap.io.vn/",
+      "root_domain": "ngan-hang-mophong-dangnhap.io.vn",
       "is_official": false,
       "trick": "them-tu",
-      "explanation": "Kẻ gian thêm '-dangnhap' vào tên chính thức để trông có vẻ hợp lý. Phần gốc đã đổi thành ngan-hang-mophong-dangnhap.example, không khớp danh sách chính thức."
+      "explanation": "Kẻ gian thêm '-dangnhap' vào tên chính thức để trông có vẻ hợp lý. Phần gốc đã đổi thành ngan-hang-mophong-dangnhap.io.vn, không khớp danh sách chính thức."
     },
     {
       "id": "m2-11-ten-chinh-o-duong-dan",
-      "url": "https://dang-nhap-an-toan.test/uubnd-mophong.example/tra-cuu",
+      "url": "https://dang-nhap-an-toan.test/uubnd-mophong.io.vn/tra-cuu",
       "root_domain": "dang-nhap-an-toan.test",
       "is_official": false,
       "trick": "duong-dan",
@@ -106,8 +106,8 @@
     },
     {
       "id": "m2-12-ngan-hang-thay-ky-tu",
-      "url": "https://ebank.ngan-harng-mophong.example/dang-nhap",
-      "root_domain": "ngan-harng-mophong.example",
+      "url": "https://ebank.ngan-harng-mophong.io.vn/dang-nhap",
+      "root_domain": "ngan-harng-mophong.io.vn",
       "is_official": false,
       "trick": "thay-ky-tu",
       "explanation": "Kẻ gian đã thêm chữ 'r' vào 'hang' để thành 'harng'. Chỉ thêm một ký tự như vậy cũng đủ làm đổi tên miền. Đây là kiểu giả mạo đọc lướt rất khó nhận ra. Phần gốc không khớp tên chính thức."

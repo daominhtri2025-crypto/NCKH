@@ -63,6 +63,7 @@ export interface Module2Item {
   position: number;
   status: 'new' | 'answered';
   correct: boolean | null;
+  button_order: 'official_first' | 'fake_first';
 }
 
 export interface Module2Overview {

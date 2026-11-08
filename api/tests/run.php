@@ -208,12 +208,22 @@ check('Mỗi mục có host và root_domain để hiển thị cách đọc', is
 $allSafe = true;
 foreach ($items as $it) {
     $host = (string) parse_url($it['url'], PHP_URL_HOST);
-    $tld = substr($host, strrpos($host, '.') + 1);
-    if (!in_array($tld, ['test', 'example'], true)) {
+    $ok = str_ends_with($host, '.test') || str_ends_with($host, '.example')
+        || (str_ends_with($host, '.io.vn') && str_contains($host, 'phong'));
+    if (!$ok) {
         $allSafe = false;
     }
 }
-check('Mọi tên miền trong Module 2 đều dùng đuôi .test hoặc .example', $allSafe);
+check('Mọi tên miền trong Module 2 là hư cấu (.test, .example, hoặc .io.vn có dấu hiệu hư cấu)', $allSafe);
+
+$orders = array_column($items, 'button_order');
+check('Mỗi mục có thứ tự nút đáp án hợp lệ', count(array_filter($orders, fn ($o) => in_array($o, ['official_first', 'fake_first'], true))) === 12);
+check('Thứ tự nút ngẫu nhiên giữa các mục (có cả hai kiểu)', in_array('official_first', $orders, true) && in_array('fake_first', $orders, true));
+$again = call('GET', '/api/module2', null, $t2Cookie);
+check('Thứ tự nút ổn định khi tải lại trang', array_column($again->body['items'], 'button_order') === $orders);
+$otherStudent = sessionTokenFrom(call('POST', '/api/participants', ['class_code' => '8A1', 'consent' => true, 'consent_version' => 'v1']));
+$otherOrders = array_column(call('GET', '/api/module2', null, ['ats_session' => (string) $otherStudent])->body['items'], 'button_order');
+check('Thứ tự nút khác nhau giữa các học sinh', $otherOrders !== $orders);
 
 $badVerdict = call('POST', '/api/module2/items/m2-06-thay-ky-tu-o-thanh-0/answer', ['verdict' => 'maybe'], $t2Cookie);
 check('Phân loại không hợp lệ bị từ chối (422)', $badVerdict->status === 422);
@@ -288,6 +298,9 @@ check('Nội dung Module 2 hợp lệ (12 mục)', count($ok->items()) === 12);
 expectRejected('Từ chối tên miền thật (.gov.vn)', function (array &$d): void {
     $d['items'][0]['url'] = 'https://sontra.danang.gov.vn/';
     $d['items'][0]['root_domain'] = 'danang.gov.vn';
+}, 'Không được dùng tên miền thật');
+expectRejected('Từ chối tên gốc chính thức không có dấu hiệu hư cấu (.io.vn)', function (array &$d): void {
+    $d['official_roots'][] = 'ten-that.io.vn';
 }, 'Không được dùng tên miền thật');
 expectRejected('Từ chối tên miền thật (.com) trong tên gốc chính thức', function (array &$d): void {
     $d['official_roots'][] = 'example.com';

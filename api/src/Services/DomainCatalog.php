@@ -9,13 +9,17 @@ use RuntimeException;
 /**
  * Nạp và kiểm tra nội dung Module 2 (Thám tử không gian mạng).
  *
- * Chốt an toàn: mọi tên miền trong nội dung phải dùng đuôi mô phỏng .test hoặc .example
- * (RFC 2606). Nội dung không được chứa tên miền thật, kể cả khi do người biên soạn nhập nhầm.
+ * Chốt an toàn: mọi tên miền trong nội dung phải thuộc một trong các hậu tố sau:
+ *  - .test, .example (dành riêng cho thử nghiệm theo RFC 2606);
+ *  - .io.vn, chỉ khi tên gốc chứa dấu hiệu hư cấu "phong" (ví dụ uubnd-mophong.io.vn).
+ * Tên gốc dưới .io.vn không có dấu hiệu hư cấu sẽ bị từ chối, để không vô tình dùng tên thật.
  * Nhãn "chính thống" phải nhất quán với danh sách tên gốc chính thức.
  */
 final class DomainCatalog
 {
-    public const SAFE_TLDS = ['test', 'example'];
+    /** Hậu tố được phép. .io.vn yêu cầu thêm dấu hiệu hư cấu (xem assertSafeDomain). */
+    public const SAFE_SUFFIXES = ['.test', '.example', '.io.vn'];
+    public const FICTION_MARKER = 'phong';
     public const TRICKS = ['none', 'thay-ky-tu', 'ten-mien-con', 'doi-duoi', 'them-tu', 'duong-dan'];
 
     /** @var array<string,mixed> */
@@ -175,11 +179,19 @@ final class DomainCatalog
 
     private function assertSafeDomain(string $domain, string $what): void
     {
-        $labels = explode('.', $domain);
-        $tld = end($labels);
-        if (count($labels) < 2 || !in_array($tld, self::SAFE_TLDS, true)) {
+        $suffix = null;
+        foreach (self::SAFE_SUFFIXES as $candidate) {
+            if (str_ends_with($domain, $candidate) && strlen($domain) > strlen($candidate)) {
+                $suffix = $candidate;
+                break;
+            }
+        }
+        $name = $suffix === null ? '' : substr($domain, 0, -strlen($suffix));
+        // Với .io.vn, tên trước đuôi phải có dấu hiệu hư cấu; .test và .example luôn là hư cấu theo RFC 2606.
+        $fictional = $suffix === '.io.vn' ? str_contains($name, self::FICTION_MARKER) : $suffix !== null;
+        if ($suffix === null || !$fictional || $name === '') {
             throw new RuntimeException(
-                "Không được dùng tên miền thật: {$what} '{$domain}'. Chỉ dùng đuôi mô phỏng .test hoặc .example."
+                "Không được dùng tên miền thật: {$what} '{$domain}'. Chỉ dùng .test, .example, hoặc .io.vn có dấu hiệu hư cấu."
             );
         }
     }
