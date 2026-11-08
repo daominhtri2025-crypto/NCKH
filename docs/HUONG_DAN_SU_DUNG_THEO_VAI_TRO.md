@@ -121,7 +121,7 @@ Nhóm này chịu trách nhiệm chạy, bảo trì, và xuất dữ liệu nghi
 php api/bin/add_class.php <MÃ_LỚP> "<Tên lớp>" "<Tên trường>"
 ```
 
-Ví dụ: `php api/bin/add_class.php 8A1 "Lớp 8A1" "THCS Hoàng Sa, phân hiệu Lý Tự Trọng"`
+Ví dụ: `php api/bin/add_class.php 8A1 "Lớp 8A1" "Tên cơ sở giáo dục"`
 
 ### 3.3. Cấu hình
 
