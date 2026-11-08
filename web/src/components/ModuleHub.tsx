@@ -1,6 +1,7 @@
 interface Props {
   onOpenModule1: () => void;
   onOpenModule2: () => void;
+  onOpenModule3: () => void;
 }
 
 interface ModuleCard {
@@ -12,7 +13,7 @@ interface ModuleCard {
   onOpen?: () => void;
 }
 
-export default function ModuleHub({ onOpenModule1, onOpenModule2 }: Props) {
+export default function ModuleHub({ onOpenModule1, onOpenModule2, onOpenModule3 }: Props) {
   const modules: ModuleCard[] = [
     {
       key: 'm1',
@@ -35,7 +36,8 @@ export default function ModuleHub({ onOpenModule1, onOpenModule2 }: Props) {
       title: 'Phòng thí nghiệm tài khoản',
       description: 'Kiểm tra độ mạnh mật khẩu và cài đặt quyền riêng tư.',
       icon: '🔐',
-      available: false,
+      available: true,
+      onOpen: onOpenModule3,
     },
   ];
 

@@ -64,4 +64,18 @@ final class EventRepository
         }
         return $summary;
     }
+
+    /**
+     * Danh sách mã mục đã đạt (có ít nhất một lần is_safe = 1).
+     *
+     * @return list<string>
+     */
+    public function passedItemIds(int $participantId, int $module): array
+    {
+        $stmt = Database::pdo()->prepare(
+            'SELECT DISTINCT item_id FROM module_events WHERE participant_id = ? AND module = ? AND is_safe = 1'
+        );
+        $stmt->execute([$participantId, $module]);
+        return array_map(static fn (array $row): string => (string) $row['item_id'], $stmt->fetchAll());
+    }
 }

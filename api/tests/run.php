@@ -272,6 +272,80 @@ check('Mục chính thống trả lời sai: choice_index = 1, is_safe = 0, hint
 $m1Hint = (int) $pdo->query("SELECT COUNT(*) FROM module_events WHERE module = 1 AND hint_used IS NULL")->fetchColumn();
 check('Module 1 không ghi hint_used (NULL)', $m1Hint === (int) $pdo->query("SELECT COUNT(*) FROM module_events WHERE module = 1")->fetchColumn());
 
+echo "Module 3: phòng thí nghiệm bảo mật tài khoản\n";
+$t3 = sessionTokenFrom(call('POST', '/api/participants', ['class_code' => '8A1', 'consent' => true, 'consent_version' => 'v1']));
+$t3Cookie = ['ats_session' => (string) $t3];
+check('Module 3 yêu cầu đăng nhập (401)', call('GET', '/api/module3')->status === 401);
+
+$m3 = call('GET', '/api/module3', null, $t3Cookie);
+check('Tổng quan Module 3 (200)', $m3->status === 200);
+$platforms = $m3->body['platforms'] ?? [];
+check('Có 2 nền tảng (Zalo, Facebook)', count($platforms) === 2);
+$allSteps = array_merge(...array_column($platforms, 'steps'));
+check('Tổng cộng 8 bước checklist', count($allSteps) === 8, (string) count($allSteps));
+$m3Json = (string) json_encode($m3->body, JSON_UNESCAPED_UNICODE);
+check('Tổng quan không lộ đáp án đúng hay giải thích', !str_contains($m3Json, 'correct_choice') && !str_contains($m3Json, 'explanation') && !str_contains($m3Json, '"correct"'));
+check('Tổng quan có cảnh báo về tính cập nhật của menu', $m3->body['disclaimer'] !== '');
+check('Ban đầu chưa có bước nào đạt', $m3->body['progress']['passed_steps'] === 0);
+
+$stepId = $allSteps[0]['id'];
+check('Từ chối khi chưa xác nhận đã thực hành (422)',
+    call('POST', "/api/module3/steps/{$stepId}/complete", ['quiz_choice' => 0, 'practiced' => false], $t3Cookie)->status === 422);
+check('Từ chối chỉ số đáp án ngoài phạm vi (422)',
+    call('POST', "/api/module3/steps/{$stepId}/complete", ['quiz_choice' => 9, 'practiced' => true], $t3Cookie)->status === 422);
+check('Bước không tồn tại (404)',
+    call('POST', '/api/module3/steps/khong-co/complete', ['quiz_choice' => 0, 'practiced' => true], $t3Cookie)->status === 404);
+
+$wrong = call('POST', "/api/module3/steps/{$stepId}/complete", ['quiz_choice' => 1, 'practiced' => true, 'response_ms' => 8000], $t3Cookie);
+check('Trả lời sai câu kiểm tra: passed = false, attempt 1', $wrong->status === 201 && $wrong->body['passed'] === false && $wrong->body['attempt_no'] === 1);
+check('Phản hồi có đáp án đúng và giải thích sau khi trả lời', isset($wrong->body['correct_choice']) && $wrong->body['explanation'] !== '');
+$right = call('POST', "/api/module3/steps/{$stepId}/complete", ['quiz_choice' => (int) $wrong->body['correct_choice'], 'practiced' => true], $t3Cookie);
+check('Thử lại đúng: passed = true, attempt 2', $right->body['passed'] === true && $right->body['attempt_no'] === 2 && $right->body['is_first_attempt'] === false);
+
+$m3b = call('GET', '/api/module3', null, $t3Cookie);
+$firstStep = $m3b->body['platforms'][0]['steps'][0];
+check('Bước đã đạt hiển thị trạng thái passed', $firstStep['status'] === 'passed' && $firstStep['attempts'] === 2);
+check('Tiến độ: 1/8 bước đạt (13%)', $m3b->body['progress']['passed_steps'] === 1 && $m3b->body['progress']['score_percent'] === 13);
+
+$lastStep = $allSteps[7]['id'];
+call('POST', "/api/module3/steps/{$lastStep}/complete", ['quiz_choice' => 0, 'practiced' => true], $t3Cookie);
+
+check('Phòng thí nghiệm: từ chối trường password (422)',
+    call('POST', '/api/module3/lab', ['best_band' => 'strong', 'password' => 'Abc!2345'], $t3Cookie)->status === 422);
+check('Phòng thí nghiệm: từ chối mức đạt không hợp lệ (422)',
+    call('POST', '/api/module3/lab', ['best_band' => 'mega'], $t3Cookie)->status === 422);
+$lab = call('POST', '/api/module3/lab', ['best_band' => 'strong'], $t3Cookie);
+check('Phòng thí nghiệm: mức mạnh được ghi nhận đạt (201)', $lab->status === 201 && $lab->body['passed'] === true);
+$m3c = call('GET', '/api/module3', null, $t3Cookie);
+check('Tổng quan phản ánh phòng thí nghiệm đã đạt', $m3c->body['lab']['passed'] === true);
+
+$m3Rows = $pdo->query("SELECT item_id, choice_index, is_safe, attempt_no, response_ms FROM module_events WHERE module = 3 ORDER BY id")->fetchAll();
+check('Ghi nhật ký Module 3: 2 lần thử bước đầu + 1 bước cuối + 1 phòng thí nghiệm = 4 dòng',
+    count($m3Rows) === 4, (string) count($m3Rows));
+check('Lần thử sai: is_safe = 0; lần đúng: is_safe = 1',
+    (int) $m3Rows[0]['is_safe'] === 0 && (int) $m3Rows[1]['is_safe'] === 1);
+check('Phòng thí nghiệm: is_safe = 1 khi mạnh (choice_index = 2)',
+    $m3Rows[3]['item_id'] === 'lab-strength' && (int) $m3Rows[3]['is_safe'] === 1 && (int) $m3Rows[3]['choice_index'] === 2);
+check('Nhật ký Module 3 không chứa nội dung mật khẩu (cột chỉ có số và mã)',
+    !str_contains((string) json_encode($m3Rows), 'Abc!2345'));
+
+echo "Kiểm tra nội dung checklist Module 3\n";
+$badChecklist = tempnam(sys_get_temp_dir(), 'ckl');
+file_put_contents($badChecklist, json_encode(['module' => 3, 'version' => 'x', 'title' => 'x', 'disclaimer' => 'd', 'platforms' => [[
+    'id' => 'p', 'name' => 'P', 'steps' => [[
+        'id' => 'bad-step', 'title' => 'T', 'instruction' => 'I', 'why' => 'W',
+        'quiz' => ['question' => 'Q', 'explanation' => 'E', 'options' => ['a', 'b'], 'correct' => 5],
+    ]],
+]]]));
+$rejectedCkl = false;
+try {
+    new AnToanSo\Services\ChecklistCatalog($badChecklist);
+} catch (RuntimeException $e) {
+    $rejectedCkl = str_contains($e->getMessage(), 'nằm ngoài phạm vi');
+}
+unlink($badChecklist);
+check('Từ chối checklist có đáp án đúng nằm ngoài phạm vi', $rejectedCkl);
+
 echo "Kiểm tra nội dung Module 2 (chốt an toàn)\n";
 function domainCatalogFrom(callable $mutate): string
 {

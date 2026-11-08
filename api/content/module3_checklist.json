@@ -1,0 +1,148 @@
+{
+  "module": 3,
+  "version": "m3-v1",
+  "title": "Phòng thí nghiệm bảo mật tài khoản",
+  "disclaimer": "Tên mục trong menu thay đổi theo phiên bản ứng dụng và hệ điều hành. Đây là hướng dẫn tổng quát; giáo viên cần đối chiếu với ứng dụng thực tế trước khi dùng cho học sinh.",
+  "platforms": [
+    {
+      "id": "zalo",
+      "name": "Zalo",
+      "steps": [
+        {
+          "id": "m3-zalo-01-an-so-dien-thoai",
+          "title": "Tắt tìm kiếm bằng số điện thoại",
+          "instruction": "Vào Cài đặt → Quyền riêng tư, tìm mục cho phép người khác tìm thấy em qua số điện thoại và tắt đi.",
+          "why": "Số điện thoại là thông tin kẻ lạ dễ có được. Khi tắt, người lạ không tìm được tài khoản của em chỉ bằng số.",
+          "quiz": {
+            "question": "Vì sao nên tắt tìm kiếm bằng số điện thoại?",
+            "options": [
+              "Để người lạ không tìm thấy và thêm em chỉ bằng số điện thoại",
+              "Để tiết kiệm pin điện thoại",
+              "Để không nhận được tin nhắn từ bạn bè"
+            ],
+            "correct": 0,
+            "explanation": "Tắt tính năng này giảm khả năng kẻ lạ tiếp cận em. Bạn bè vẫn liên lạc được qua danh bạ đã lưu."
+          }
+        },
+        {
+          "id": "m3-zalo-02-chan-nguoi-la",
+          "title": "Chặn tin nhắn và cuộc gọi từ người lạ",
+          "instruction": "Trong phần Quyền riêng tư, bật tùy chọn chỉ nhận tin nhắn từ bạn bè hoặc người trong danh bạ.",
+          "why": "Nhiều vụ lừa đảo bắt đầu bằng một tin nhắn từ tài khoản lạ.",
+          "quiz": {
+            "question": "Người lạ nhắn xin tiền và nói là bạn cũ của em. Em nên làm gì?",
+            "options": [
+              "Chuyển tiền ngay vì có vẻ quen",
+              "Không trả lời, chặn tài khoản và báo người lớn",
+              "Hỏi cả nhóm lớp xem có ai quen không"
+            ],
+            "correct": 1,
+            "explanation": "Chặn và báo người lớn là cách an toàn nhất. Hỏi nhóm không xác minh được danh tính."
+          }
+        },
+        {
+          "id": "m3-zalo-03-xac-thuc-hai-lop",
+          "title": "Bật xác thực hai lớp",
+          "instruction": "Vào Cài đặt → Bảo mật, tìm mục xác thực hai lớp hoặc mã khóa và bật theo hướng dẫn. Lưu ý: tên và cách bật có thể khác tùy phiên bản; đối chiếu trên ứng dụng thực tế.",
+          "why": "Khi bật, kẻ biết mật khẩu vẫn cần mã thứ hai để đăng nhập.",
+          "quiz": {
+            "question": "Xác thực hai lớp bảo vệ tài khoản như thế nào?",
+            "options": [
+              "Cần thêm một mã thứ hai ngoài mật khẩu để đăng nhập",
+              "Tự động đổi mật khẩu mỗi ngày",
+              "Ẩn tài khoản khỏi mọi người"
+            ],
+            "correct": 0,
+            "explanation": "Mật khẩu bị lộ vẫn chưa đủ để đăng nhập nếu thiếu mã thứ hai."
+          }
+        },
+        {
+          "id": "m3-zalo-04-thiet-bi-dang-nhap",
+          "title": "Kiểm tra thiết bị đang đăng nhập",
+          "instruction": "Vào mục thiết bị đăng nhập (thường trong Cài đặt) và xem danh sách. Đăng xuất những thiết bị em không nhận ra.",
+          "why": "Thiết bị lạ có thể là dấu hiệu tài khoản đã bị người khác truy cập.",
+          "quiz": {
+            "question": "Em thấy một thiết bị lạ đang đăng nhập vào tài khoản của mình. Em nên làm gì?",
+            "options": [
+              "Bỏ qua vì có thể là máy của người nhà",
+              "Đăng xuất thiết bị đó, đổi mật khẩu và báo người lớn",
+              "Gửi mật khẩu cho người lạ để họ kiểm tra"
+            ],
+            "correct": 1,
+            "explanation": "Đăng xuất và đổi mật khẩu ngay sẽ chặn quyền truy cập của người lạ."
+          }
+        }
+      ]
+    },
+    {
+      "id": "facebook",
+      "name": "Facebook",
+      "steps": [
+        {
+          "id": "m3-fb-01-doi-tuong-xem-bai",
+          "title": "Đặt đối tượng xem bài viết",
+          "instruction": "Trong phần Quyền riêng tư, đặt đối tượng mặc định cho bài viết là Chỉ bạn bè, và kiểm tra cả các bài đã đăng trước đó.",
+          "why": "Bài viết công khai có thể bị người lạ thu thập thông tin về thói quen, trường lớp và gia đình.",
+          "quiz": {
+            "question": "Với người lạ, em nên đặt bài viết ở chế độ nào?",
+            "options": [
+              "Công khai",
+              "Chỉ bạn bè",
+              "Ai cũng xem được và được tải về"
+            ],
+            "correct": 1,
+            "explanation": "Chỉ bạn bè giới hạn người xem trong vòng quen biết."
+          }
+        },
+        {
+          "id": "m3-fb-02-loi-moi-la",
+          "title": "Lọc lời mời kết bạn và tin nhắn lạ",
+          "instruction": "Trong phần Quyền riêng tư, chỉnh ai được gửi lời mời kết bạn và ai được nhắn tin cho em, chỉ cho phép bạn bè hoặc bạn của bạn bè.",
+          "why": "Tài khoản giả thường gửi lời mời với ảnh đẹp rồi dẫn đến lừa đảo.",
+          "quiz": {
+            "question": "Một người lạ có ảnh đẹp, mới mời kết bạn và hỏi trường, lớp, địa chỉ của em. Em nên làm gì?",
+            "options": [
+              "Kết bạn và trả lời hết để làm quen",
+              "Từ chối lời mời và không cung cấp thông tin cá nhân",
+              "Gửi ảnh gia đình để họ tin"
+            ],
+            "correct": 1,
+            "explanation": "Từ chối lời mời và không cung cấp thông tin cá nhân là cách phòng tránh tốt nhất."
+          }
+        },
+        {
+          "id": "m3-fb-03-xac-thuc-hai-yeu-to",
+          "title": "Bật xác thực hai yếu tố",
+          "instruction": "Vào Trung tâm tài khoản hoặc Cài đặt → Mật khẩu và bảo mật, bật xác thực hai yếu tố. Lưu ý: vị trí mục có thể khác tùy phiên bản; đối chiếu trên ứng dụng thực tế.",
+          "why": "Xác thực hai yếu tố ngăn người khác đăng nhập ngay cả khi họ biết mật khẩu.",
+          "quiz": {
+            "question": "Khi bật xác thực hai yếu tố, điều gì xảy ra khi đăng nhập trên máy lạ?",
+            "options": [
+              "Không cần làm gì thêm",
+              "Hệ thống yêu cầu thêm một mã xác nhận gửi đến thiết bị đáng tin cậy",
+              "Tài khoản tự khóa vĩnh viễn"
+            ],
+            "correct": 1,
+            "explanation": "Mã xác nhận đến từ thiết bị hoặc số điện thoại đã đăng ký, nên người lạ không thể đăng nhập chỉ bằng mật khẩu."
+          }
+        },
+        {
+          "id": "m3-fb-04-canh-bao-dang-nhap",
+          "title": "Bật cảnh báo đăng nhập lạ",
+          "instruction": "Trong phần Mật khẩu và bảo mật, bật thông báo khi có đăng nhập từ thiết bị hoặc trình duyệt lạ.",
+          "why": "Cảnh báo giúp em phát hiện sớm tài khoản bị truy cập trái phép.",
+          "quiz": {
+            "question": "Em nhận thông báo đăng nhập từ một trình duyệt lạ mà em không làm. Em nên làm gì?",
+            "options": [
+              "Bỏ qua vì không phải em làm",
+              "Đăng xuất phiên lạ, đổi mật khẩu và bật xác thực hai yếu tố",
+              "Trả lời tin nhắn của người tự xưng là hỗ trợ viên"
+            ],
+            "correct": 1,
+            "explanation": "Hãy xử lý ngay: đăng xuất phiên lạ, đổi mật khẩu và bật xác thực hai yếu tố."
+          }
+        }
+      ]
+    }
+  ]
+}

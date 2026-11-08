@@ -822,3 +822,217 @@ h3 {
     animation: none !important;
   }
 }
+
+/* Module 3: phòng thí nghiệm bảo mật tài khoản */
+.privacy-note {
+  background: var(--ok-bg);
+  border-color: var(--ok);
+  color: var(--ink);
+}
+
+.pw-row {
+  display: flex;
+  gap: 8px;
+}
+
+.pw-row input {
+  flex: 1;
+  min-width: 0;
+}
+
+.pw-row .btn {
+  min-width: 76px;
+}
+
+.meter {
+  height: 14px;
+  border-radius: 999px;
+  background: var(--line);
+  overflow: hidden;
+  margin: 14px 0 6px;
+}
+
+.meter-fill {
+  height: 100%;
+  transition: width 0.25s ease;
+}
+
+.meter.band-weak .meter-fill { background: var(--danger); }
+.meter.band-fair .meter-fill { background: #d98c00; }
+.meter.band-strong .meter-fill { background: var(--ok); }
+
+.meter-label {
+  margin: 4px 0 12px;
+}
+
+.facts {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+  margin: 0 0 12px;
+}
+
+.facts div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  border-bottom: 1px dashed var(--line);
+  padding-bottom: 6px;
+}
+
+.facts dt {
+  color: var(--ink-soft);
+}
+
+.facts dd {
+  margin: 0;
+  font-weight: 600;
+  text-align: right;
+}
+
+.reasons {
+  padding-left: 22px;
+  margin: 0 0 12px;
+}
+
+.alert-ok {
+  background: var(--ok-bg);
+  color: var(--ok);
+  border-radius: 12px;
+  padding: 12px 14px;
+  font-weight: 600;
+}
+
+.disclaimer {
+  background: var(--warn-bg);
+  color: var(--warn);
+  border-radius: 12px;
+  padding: 10px 12px;
+}
+
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.tab {
+  appearance: none;
+  border: 2px solid var(--line);
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+  font-weight: 600;
+  padding: 10px 14px;
+  border-radius: 12px;
+  cursor: pointer;
+  min-height: 44px;
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.tab.is-active {
+  border-color: var(--brand);
+  color: var(--brand);
+  background: var(--brand-soft);
+}
+
+.tab-count {
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+}
+
+.steps {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.steps > li {
+  margin-bottom: 12px;
+}
+
+.step {
+  padding: 0;
+  overflow: hidden;
+}
+
+.step.is-passed {
+  border-left: 6px solid var(--ok);
+}
+
+.step-head {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: none;
+  border: none;
+  color: var(--ink);
+  font: inherit;
+  text-align: left;
+  padding: 14px 16px;
+  cursor: pointer;
+  min-height: 56px;
+}
+
+.step-num {
+  flex: 0 0 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--brand-soft);
+  color: var(--brand);
+  font-weight: 800;
+  display: grid;
+  place-items: center;
+}
+
+.step-title {
+  flex: 1;
+  font-weight: 700;
+}
+
+.step-body {
+  padding: 0 16px 16px;
+}
+
+.quiz fieldset {
+  border: none;
+  padding: 0;
+  margin: 12px 0;
+}
+
+.quiz legend {
+  margin-bottom: 8px;
+  padding: 0;
+}
+
+.option {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  border: 2px solid var(--line);
+  border-radius: 12px;
+  padding: 10px 12px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  background: var(--surface);
+}
+
+.option.is-selected {
+  border-color: var(--brand);
+  background: var(--brand-soft);
+}
+
+.option input {
+  margin-top: 4px;
+  accent-color: var(--brand);
+}
+
+@media (min-width: 720px) {
+  .facts {
+    grid-template-columns: 1fr 1fr;
+  }
+}

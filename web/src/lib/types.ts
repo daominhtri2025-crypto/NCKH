@@ -94,3 +94,32 @@ export interface Module2Result {
   explanation: string;
   official_roots: string[];
 }
+
+export interface Module3Step {
+  id: string;
+  title: string;
+  instruction: string;
+  why: string;
+  quiz: { question: string; options: string[] };
+  status: 'open' | 'passed';
+  attempts: number;
+}
+
+export interface Module3Overview {
+  module: number;
+  title: string;
+  content_version: string;
+  disclaimer: string;
+  platforms: { id: string; name: string; steps: Module3Step[] }[];
+  progress: { total_steps: number; passed_steps: number; score_percent: number };
+  lab: { passed: boolean; attempts: number };
+}
+
+export interface Module3StepResult {
+  item_id: string;
+  attempt_no: number;
+  is_first_attempt: boolean;
+  passed: boolean;
+  correct_choice: number;
+  explanation: string;
+}

@@ -16,7 +16,7 @@
 
 - **Module 1: Sân chơi tình huống.** Đã hoàn thiện: 5 tình huống về cuộc gọi giả mạo, OTP, tin nhắn trúng thưởng, tài khoản mạo danh và trang thanh toán giả.
 - **Module 2: Thám tử không gian mạng.** Đã hoàn thiện: 12 URL (5 chính thống, 7 giả mạo theo 5 kiểu đánh lừa), có thẻ "Đọc từ phải sang trái" và giải thích sau mỗi lượt. Tên miền hư cấu: đuôi `.test`, `.example`, hoặc `.io.vn` (có dấu hiệu hư cấu "phong"). Vị trí hai nút đáp án được đảo ngẫu nhiên theo học sinh và mục.
-- **Module 3: Phòng thí nghiệm tài khoản.** Đang phát triển.
+- **Module 3: Phòng thí nghiệm bảo mật tài khoản.** Đã hoàn thiện: (a) kiểm tra mật khẩu và entropy hoàn toàn trên trình duyệt, máy chủ không nhận mật khẩu; (b) checklist quyền riêng tư cho Zalo và Facebook, có câu kiểm tra và xác nhận đã thực hành, được ghi nhận vào `module_events`.
 
 ## Bắt đầu nhanh
 
@@ -25,6 +25,7 @@ Xem hướng dẫn chi tiết tại [docs/TRIEN_KHAI_INET.md](docs/TRIEN_KHAI_IN
 ```bash
 php api/tests/run.php          # cần DB_NAME kết thúc bằng _test
 cd web && npm run build        # kiểm tra kiểu và build giao diện
+cd web && npm run test:unit    # kiểm thử đơn vị bộ đánh giá mật khẩu
 ```
 
 ## Nguyên tắc nghiên cứu
