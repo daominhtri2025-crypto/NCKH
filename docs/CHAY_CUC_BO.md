@@ -9,6 +9,125 @@ Cấu hình cổng mặc định:
 | API PHP (Built-in Server) | `http://127.0.0.1:8000` | Dùng `127.0.0.1`, không dùng `localhost`, để khớp với proxy của Vite |
 | Giao diện (Vite dev server) | `http://localhost:5173` | Trình duyệt mở địa chỉ này. Vite chuyển tiếp `/api` về cổng 8000 |
 
+## 0. Windows với XAMPP (quy trình đã chạy thành công)
+
+Phần này dành cho máy Windows dùng XAMPP (MariaDB 10.4.32, PHP 8.2.12). Các đường dẫn giả định XAMPP cài ở `C:\xampp`.
+
+### 0.1. Chuẩn bị một lần
+
+1. Mở **XAMPP Control Panel**, bấm **Start** ở dòng **MySQL**.
+2. Kiểm tra PHP có `pdo_mysql` và `mysqli`:
+   ```bat
+   "C:\xampp\php\php.exe" -m | findstr /i "mysqli pdo_mysql"
+   ```
+   Nếu không thấy, mở `C:\xampp\php\php.ini`, bỏ dấu `;` ở hai dòng `extension=mysqli` và `extension=pdo_mysql` (mỗi dòng chỉ xuất hiện một lần).
+3. **Chuyển bộ gõ sang tiếng Anh (EN)** trước khi nhập mật khẩu. Bộ gõ tiếng Việt kiểu Telex biến các chữ như `s`, `f`, `r`, `x`, `j` thành dấu thanh, làm mật khẩu bị sai.
+
+### 0.2. Tạo CSDL, user và nạp schema (tự động)
+
+Từ thư mục gốc dự án, chạy:
+
+```bat
+cd /d D:\UNG_DUNG_VIBE\NCKH
+scripts\setup-windows.bat
+```
+
+Script làm các việc sau: tạo `antoanso_dev` và `antoanso_test`, tạo user `antoanso` với mật khẩu em nhập (chỉ chữ và số), sửa bảng `mysql.db` nếu bị hỏng, nạp `api\database\schema.sql`, tạo `api\.env`, tạo lớp `8A1`, và chạy bộ kiểm thử. Script giả định `root` của XAMPP chưa có mật khẩu.
+
+Nếu muốn làm từng bước thủ công, xem phụ lục A cuối tài liệu.
+
+### 0.3. Chạy hằng ngày (hai cửa sổ cmd)
+
+**Cửa sổ 1: API PHP** (từ thư mục gốc):
+
+```bat
+cd /d D:\UNG_DUNG_VIBE\NCKH
+"C:\xampp\php\php.exe" -S 127.0.0.1:8000 -t api api\router.php
+```
+
+**Cửa sổ 2: giao diện Vite** (lệnh `npm` phải chạy trong thư mục `web`):
+
+```bat
+cd /d D:\UNG_DUNG_VIBE\NCKH\web
+npm run dev
+```
+
+Lần đầu, chạy `npm install` trong `web` trước khi `npm run dev`.
+
+Mở trình duyệt tại `http://localhost:5173`.
+
+### 0.4. Kiểm tra nhanh
+
+Ở cửa sổ thứ ba, trong thư mục gốc:
+
+```bat
+curl http://127.0.0.1:8000/api/health
+```
+
+Kết quả phải là `{"ok":true}`.
+
+Muốn chạy smoke test luồng học sinh (cần Node.js):
+
+```bat
+cd /d D:\UNG_DUNG_VIBE\NCKH
+node scripts\smoke-test.mjs
+```
+
+### 0.5. Xử lý sự cố riêng cho Windows
+
+| Triệu chứng | Nguyên nhân | Cách xử lý |
+|---|---|---|
+| `'mysql' is not recognized` | Chưa thêm MySQL vào PATH | Dùng đường dẫn đầy đủ `"C:\xampp\mysql\bin\mysql.exe"` |
+| `Access denied for user 'antoanso'` dù đã tạo user | Bộ gõ tiếng Việt, hoặc mật khẩu nhập khác với mật khẩu đã đặt | Chuyển bộ gõ sang EN, đặt lại mật khẩu bằng `ALTER USER` |
+| `Index for table 'db' is corrupt` | Bảng quyền `mysql.db` bị hỏng | Chạy `REPAIR TABLE mysql.db;` bằng root |
+| `npm error ENOENT ... package.json` | Chạy `npm` ở thư mục gốc | Chạy `npm` trong thư mục `web` |
+| Nạp schema báo `Access denied` dù mật khẩu đúng | Khi dùng `<` để nạp tệp, `mysql.exe` đọc mật khẩu từ tệp thay vì bàn phím | Đăng nhập tương tác rồi dùng `SOURCE D:/UNG_DUNG_VIBE/NCKH/api/database/schema.sql;` |
+| `Module "mysqli" is already loaded` | Một extension khai báo hai lần trong `php.ini` | Xóa dòng trùng, giữ một dòng `extension=mysqli` |
+
+## Phụ lục A: Làm từng bước thủ công trên Windows
+
+Dùng khi không chạy được script ở mục 0.2.
+
+```bat
+"C:\xampp\mysql\bin\mysql.exe" -u root
+```
+
+```sql
+REPAIR TABLE mysql.db;
+CREATE DATABASE IF NOT EXISTS antoanso_dev CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE DATABASE IF NOT EXISTS antoanso_test CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE USER IF NOT EXISTS 'antoanso'@'localhost' IDENTIFIED BY 'Antoanso2026';
+CREATE USER IF NOT EXISTS 'antoanso'@'127.0.0.1' IDENTIFIED BY 'Antoanso2026';
+ALTER USER 'antoanso'@'localhost' IDENTIFIED BY 'Antoanso2026';
+ALTER USER 'antoanso'@'127.0.0.1' IDENTIFIED BY 'Antoanso2026';
+GRANT ALL PRIVILEGES ON antoanso_dev.* TO 'antoanso'@'localhost';
+GRANT ALL PRIVILEGES ON antoanso_test.* TO 'antoanso'@'localhost';
+GRANT ALL PRIVILEGES ON antoanso_dev.* TO 'antoanso'@'127.0.0.1';
+GRANT ALL PRIVILEGES ON antoanso_test.* TO 'antoanso'@'127.0.0.1';
+FLUSH PRIVILEGES;
+EXIT;
+```
+
+Sau đó đăng nhập tương tác và nạp schema:
+
+```bat
+"C:\xampp\mysql\bin\mysql.exe" -u antoanso -p antoanso_dev
+```
+
+```sql
+SOURCE D:/UNG_DUNG_VIBE/NCKH/api/database/schema.sql;
+SHOW TABLES;
+EXIT;
+```
+
+Tạo `api\.env` từ `api\.env.example`, đặt `DB_PASS=Antoanso2026`, rồi tạo lớp:
+
+```bat
+"C:\xampp\php\php.exe" api\bin\add_class.php 8A1 "Lop 8A1" "THCS Thu nghiem"
+```
+
+---
+
 ## 1. Yêu cầu
 
 - **PHP 8.1 trở lên**, có extension `pdo_mysql`. Kiểm tra: `php -v` và `php -m | grep pdo_mysql`.
