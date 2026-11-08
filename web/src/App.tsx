@@ -6,6 +6,7 @@ import ConsentForm from './components/ConsentForm';
 import LoginForm from './components/LoginForm';
 import CodeReveal from './components/CodeReveal';
 import ModuleHub from './components/ModuleHub';
+import Footer from './components/Footer';
 import Module1Page from './modules/module1/Module1Page';
 import Module2Page from './modules/module2/Module2Page';
 import Module3Page from './modules/module3/Module3Page';
@@ -85,6 +86,7 @@ export default function App() {
   }
 
   return (
+    <>
     <main className="shell">
       <header className="topbar">
         <span className="brand">🛡️ An Toàn Số Học Đường</span>
@@ -160,5 +162,7 @@ export default function App() {
         <Module3Page onBack={goHub} />
       )}
     </main>
+    <Footer />
+    </>
   );
 }

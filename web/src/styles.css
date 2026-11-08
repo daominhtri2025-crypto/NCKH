@@ -1170,3 +1170,75 @@ h3 {
     grid-template-columns: repeat(4, 1fr);
   }
 }
+
+/* Chân trang: thông tin đề tài và tác giả */
+.site-footer {
+  background: var(--surface);
+  border-top: 4px solid var(--brand);
+  margin-top: 32px;
+}
+
+.footer-inner {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 24px 16px 20px;
+}
+
+.footer-title {
+  margin: 0 0 16px;
+  font-size: 1.2rem;
+  color: var(--brand);
+  text-align: center;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+.footer-block {
+  background: var(--brand-soft);
+  border-radius: 14px;
+  padding: 14px 16px;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.footer-block h3 {
+  margin: 0 0 8px;
+  font-size: 1rem;
+}
+
+.footer-block p {
+  margin: 4px 0;
+}
+
+.footer-list {
+  margin: 0 0 8px;
+  padding-left: 22px;
+}
+
+.footer-steps li {
+  margin-bottom: 6px;
+}
+
+.footer-label {
+  font-weight: 700;
+}
+
+.footer-note {
+  text-align: center;
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+  margin: 18px 0 0;
+}
+
+@media (min-width: 720px) {
+  .footer-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .footer-wide {
+    grid-column: 1 / -1;
+  }
+}
