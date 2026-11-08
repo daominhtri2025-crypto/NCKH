@@ -1,0 +1,195 @@
+{
+  "module": 1,
+  "version": "m1-v1",
+  "title": "Sân chơi tình huống",
+  "scenarios": [
+    {
+      "id": "m1-01-cuoc-goi-cong-an",
+      "title": "Cuộc gọi tự xưng công an",
+      "summary": "Người lạ gọi điện, nói em liên quan đến một vụ án.",
+      "messages": [
+        { "from": "Người gọi", "text": "Alo, tôi là đại úy Hùng, Công an phường. Số tài khoản của em đang liên quan đến một vụ rửa tiền." },
+        { "from": "Người gọi", "text": "Em phải chuyển toàn bộ tiền sang tài khoản 'an toàn' để kiểm tra trong 30 phút, nếu không sẽ bị bắt. Không được nói với ai." }
+      ],
+      "question": "Em sẽ làm gì?",
+      "choices": [
+        {
+          "text": "Chuyển tiền ngay để tránh bị bắt.",
+          "is_safe": false,
+          "feedback": "Đây là lừa đảo. Cơ quan công an không yêu cầu chuyển tiền qua điện thoại."
+        },
+        {
+          "text": "Cúp máy, hỏi ý kiến người nhà và tự gọi đến Công an phường để xác minh.",
+          "is_safe": true,
+          "feedback": "Đúng. Khi bị gây áp lực về thời gian, hãy dừng lại, không chuyển tiền và xác minh qua kênh chính thức."
+        },
+        {
+          "text": "Đọc mã OTP để họ xác minh tài khoản.",
+          "is_safe": false,
+          "feedback": "Mã OTP là chìa khóa để chuyển tiền. Không bao giờ đọc OTP cho bất kỳ ai."
+        },
+        {
+          "text": "Cung cấp số CCCD để họ kiểm tra hồ sơ.",
+          "is_safe": false,
+          "feedback": "Thông tin cá nhân có thể bị dùng để mạo danh. Không cung cấp qua điện thoại cho người chưa xác minh được danh tính."
+        }
+      ],
+      "red_flags": [
+        "Gọi điện đột ngột và tự xưng cơ quan chức năng",
+        "Yêu cầu chuyển tiền vào tài khoản 'an toàn'",
+        "Tạo áp lực về thời gian và đe dọa bắt giữ",
+        "Yêu cầu giữ bí mật, không báo người thân"
+      ],
+      "takeaway": "Cơ quan nhà nước không đòi tiền qua điện thoại. Hãy dừng lại, hỏi người thân và xác minh qua số điện thoại chính thức."
+    },
+    {
+      "id": "m1-02-ma-otp",
+      "title": "Nhân viên 'ngân hàng' cần mã OTP",
+      "summary": "Có người gọi và nhờ đọc mã OTP vừa nhận được.",
+      "messages": [
+        { "from": "Tin nhắn", "text": "Ma OTP cua ban la 482913. Khong chia se ma nay cho bat ky ai." },
+        { "from": "Người gọi", "text": "Em là nhân viên ngân hàng. Hệ thống vừa ghi nhận giao dịch lạ. Em đọc giúp anh mã OTP vừa gửi về điện thoại để hủy giao dịch." }
+      ],
+      "question": "Em nên làm gì?",
+      "choices": [
+        {
+          "text": "Đọc mã OTP để họ hủy giao dịch giúp.",
+          "is_safe": false,
+          "feedback": "Đây là cách kẻ gian rút tiền. Mã OTP dùng để xác nhận giao dịch của chính em, không dùng để hủy cho người khác."
+        },
+        {
+          "text": "Cúp máy, không đọc OTP, rồi gọi số in trên thẻ hoặc mở ứng dụng ngân hàng để kiểm tra.",
+          "is_safe": true,
+          "feedback": "Đúng. Ngân hàng không hỏi OTP qua điện thoại. Hãy tự liên hệ bằng kênh chính thức."
+        },
+        {
+          "text": "Đọc mã OTP nhưng bảo họ đừng chuyển tiền.",
+          "is_safe": false,
+          "feedback": "Khi đã có mã, kẻ gian có thể tự hoàn tất giao dịch. Không có cách đọc OTP an toàn."
+        },
+        {
+          "text": "Gửi mã OTP qua Zalo cho người quen để hỏi ý kiến.",
+          "is_safe": false,
+          "feedback": "Không gửi OTP cho bất kỳ ai, kể cả người quen. Chia sẻ mã là chia sẻ quyền chuyển tiền."
+        }
+      ],
+      "red_flags": [
+        "Người gọi tự xưng nhân viên ngân hàng nhưng không có số điện thoại kiểm chứng",
+        "Yêu cầu đọc mã OTP",
+        "Đưa ra lý do 'hủy giao dịch' để khiến em hoảng sợ"
+      ],
+      "takeaway": "Mã OTP là mã bí mật. Ngân hàng không bao giờ hỏi OTP qua điện thoại."
+    },
+    {
+      "id": "m1-03-trung-thuong",
+      "title": "Tin nhắn trúng thưởng có đường link",
+      "summary": "Một tin nhắn lạ báo em trúng thưởng lớn.",
+      "messages": [
+        { "from": "Số lạ", "text": "Chúc mừng! Bạn đã trúng thưởng 50 triệu đồng. Bấm link để nhận quà: http://nhan-qua-trung-thuong.example" }
+      ],
+      "question": "Em sẽ làm gì với tin nhắn này?",
+      "choices": [
+        {
+          "text": "Bấm vào link để xem phần thưởng.",
+          "is_safe": false,
+          "feedback": "Link lạ có thể dẫn đến trang giả mạo để đánh cắp tài khoản, hoặc cài phần mềm độc hại."
+        },
+        {
+          "text": "Không bấm link, xóa tin nhắn và chặn số gửi.",
+          "is_safe": true,
+          "feedback": "Đúng. Chương trình trúng thưởng chính thức không yêu cầu bấm link lạ hay đóng phí để nhận thưởng."
+        },
+        {
+          "text": "Chuyển tiếp cho nhóm bạn cùng xem.",
+          "is_safe": false,
+          "feedback": "Chuyển tiếp làm lan truyền lừa đảo và có thể khiến bạn bè bị hại."
+        },
+        {
+          "text": "Nhập số điện thoại và mật khẩu để xác nhận trúng thưởng.",
+          "is_safe": false,
+          "feedback": "Đây là hình thức đánh cắp thông tin. Không bao giờ nhập mật khẩu tại trang mở từ tin nhắn lạ."
+        }
+      ],
+      "red_flags": [
+        "Thông báo trúng thưởng mà em không hề tham gia",
+        "Yêu cầu bấm link lạ",
+        "Số gửi không quen biết"
+      ],
+      "takeaway": "Trúng thưởng thật không cần bấm link lạ hay đóng phí. Xóa tin nhắn và chặn số gửi."
+    },
+    {
+      "id": "m1-04-ban-nho-chuyen-tien",
+      "title": "Tài khoản Zalo 'bạn thân' nhờ chuyển tiền gấp",
+      "summary": "Một tài khoản có ảnh đại diện giống bạn thân nhắn tin xin tiền.",
+      "messages": [
+        { "from": "Zalo", "text": "Mình đang ở bệnh viện, điện thoại mình hỏng nên nhắn từ số này. Chuyển giúp mình 5 triệu gấp nhé, đừng gọi vì mình không nghe được." }
+      ],
+      "question": "Em sẽ xử lý thế nào?",
+      "choices": [
+        {
+          "text": "Chuyển ngay vì đó là bạn thân.",
+          "is_safe": false,
+          "feedback": "Ảnh đại diện và tên hiển thị có thể bị sao chép. Đây là kịch bản mạo danh phổ biến."
+        },
+        {
+          "text": "Gọi điện hoặc gọi video cho bạn qua số đã lưu trước đó, hoặc hỏi một chi tiết chỉ hai người biết.",
+          "is_safe": true,
+          "feedback": "Đúng. Hãy xác minh qua kênh bạn đã biết từ trước, không dùng chính tài khoản đang nghi ngờ."
+        },
+        {
+          "text": "Chuyển một nửa số tiền để giảm rủi ro.",
+          "is_safe": false,
+          "feedback": "Chuyển một phần vẫn là mất tiền. Hãy xác minh trước khi chuyển bất kỳ khoản nào."
+        },
+        {
+          "text": "Hỏi cả nhóm lớp để mọi người cùng quyết định.",
+          "is_safe": false,
+          "feedback": "Hỏi số đông không xác minh được danh tính. Chỉ xác minh qua kênh riêng đã biết."
+        }
+      ],
+      "red_flags": [
+        "Đổi số điện thoại và nói không gọi được",
+        "Tạo áp lực gấp gáp",
+        "Yêu cầu chuyển tiền và dặn đừng báo người khác"
+      ],
+      "takeaway": "Trước khi chuyển tiền, hãy xác minh bằng kênh liên lạc đã biết từ trước."
+    },
+    {
+      "id": "m1-05-cong-dich-vu-gia",
+      "title": "Đường link thanh toán dịch vụ công giả",
+      "summary": "Tin nhắn báo hồ sơ chưa thanh toán lệ phí và yêu cầu truy cập ngay.",
+      "messages": [
+        { "from": "Tin nhắn", "text": "Ho so cua ban chua duoc thanh toan le phi. Truy cap http://tra-cuu-hoso-dichvu.example/thanh-toan de hoan tat trong 24 gio." }
+      ],
+      "question": "Em sẽ làm gì?",
+      "choices": [
+        {
+          "text": "Mở link và nhập thông tin thẻ để thanh toán nhanh.",
+          "is_safe": false,
+          "feedback": "Trang giả thường được làm giống trang thật. Nhập thông tin thẻ ở đây là trao tiền cho kẻ gian."
+        },
+        {
+          "text": "Không bấm link. Tự truy cập cổng chính thức bằng địa chỉ đã biết, hoặc hỏi UBND phường hoặc Tổng đài 1022.",
+          "is_safe": true,
+          "feedback": "Đúng. Cơ quan nhà nước dùng tên miền .gov.vn. Hãy kiểm tra địa chỉ trước khi tin."
+        },
+        {
+          "text": "Mở link nhưng chỉ xem, không nhập gì.",
+          "is_safe": false,
+          "feedback": "Chỉ mở trang cũng có thể bị theo dõi hoặc cài mã độc. Không nên mở link lạ."
+        },
+        {
+          "text": "Chuyển tin nhắn cho hàng xóm để hỏi.",
+          "is_safe": false,
+          "feedback": "Chuyển tiếp không xác minh được nội dung và có thể làm lan truyền lừa đảo."
+        }
+      ],
+      "red_flags": [
+        "Tên miền không phải là .gov.vn",
+        "Yêu cầu hoàn tất gấp trong 24 giờ",
+        "Yêu cầu nhập thông tin thẻ hoặc tài khoản"
+      ],
+      "takeaway": "Chỉ thanh toán qua cổng chính thức đã biết trước. Không nhập thông tin thẻ từ link trong tin nhắn."
+    }
+  ]
+}

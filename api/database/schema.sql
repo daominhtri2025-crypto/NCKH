@@ -1,0 +1,51 @@
+-- =====================================================================
+-- An Toàn Số Học Đường — Lược đồ MySQL 8.0 / MariaDB 10.6+ (InnoDB, utf8mb4)
+-- Dữ liệu nghiên cứu được ẩn danh: không lưu họ tên, email hay số điện thoại học sinh.
+-- =====================================================================
+
+-- Lớp học do giáo viên đăng ký (bin/add_class.php).
+CREATE TABLE IF NOT EXISTS classes (
+  code        VARCHAR(40)  NOT NULL,
+  name        VARCHAR(120) NOT NULL,
+  school      VARCHAR(120) NOT NULL,
+  created_at  DATETIME     NOT NULL,
+  PRIMARY KEY (code)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Người tham gia nghiên cứu. "code" là mã giả danh do hệ thống cấp (dạng XXXX-XXXX),
+-- học sinh giữ mã này để đăng nhập lại và để nhóm nghiên cứu nối kết quả trước/sau.
+-- token_hash là SHA-256 của cookie phiên; token gốc không bao giờ được lưu.
+CREATE TABLE IF NOT EXISTS participants (
+  id              BIGINT       NOT NULL AUTO_INCREMENT,
+  code            CHAR(9)      NOT NULL,
+  class_code      VARCHAR(40)  NOT NULL,
+  token_hash      CHAR(64)     NULL,
+  consent_version VARCHAR(20)  NOT NULL,
+  consented_at    DATETIME     NOT NULL,
+  created_at      DATETIME     NOT NULL,
+  last_seen_at    DATETIME     NULL,
+  PRIMARY KEY (id),
+  UNIQUE KEY uq_participants_code (code),
+  UNIQUE KEY uq_participants_token (token_hash),
+  KEY idx_participants_class (class_code),
+  CONSTRAINT fk_participants_class FOREIGN KEY (class_code) REFERENCES classes (code)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Mọi lần trả lời tình huống đều được ghi lại (kể cả lần thử lại).
+-- Điểm nghiên cứu chỉ tính trên attempt_no = 1 (lần trả lời đầu tiên).
+CREATE TABLE IF NOT EXISTS module_events (
+  id              BIGINT       NOT NULL AUTO_INCREMENT,
+  participant_id  BIGINT       NOT NULL,
+  module          TINYINT      NOT NULL,
+  item_id         VARCHAR(60)  NOT NULL,
+  attempt_no      SMALLINT     NOT NULL,
+  choice_index    TINYINT      NOT NULL,
+  is_safe         TINYINT(1)   NOT NULL,
+  response_ms     INT          NULL,
+  content_version VARCHAR(20)  NOT NULL,
+  created_at      DATETIME     NOT NULL,
+  PRIMARY KEY (id),
+  UNIQUE KEY uq_events_attempt (participant_id, item_id, attempt_no),
+  KEY idx_events_module (participant_id, module),
+  CONSTRAINT fk_events_participant FOREIGN KEY (participant_id) REFERENCES participants (id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
