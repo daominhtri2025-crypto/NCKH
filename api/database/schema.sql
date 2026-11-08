@@ -52,3 +52,24 @@ CREATE TABLE IF NOT EXISTS module_events (
   KEY idx_events_module (participant_id, module),
   CONSTRAINT fk_events_participant FOREIGN KEY (participant_id) REFERENCES participants (id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Khảo sát tự báo cáo theo giai đoạn: pre (trước can thiệp), post (sau 3 module), delayed (theo dõi sau 4-6 tuần).
+-- instrument = knowledge: is_correct có giá trị, answer_index là lựa chọn (0-based).
+-- instrument = behavior: answer_value là mức 1-4, is_correct = NULL.
+CREATE TABLE IF NOT EXISTS assessments_self (
+  id              BIGINT       NOT NULL AUTO_INCREMENT,
+  participant_id  BIGINT       NOT NULL,
+  phase           ENUM('pre','post','delayed') NOT NULL,
+  item_id         VARCHAR(60)  NOT NULL,
+  instrument      ENUM('knowledge','behavior') NOT NULL,
+  answer_index    TINYINT      NULL,
+  answer_value    TINYINT      NULL,
+  is_correct      TINYINT(1)   NULL,
+  response_ms     INT          NULL,
+  content_version VARCHAR(20)  NOT NULL,
+  created_at      DATETIME     NOT NULL,
+  PRIMARY KEY (id),
+  UNIQUE KEY uq_assessment_item (participant_id, phase, item_id),
+  KEY idx_assessment_phase (participant_id, phase),
+  CONSTRAINT fk_assessment_participant FOREIGN KEY (participant_id) REFERENCES participants (id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

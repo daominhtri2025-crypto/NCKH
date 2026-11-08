@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace AnToanSo\Http;
 
+use AnToanSo\Controllers\AdminController;
+use AnToanSo\Controllers\AssessmentController;
 use AnToanSo\Controllers\Module1Controller;
 use AnToanSo\Controllers\Module2Controller;
 use AnToanSo\Controllers\Module3Controller;
@@ -39,6 +41,15 @@ final class Routes
         $router->add('GET', '/module3', [$module3, 'overview']);
         $router->add('POST', '/module3/steps/{id}/complete', [$module3, 'completeStep']);
         $router->add('POST', '/module3/lab', [$module3, 'lab']);
+
+        $assessment = new AssessmentController();
+        $router->add('GET', '/assessments', [$assessment, 'status']);
+        $router->add('GET', '/assessments/{phase}', [$assessment, 'show']);
+        $router->add('POST', '/assessments/{phase}/items/{id}/answer', [$assessment, 'answer']);
+
+        $admin = new AdminController();
+        $router->add('GET', '/admin/export/long.csv', [$admin, 'exportLong']);
+        $router->add('GET', '/admin/export/wide.csv', [$admin, 'exportWide']);
 
         return $router;
     }

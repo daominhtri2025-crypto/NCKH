@@ -1,0 +1,170 @@
+{
+  "version": "a-v1",
+  "title": "Khảo sát an toàn số",
+  "intro": "Khảo sát này không tính điểm học tập. Hãy trả lời theo đúng suy nghĩ và thói quen của em.",
+  "behavior_scale": ["Không bao giờ", "Thỉnh thoảng", "Thường xuyên", "Luôn luôn"],
+  "items": [
+    {
+      "id": "k01-khoa-tai-khoan",
+      "instrument": "knowledge",
+      "topic": "m1",
+      "question": "Em nhận tin nhắn: \"Tài khoản ngân hàng của bạn bị khóa, bấm link để mở lại\". Em nên làm gì?",
+      "options": [
+        "Bấm link và nhập thông tin để mở khóa",
+        "Không bấm link; gọi số trên thẻ hoặc mở ứng dụng ngân hàng để kiểm tra",
+        "Trả lời tin nhắn hỏi xem có thật không"
+      ],
+      "correct": 1
+    },
+    {
+      "id": "k02-shipper-otp",
+      "instrument": "knowledge",
+      "topic": "m1",
+      "question": "Một người gọi tự nhận là shipper và nói cần đọc mã OTP để \"xác nhận nhận hàng\". Em nên làm gì?",
+      "options": [
+        "Đọc mã OTP cho họ để nhận hàng nhanh",
+        "Không đọc mã; shipper không cần mã OTP của em",
+        "Đọc một nửa mã để họ kiểm tra"
+      ],
+      "correct": 1
+    },
+    {
+      "id": "k03-mat-khau-ngan-hang",
+      "instrument": "knowledge",
+      "topic": "m1",
+      "question": "Ai trong các trường hợp sau có thể yêu cầu em cung cấp mật khẩu đăng nhập ngân hàng?",
+      "options": [
+        "Nhân viên ngân hàng gọi điện để kiểm tra",
+        "Không ai có quyền yêu cầu; em không nên cung cấp mật khẩu cho bất kỳ ai",
+        "Cán bộ phường khi làm thủ tục"
+      ],
+      "correct": 1
+    },
+    {
+      "id": "k04-wifi-cong-cong",
+      "instrument": "knowledge",
+      "topic": "m1",
+      "question": "Khi dùng Wifi công cộng không có mật khẩu, điều gì nên tránh?",
+      "options": [
+        "Đọc tin tức trên trang thông thường",
+        "Đăng nhập tài khoản ngân hàng hoặc nhập mật khẩu quan trọng",
+        "Tắt Wifi khi không dùng"
+      ],
+      "correct": 1
+    },
+    {
+      "id": "k05-ten-mien-cuoi",
+      "instrument": "knowledge",
+      "topic": "m2",
+      "question": "Địa chỉ https://uubnd-mophong.io.vn.tra-cuu.test/ có phần gốc (tên do đơn vị đăng ký) là gì?",
+      "options": [
+        "uubnd-mophong.io.vn",
+        "tra-cuu.test",
+        "uubnd-mophong"
+      ],
+      "correct": 1
+    },
+    {
+      "id": "k06-thay-ky-tu",
+      "instrument": "knowledge",
+      "topic": "m2",
+      "question": "Tên miền \"uubnd-m0phong.io.vn\" khác \"uubnd-mophong.io.vn\" ở điểm nào?",
+      "options": [
+        "Chữ 'o' bị thay bằng số '0' nên đây là tên giả mạo",
+        "Không khác gì, chỉ là cách viết khác",
+        "Chỉ khác về đuôi tên miền"
+      ],
+      "correct": 0
+    },
+    {
+      "id": "k07-ten-chinh-tren-duong-dan",
+      "instrument": "knowledge",
+      "topic": "m2",
+      "question": "Trang web có tên chính thức của cơ quan nằm trong đường dẫn (sau dấu /), còn tên miền thật là một tên khác. Trang này có đáng tin không?",
+      "options": [
+        "Đáng tin vì có tên cơ quan",
+        "Không đáng tin; tên miền thật mới quyết định nguồn của trang",
+        "Đáng tin nếu có ổ khóa trên thanh địa chỉ"
+      ],
+      "correct": 1
+    },
+    {
+      "id": "k08-mat-khau-manh",
+      "instrument": "knowledge",
+      "topic": "m3",
+      "question": "Trong ba mật khẩu sau, mật khẩu nào khó đoán nhất?",
+      "options": [
+        "123456789",
+        "matkhau2026",
+        "Mua-Cafe-Sang-7Tr!"
+      ],
+      "correct": 2
+    },
+    {
+      "id": "k09-dung-chung-mat-khau",
+      "instrument": "knowledge",
+      "topic": "m3",
+      "question": "Dùng cùng một mật khẩu cho nhiều tài khoản có rủi ro gì?",
+      "options": [
+        "Không có rủi ro nếu mật khẩu dài",
+        "Nếu một trang bị lộ mật khẩu, các tài khoản khác cũng có thể bị truy cập",
+        "Chỉ ảnh hưởng đến việc nhớ mật khẩu"
+      ],
+      "correct": 1
+    },
+    {
+      "id": "k10-xac-thuc-hai-lop",
+      "instrument": "knowledge",
+      "topic": "m3",
+      "question": "Xác thực hai lớp (hai yếu tố) giúp bảo vệ tài khoản như thế nào?",
+      "options": [
+        "Cần thêm một bước xác nhận ngoài mật khẩu khi đăng nhập",
+        "Tự động đổi mật khẩu mỗi ngày",
+        "Làm tài khoản không ai tìm thấy được"
+      ],
+      "correct": 0
+    },
+    {
+      "id": "b01-xac-thuc-hai-lop",
+      "instrument": "behavior",
+      "topic": "m3",
+      "question": "Em có bật xác thực hai lớp cho tài khoản mạng xã hội hoặc Zalo không?",
+      "reverse": false
+    },
+    {
+      "id": "b02-mat-khau-rieng",
+      "instrument": "behavior",
+      "topic": "m3",
+      "question": "Em có dùng mật khẩu khác nhau cho các tài khoản quan trọng không?",
+      "reverse": false
+    },
+    {
+      "id": "b03-bam-link-la",
+      "instrument": "behavior",
+      "topic": "m1",
+      "question": "Khi nhận tin nhắn có đường link lạ, em có bấm vào xem không?",
+      "reverse": true
+    },
+    {
+      "id": "b04-chia-se-otp",
+      "instrument": "behavior",
+      "topic": "m1",
+      "question": "Em có đọc mã OTP cho người khác qua điện thoại không?",
+      "reverse": true
+    },
+    {
+      "id": "b05-quyen-rieng-tu",
+      "instrument": "behavior",
+      "topic": "m3",
+      "question": "Em có kiểm tra cài đặt quyền riêng tư của tài khoản mạng xã hội không?",
+      "reverse": false
+    },
+    {
+      "id": "b06-xac-minh-nguoi-quen",
+      "instrument": "behavior",
+      "topic": "m1",
+      "question": "Khi người quen nhờ chuyển tiền qua mạng, em có gọi điện xác minh trước không?",
+      "reverse": false
+    }
+  ]
+}

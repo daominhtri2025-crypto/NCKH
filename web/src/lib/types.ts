@@ -123,3 +123,37 @@ export interface Module3StepResult {
   correct_choice: number;
   explanation: string;
 }
+
+export type PhaseName = 'pre' | 'post' | 'delayed';
+
+export interface PhaseState {
+  phase: PhaseName;
+  status: 'open' | 'in_progress' | 'done' | 'locked';
+  answered: number;
+  total: number;
+  locked_reason: string | null;
+  available_at: string | null;
+}
+
+export interface AssessmentStatus {
+  title: string;
+  intro: string;
+  content_version: string;
+  behavior_scale: string[];
+  phases: Record<PhaseName, PhaseState>;
+  modules: { m1: boolean; m2: boolean; m3: boolean; all: boolean };
+}
+
+export interface AssessmentItemView {
+  id: string;
+  instrument: 'knowledge' | 'behavior';
+  question: string;
+  options?: string[];
+  answered: boolean;
+}
+
+export interface AssessmentPhaseView {
+  phase: PhaseName;
+  state: PhaseState;
+  items: AssessmentItemView[];
+}

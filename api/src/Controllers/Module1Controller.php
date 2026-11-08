@@ -14,13 +14,15 @@ final class Module1Controller
     public function overview(Request $request): Response
     {
         $participant = Container::participants()->authenticate($request);
+        Container::assessments()->assertPreDone($participant);
         return Response::json(Container::module1()->overview($participant));
     }
 
     /** GET /api/module1/scenarios/{id} */
     public function show(Request $request, array $params): Response
     {
-        Container::participants()->authenticate($request);
+        $participant = Container::participants()->authenticate($request);
+        Container::assessments()->assertPreDone($participant);
         return Response::json(Container::module1()->show($params['id']));
     }
 
@@ -28,6 +30,7 @@ final class Module1Controller
     public function answer(Request $request, array $params): Response
     {
         $participant = Container::participants()->authenticate($request);
+        Container::assessments()->assertPreDone($participant);
         $body = $request->json();
         $result = Container::module1()->answer(
             $participant,

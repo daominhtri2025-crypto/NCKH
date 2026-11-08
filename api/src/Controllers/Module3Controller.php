@@ -14,6 +14,7 @@ final class Module3Controller
     public function overview(Request $request): Response
     {
         $participant = Container::participants()->authenticate($request);
+        Container::assessments()->assertPreDone($participant);
         return Response::json(Container::module3()->overview($participant));
     }
 
@@ -21,6 +22,7 @@ final class Module3Controller
     public function completeStep(Request $request, array $params): Response
     {
         $participant = Container::participants()->authenticate($request);
+        Container::assessments()->assertPreDone($participant);
         $body = $request->json();
         $result = Container::module3()->completeStep(
             $participant,
@@ -36,6 +38,7 @@ final class Module3Controller
     public function lab(Request $request): Response
     {
         $participant = Container::participants()->authenticate($request);
+        Container::assessments()->assertPreDone($participant);
         $body = $request->json();
         if (array_key_exists('password', $body)) {
             // Chặn cứng: không bao giờ chấp nhận mật khẩu trên máy chủ, kể cả do nhầm lẫn khi phát triển.

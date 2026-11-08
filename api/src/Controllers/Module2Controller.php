@@ -14,6 +14,7 @@ final class Module2Controller
     public function overview(Request $request): Response
     {
         $participant = Container::participants()->authenticate($request);
+        Container::assessments()->assertPreDone($participant);
         return Response::json(Container::module2()->overview($participant));
     }
 
@@ -21,6 +22,7 @@ final class Module2Controller
     public function answer(Request $request, array $params): Response
     {
         $participant = Container::participants()->authenticate($request);
+        Container::assessments()->assertPreDone($participant);
         $body = $request->json();
         $result = Container::module2()->answer(
             $participant,

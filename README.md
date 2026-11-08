@@ -10,12 +10,13 @@
 | `api/` | API PHP 8.1+ với PDO MySQL, không framework |
 | `api/database/` | Lược đồ CSDL (`schema.sql`) |
 | `api/content/` | Nội dung kịch bản (JSON có phiên bản) |
-| `docs/` | Hướng dẫn triển khai và vận hành |
+| `docs/` | Hướng dẫn triển khai, vận hành và mã hóa dữ liệu nghiên cứu |
 
 ## Mô-đun
 
 - **Module 1: Sân chơi tình huống.** Đã hoàn thiện: 5 tình huống về cuộc gọi giả mạo, OTP, tin nhắn trúng thưởng, tài khoản mạo danh và trang thanh toán giả.
 - **Module 2: Thám tử không gian mạng.** Đã hoàn thiện: 12 URL (5 chính thống, 7 giả mạo theo 5 kiểu đánh lừa), có thẻ "Đọc từ phải sang trái" và giải thích sau mỗi lượt. Tên miền hư cấu: đuôi `.test`, `.example`, hoặc `.io.vn` (có dấu hiệu hư cấu "phong"). Vị trí hai nút đáp án được đảo ngẫu nhiên theo học sinh và mục.
+- **Khảo sát tiền–hậu–theo dõi.** Pre-test bắt buộc trước các hoạt động; post-test mở sau khi hoàn thành cả 3 hoạt động; delayed-test mở sau 4 tuần. Xuất dữ liệu ẩn danh: xem `docs/CODEBOOK_NGHIEN_CUU.md`.
 - **Module 3: Phòng thí nghiệm bảo mật tài khoản.** Đã hoàn thiện: (a) kiểm tra mật khẩu và entropy hoàn toàn trên trình duyệt, máy chủ không nhận mật khẩu; (b) checklist quyền riêng tư cho Zalo và Facebook, có câu kiểm tra và xác nhận đã thực hành, được ghi nhận vào `module_events`.
 
 ## Bắt đầu nhanh

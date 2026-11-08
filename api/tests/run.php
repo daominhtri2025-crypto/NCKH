@@ -24,7 +24,7 @@ if (!str_ends_with($dbName, '_test')) {
 
 Env::set('APP_URL', 'http://localhost:5173');
 $pdo = Database::pdo();
-foreach (['module_events', 'participants', 'classes'] as $table) {
+foreach (['assessments_self', 'module_events', 'participants', 'classes'] as $table) {
     $pdo->exec("DROP TABLE IF EXISTS {$table}");
 }
 Migrator::run($pdo, dirname(__DIR__) . '/database/schema.sql');
@@ -120,6 +120,39 @@ $newToken = sessionTokenFrom($login);
 $oldStillWorks = call('GET', '/api/me', null, ['ats_session' => (string) $token]);
 check('Token cũ bị vô hiệu sau khi đăng nhập lại (401)', $oldStillWorks->status === 401);
 $token = $newToken;
+completePhase((string) $token, 'pre');
+
+
+/** Hoàn thành một giai đoạn khảo sát: đáp án đúng cho câu kiến thức, mức 2 cho câu hành vi (bỏ qua câu đã trả lời). */
+function completePhase(string $token, string $phase): void
+{
+    $cookie = ['ats_session' => $token];
+    $catalog = new AnToanSo\Services\AssessmentCatalog(dirname(__DIR__) . '/content/assessment_items.json');
+    foreach ($catalog->items() as $item) {
+        $body = $item['instrument'] === 'knowledge' ? ['answer_index' => $item['correct']] : ['answer_value' => 2];
+        call('POST', "/api/assessments/{$phase}/items/{$item['id']}/answer", $body, $cookie);
+    }
+}
+
+/** Hoàn thành cả ba module bằng đáp án đúng (dữ liệu lấy từ nội dung). */
+function completeModules(string $token): void
+{
+    $cookie = ['ats_session' => $token];
+    $m1 = new AnToanSo\Services\ScenarioCatalog(dirname(__DIR__) . '/content/module1_scenarios.json');
+    foreach ($m1->scenarios() as $sc) {
+        $safe = array_search(true, array_column($sc['choices'], 'is_safe'), true);
+        call('POST', "/api/module1/scenarios/{$sc['id']}/answer", ['choice_index' => $safe], $cookie);
+    }
+    $m2 = new AnToanSo\Services\DomainCatalog(dirname(__DIR__) . '/content/module2_domains.json');
+    foreach ($m2->items() as $it) {
+        call('POST', "/api/module2/items/{$it['id']}/answer", ['verdict' => $it['is_official'] ? 'official' : 'fake'], $cookie);
+    }
+    $m3 = new AnToanSo\Services\ChecklistCatalog(dirname(__DIR__) . '/content/module3_checklist.json');
+    foreach (array_merge(...array_column($m3->platforms(), 'steps')) as $st) {
+        call('POST', "/api/module3/steps/{$st['id']}/complete", ['quiz_choice' => $st['quiz']['correct'], 'practiced' => true], $cookie);
+    }
+    call('POST', '/api/module3/lab', ['best_band' => 'strong'], $cookie);
+}
 
 echo "Module 1: sân chơi tình huống\n";
 $overview = call('GET', '/api/module1', null, ['ats_session' => (string) $token]);
@@ -188,9 +221,124 @@ check('Đăng xuất (200)', $logout->status === 200);
 $afterLogout = call('GET', '/api/me', null, ['ats_session' => (string) $token]);
 check('Sau đăng xuất, token không còn hiệu lực (401)', $afterLogout->status === 401);
 
+echo "Khảo sát tiền–hậu–theo dõi và mở khóa\n";
+$ta = sessionTokenFrom(call('POST', '/api/participants', ['class_code' => '8A1', 'consent' => true, 'consent_version' => 'v1']));
+$taCookie = ['ats_session' => (string) $ta];
+$taCode = (string) call('GET', '/api/me', null, $taCookie)->body['participant']['code'];
+
+check('Chưa làm khảo sát đầu vào: Module 1 bị khóa (403)', call('GET', '/api/module1', null, $taCookie)->status === 403);
+check('Khóa Module 2 và Module 3 khi chưa làm pre-test', call('GET', '/api/module2', null, $taCookie)->status === 403
+    && call('GET', '/api/module3', null, $taCookie)->status === 403);
+$status0 = call('GET', '/api/assessments', null, $taCookie);
+check('Trạng thái: pre mở, post và delayed khóa', $status0->body['phases']['pre']['status'] === 'open'
+    && $status0->body['phases']['post']['status'] === 'locked' && $status0->body['phases']['delayed']['status'] === 'locked');
+$preView = call('GET', '/api/assessments/pre', null, $taCookie);
+check('Pre-test có 16 câu (10 kiến thức, 6 hành vi)', count($preView->body['items']) === 16);
+$preJson = (string) json_encode($preView->body);
+check('Câu hỏi không lộ đáp án đúng hay cờ đảo chiều', !str_contains($preJson, '"correct"') && !str_contains($preJson, 'reverse'));
+check('Câu hành vi không có lựa chọn đáp án', (function () use ($preView) {
+    foreach ($preView->body['items'] as $it) {
+        if ($it['instrument'] === 'behavior' && array_key_exists('options', $it)) return false;
+    }
+    return true;
+})());
+check('Giai đoạn không tồn tại (404)', call('GET', '/api/assessments/giua-ky', null, $taCookie)->status === 404);
+check('Post-test khóa khi chưa làm pre-test (403)', call('POST', '/api/assessments/post/items/k01-khoa-tai-khoan/answer', ['answer_index' => 0], $taCookie)->status === 403);
+
+$k1 = call('POST', '/api/assessments/pre/items/k01-khoa-tai-khoan/answer', ['answer_index' => 9], $taCookie);
+check('Đáp án kiến thức ngoài phạm vi (422)', $k1->status === 422);
+$k1ok = call('POST', '/api/assessments/pre/items/k01-khoa-tai-khoan/answer', ['answer_index' => 1, 'response_ms' => 4300], $taCookie);
+check('Ghi nhận câu kiến thức (201), không phản hồi đúng/sai', $k1ok->status === 201 && !array_key_exists('is_correct', $k1ok->body) && !array_key_exists('is_safe', $k1ok->body));
+check('Tiến độ pre sau 1 câu: 1/16', $k1ok->body['progress']['answered'] === 1 && $k1ok->body['progress']['total'] === 16);
+check('Câu hành vi: mức 5 bị từ chối (422)', call('POST', '/api/assessments/pre/items/b01-xac-thuc-hai-lop/answer', ['answer_value' => 5], $taCookie)->status === 422);
+check('Câu hành vi: mức 3 được ghi nhận', call('POST', '/api/assessments/pre/items/b01-xac-thuc-hai-lop/answer', ['answer_value' => 3], $taCookie)->status === 201);
+check('Trả lời lại cùng câu bị từ chối (409)', call('POST', '/api/assessments/pre/items/k01-khoa-tai-khoan/answer', ['answer_index' => 0], $taCookie)->status === 409);
+check('Câu không tồn tại (404)', call('POST', '/api/assessments/pre/items/khong-co/answer', ['answer_index' => 0], $taCookie)->status === 404);
+
+completePhase((string) $ta, 'pre');
+$preDone = call('GET', '/api/assessments', null, $taCookie);
+check('Hoàn thành pre-test: trạng thái done', $preDone->body['phases']['pre']['status'] === 'done');
+check('Sau pre-test: Module 1 mở (200)', call('GET', '/api/module1', null, $taCookie)->status === 200);
+
+$postBlocked = call('POST', '/api/assessments/post/items/k02-shipper-otp/answer', ['answer_index' => 0], $taCookie);
+check('Post-test vẫn khóa khi chưa hoàn thành 3 module (403)', $postBlocked->status === 403
+    && str_contains((string) $postBlocked->body['error'], '3 hoạt động'));
+
+completeModules((string) $ta);
+$modulesDone = call('GET', '/api/assessments', null, $taCookie)->body;
+check('Trạng thái: cả 3 module đã hoàn thành', $modulesDone['modules']['all'] === true);
+check('Post-test mở sau khi hoàn thành đủ 3 module', $modulesDone['phases']['post']['status'] === 'open');
+$delayedLocked = $modulesDone['phases']['delayed'];
+check('Delayed khóa, có thời điểm mở (theo DELAYED_MIN_DAYS = 28)', $delayedLocked['status'] === 'locked' && $delayedLocked['available_at'] === null);
+
+$postWrong = call('POST', '/api/assessments/post/items/k02-shipper-otp/answer', ['answer_index' => 0], $taCookie);
+check('Post-test: câu kiến thức sai được ghi nhận (201)', $postWrong->status === 201);
+completePhase((string) $ta, 'post');
+check('Hoàn thành post-test', call('GET', '/api/assessments', null, $taCookie)->body['phases']['post']['status'] === 'done');
+
+$delayedTooSoon = call('POST', '/api/assessments/delayed/items/k01-khoa-tai-khoan/answer', ['answer_index' => 1], $taCookie);
+check('Delayed chưa đủ 28 ngày: từ chối (403)', $delayedTooSoon->status === 403);
+$delayedState = call('GET', '/api/assessments', null, $taCookie)->body['phases']['delayed'];
+check('Delayed có available_at trong tương lai', $delayedState['available_at'] !== null && $delayedState['available_at'] > date('Y-m-d H:i:s'));
+
+AnToanSo\Support\Env::set('DELAYED_MIN_DAYS', '0');
+$delayedOpen = call('POST', '/api/assessments/delayed/items/k01-khoa-tai-khoan/answer', ['answer_index' => 1, 'response_ms' => 3900], $taCookie);
+check('Cấu hình DELAYED_MIN_DAYS = 0: delayed mở và nhận câu trả lời (201)', $delayedOpen->status === 201);
+completePhase((string) $ta, 'delayed');
+check('Hoàn thành delayed-test', call('GET', '/api/assessments', null, $taCookie)->body['phases']['delayed']['status'] === 'done');
+AnToanSo\Support\Env::set('DELAYED_MIN_DAYS', '28');
+
+$knowRows = $pdo->prepare("SELECT phase, item_id, is_correct, answer_index, answer_value, response_ms FROM assessments_self WHERE participant_id = (SELECT id FROM participants WHERE code = ?) ORDER BY id");
+$knowRows->execute([$taCode]);
+$allRows = $knowRows->fetchAll();
+$wrongPost = array_values(array_filter($allRows, fn ($r) => $r['phase'] === 'post' && $r['item_id'] === 'k02-shipper-otp'));
+check('CSDL: câu kiến thức sai có is_correct = 0', count($wrongPost) === 1 && (int) $wrongPost[0]['is_correct'] === 0);
+$rightPre = array_values(array_filter($allRows, fn ($r) => $r['phase'] === 'pre' && $r['item_id'] === 'k01-khoa-tai-khoan'));
+check('CSDL: câu kiến thức đúng có is_correct = 1 và response_ms', (int) $rightPre[0]['is_correct'] === 1 && (int) $rightPre[0]['response_ms'] === 4300);
+$behRow = array_values(array_filter($allRows, fn ($r) => $r['phase'] === 'pre' && $r['item_id'] === 'b01-xac-thuc-hai-lop'));
+check('CSDL: câu hành vi lưu answer_value và is_correct = NULL', (int) $behRow[0]['answer_value'] === 3 && $behRow[0]['is_correct'] === null);
+
+echo "Xuất dữ liệu nghiên cứu\n";
+Env::set('ADMIN_TOKEN', '');
+check('Xuất dữ liệu bị tắt khi chưa đặt ADMIN_TOKEN (503)', call('GET', '/api/admin/export/wide.csv')->status === 503);
+Env::set('ADMIN_TOKEN', 'token-quan-tri-thu-nghiem');
+check('Xuất dữ liệu không có token (401)', call('GET', '/api/admin/export/wide.csv')->status === 401);
+check('Xuất dữ liệu sai token (401)', call('GET', '/api/admin/export/wide.csv', null, [], ['x-admin-token' => 'sai'])->status === 401);
+
+$wide = call('GET', '/api/admin/export/wide.csv', null, [], ['x-admin-token' => 'token-quan-tri-thu-nghiem']);
+check('Xuất wide CSV thành công (200, dạng tệp đính kèm)', $wide->status === 200 && $wide->rawBody() !== null
+    && str_contains(implode(' ', $wide->headers()), 'attachment'));
+$wideLines = array_values(array_filter(explode("\n", (string) $wide->rawBody())));
+$header = str_getcsv(ltrim($wideLines[0], "\xEF\xBB\xBF"));
+check('Wide CSV: tiêu đề có các cột lặp đo', in_array('pre_knowledge_correct', $header) && in_array('delayed_mean_response_ms', $header) && in_array('m3_lab_passed', $header));
+check('Wide CSV không có cột định danh thật (họ tên, email, số điện thoại, ngày đồng ý)', !preg_match('/name|email|phone|consent|sdt|ho_ten/i', $wideLines[0]));
+$taRow = null;
+foreach ($wideLines as $line) {
+    $cells = str_getcsv($line);
+    if (($cells[0] ?? '') === $taCode) {
+        $taRow = array_combine($header, $cells);
+    }
+}
+check('Wide CSV: học sinh thử nghiệm xuất hiện với mã giả danh', $taRow !== null);
+check('Pre: 10/10 câu kiến thức đúng', $taRow !== null && (int) $taRow['pre_knowledge_correct'] === 10 && (float) $taRow['pre_knowledge_pct'] === 100.0);
+check('Post: 9/10 câu kiến thức đúng (một câu sai có chủ đích)', $taRow !== null && (int) $taRow['post_knowledge_correct'] === 9);
+check('Hành vi có đảo chiều: trung bình điều chỉnh pre = 2.5',
+    $taRow !== null && abs((float) $taRow['pre_behavior_mean_adj'] - 2.5) < 0.01, (string) ($taRow['pre_behavior_mean_adj'] ?? '?'));
+check('Wide CSV: module 1 đã trả lời đủ 5, module 2 đủ 12, module 3 đủ 8 bước, lab đạt',
+    $taRow !== null && $taRow['m1_items_answered'] === '5' && $taRow['m2_items_answered'] === '12'
+    && $taRow['m3_steps_passed'] === '8' && $taRow['m3_lab_passed'] === '1');
+
+$long = call('GET', '/api/admin/export/long.csv', null, [], ['x-admin-token' => 'token-quan-tri-thu-nghiem']);
+$longText = (string) $long->rawBody();
+check('Long CSV: đủ 16 dòng pre cho học sinh thử nghiệm', substr_count($longText, "{$taCode},8A1,pre,") === 16);
+check('Long CSV: có dòng câu kiến thức sai với is_correct = 0', str_contains($longText, "{$taCode},8A1,post,k02-shipper-otp,knowledge,0,"));
+check('Long CSV không có cột định danh thật', !preg_match('/^pseudonym,class_code,phase,item_id,instrument,is_correct,answer_index,answer_value,response_ms,content_version,answered_at\r?\n/m', '') && !str_contains(explode("\n", $longText)[0], 'email'));
+
 echo "Module 2: thám tử không gian mạng\n";
 $t2 = sessionTokenFrom(call('POST', '/api/participants', ['class_code' => '8A1', 'consent' => true, 'consent_version' => 'v1']));
 $t2Cookie = ['ats_session' => (string) $t2];
+$call2Code = (string) call('GET', '/api/me', null, $t2Cookie)->body['participant']['code'];
+completePhase((string) $t2, 'pre');
 
 $m2Anon = call('GET', '/api/module2');
 check('Module 2 yêu cầu đăng nhập (401)', $m2Anon->status === 401);
@@ -222,6 +370,7 @@ check('Thứ tự nút ngẫu nhiên giữa các mục (có cả hai kiểu)', i
 $again = call('GET', '/api/module2', null, $t2Cookie);
 check('Thứ tự nút ổn định khi tải lại trang', array_column($again->body['items'], 'button_order') === $orders);
 $otherStudent = sessionTokenFrom(call('POST', '/api/participants', ['class_code' => '8A1', 'consent' => true, 'consent_version' => 'v1']));
+completePhase((string) $otherStudent, 'pre');
 $otherOrders = array_column(call('GET', '/api/module2', null, ['ats_session' => (string) $otherStudent])->body['items'], 'button_order');
 check('Thứ tự nút khác nhau giữa các học sinh', $otherOrders !== $orders);
 
@@ -260,7 +409,8 @@ foreach ($m2After->body['items'] as $it) {
 }
 check('Mục đã làm hiển thị trạng thái answered và kết quả', $row6 !== null && $row6['status'] === 'answered' && $row6['correct'] === true);
 
-$evt = $pdo->query("SELECT item_id, choice_index, is_safe, hint_used, response_ms FROM module_events WHERE module = 2 ORDER BY id")->fetchAll();
+$t2Pid = (int) $pdo->query("SELECT id FROM participants WHERE code = '" . $call2Code . "'")->fetchColumn();
+$evt = $pdo->query("SELECT item_id, choice_index, is_safe, hint_used, response_ms FROM module_events WHERE module = 2 AND participant_id = {$t2Pid} ORDER BY id")->fetchAll();
 check('Ghi đúng 2 dòng module_events cho Module 2', count($evt) === 2, (string) count($evt));
 check('Mục giả mạo: choice_index = 1, is_safe = 1, hint_used = 1, response_ms = 3100',
     isset($evt[0]) && (int) $evt[0]['choice_index'] === 1 && (int) $evt[0]['is_safe'] === 1
@@ -275,6 +425,7 @@ check('Module 1 không ghi hint_used (NULL)', $m1Hint === (int) $pdo->query("SEL
 echo "Module 3: phòng thí nghiệm bảo mật tài khoản\n";
 $t3 = sessionTokenFrom(call('POST', '/api/participants', ['class_code' => '8A1', 'consent' => true, 'consent_version' => 'v1']));
 $t3Cookie = ['ats_session' => (string) $t3];
+completePhase((string) $t3, 'pre');
 check('Module 3 yêu cầu đăng nhập (401)', call('GET', '/api/module3')->status === 401);
 
 $m3 = call('GET', '/api/module3', null, $t3Cookie);
@@ -319,7 +470,9 @@ check('Phòng thí nghiệm: mức mạnh được ghi nhận đạt (201)', $la
 $m3c = call('GET', '/api/module3', null, $t3Cookie);
 check('Tổng quan phản ánh phòng thí nghiệm đã đạt', $m3c->body['lab']['passed'] === true);
 
-$m3Rows = $pdo->query("SELECT item_id, choice_index, is_safe, attempt_no, response_ms FROM module_events WHERE module = 3 ORDER BY id")->fetchAll();
+$t3Code = (string) call('GET', '/api/me', null, $t3Cookie)->body['participant']['code'];
+$t3Pid = (int) $pdo->query("SELECT id FROM participants WHERE code = '" . $t3Code . "'")->fetchColumn();
+$m3Rows = $pdo->query("SELECT item_id, choice_index, is_safe, attempt_no, response_ms FROM module_events WHERE module = 3 AND participant_id = {$t3Pid} ORDER BY id")->fetchAll();
 check('Ghi nhật ký Module 3: 2 lần thử bước đầu + 1 bước cuối + 1 phòng thí nghiệm = 4 dòng',
     count($m3Rows) === 4, (string) count($m3Rows));
 check('Lần thử sai: is_safe = 0; lần đúng: is_safe = 1',

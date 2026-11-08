@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { api, ApiError } from './lib/api';
-import type { Participant } from './lib/types';
+import type { AssessmentStatus, Participant, PhaseName } from './lib/types';
 import Welcome from './components/Welcome';
 import ConsentForm from './components/ConsentForm';
 import LoginForm from './components/LoginForm';
@@ -9,6 +9,8 @@ import ModuleHub from './components/ModuleHub';
 import Module1Page from './modules/module1/Module1Page';
 import Module2Page from './modules/module2/Module2Page';
 import Module3Page from './modules/module3/Module3Page';
+import AssessmentPage from './modules/assessment/AssessmentPage';
+import AssessmentPanel from './modules/assessment/AssessmentPanel';
 
 type View =
   | { name: 'loading' }
@@ -19,11 +21,26 @@ type View =
   | { name: 'hub' }
   | { name: 'module1' }
   | { name: 'module2' }
-  | { name: 'module3' };
+  | { name: 'module3' }
+  | { name: 'assessment'; phase: PhaseName };
 
 export default function App() {
   const [view, setView] = useState<View>({ name: 'loading' });
   const [participant, setParticipant] = useState<Participant | null>(null);
+  const [assessment, setAssessment] = useState<AssessmentStatus | null>(null);
+
+  async function refreshAssessment() {
+    try {
+      setAssessment(await api.get<AssessmentStatus>('/assessments'));
+    } catch {
+      setAssessment(null);
+    }
+  }
+
+  function goHub() {
+    void refreshAssessment();
+    setView({ name: 'hub' });
+  }
 
   useEffect(() => {
     let cancelled = false;
@@ -32,6 +49,7 @@ export default function App() {
       .then((data) => {
         if (cancelled) return;
         setParticipant(data.participant);
+        void refreshAssessment();
         setView({ name: 'hub' });
       })
       .catch((err: unknown) => {
@@ -49,7 +67,7 @@ export default function App() {
 
   function enter(p: Participant) {
     setParticipant(p);
-    setView({ name: 'hub' });
+    goHub();
   }
 
   async function logout() {
@@ -57,6 +75,7 @@ export default function App() {
       await api.logout();
     } finally {
       setParticipant(null);
+      setAssessment(null);
       setView({ name: 'welcome' });
     }
   }
@@ -103,23 +122,42 @@ export default function App() {
       )}
 
       {view.name === 'hub' && (
-        <ModuleHub
-          onOpenModule1={() => setView({ name: 'module1' })}
-          onOpenModule2={() => setView({ name: 'module2' })}
-          onOpenModule3={() => setView({ name: 'module3' })}
+        <>
+          {assessment && (
+            <AssessmentPanel
+              status={assessment}
+              onOpen={(phase) => setView({ name: 'assessment', phase })}
+            />
+          )}
+          <ModuleHub
+            preDone={assessment?.phases.pre.status === 'done'}
+            onOpenPre={() => setView({ name: 'assessment', phase: 'pre' })}
+            onOpenModule1={() => setView({ name: 'module1' })}
+            onOpenModule2={() => setView({ name: 'module2' })}
+            onOpenModule3={() => setView({ name: 'module3' })}
+          />
+        </>
+      )}
+
+      {view.name === 'assessment' && assessment && (
+        <AssessmentPage
+          key={view.phase}
+          phase={view.phase}
+          scale={assessment.behavior_scale}
+          onExit={goHub}
         />
       )}
 
       {view.name === 'module1' && (
-        <Module1Page onBack={() => setView({ name: 'hub' })} />
+        <Module1Page onBack={goHub} />
       )}
 
       {view.name === 'module2' && (
-        <Module2Page onBack={() => setView({ name: 'hub' })} />
+        <Module2Page onBack={goHub} />
       )}
 
       {view.name === 'module3' && (
-        <Module3Page onBack={() => setView({ name: 'hub' })} />
+        <Module3Page onBack={goHub} />
       )}
     </main>
   );

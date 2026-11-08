@@ -4,9 +4,13 @@ declare(strict_types=1);
 
 namespace AnToanSo\Support;
 
+use AnToanSo\Repositories\AssessmentRepository;
 use AnToanSo\Repositories\ClassRepository;
 use AnToanSo\Repositories\EventRepository;
 use AnToanSo\Repositories\ParticipantRepository;
+use AnToanSo\Services\AssessmentCatalog;
+use AnToanSo\Services\AssessmentExportService;
+use AnToanSo\Services\AssessmentService;
 use AnToanSo\Services\ChecklistCatalog;
 use AnToanSo\Services\DomainCatalog;
 use AnToanSo\Services\Module1Service;
@@ -52,6 +56,29 @@ final class Container
         return self::$instances['module3'] ??= new Module3Service(
             new ChecklistCatalog(dirname(__DIR__, 2) . '/content/module3_checklist.json'),
             new EventRepository(),
+        );
+    }
+
+    public static function assessments(): AssessmentService
+    {
+        return self::$instances['assessments'] ??= new AssessmentService(
+            self::assessmentCatalog(),
+            new AssessmentRepository(),
+            self::module1(),
+            self::module2(),
+            self::module3(),
+        );
+    }
+
+    public static function exporter(): AssessmentExportService
+    {
+        return self::$instances['exporter'] ??= new AssessmentExportService(self::assessmentCatalog());
+    }
+
+    private static function assessmentCatalog(): AssessmentCatalog
+    {
+        return self::$instances['assessmentCatalog'] ??= new AssessmentCatalog(
+            dirname(__DIR__, 2) . '/content/assessment_items.json'
         );
     }
 

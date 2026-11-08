@@ -1036,3 +1036,137 @@ h3 {
     grid-template-columns: 1fr 1fr;
   }
 }
+
+/* Khảo sát tiền–hậu–theo dõi */
+.track {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.track-card {
+  width: 100%;
+  text-align: left;
+  font: inherit;
+  color: var(--ink);
+  display: grid;
+  grid-template-columns: 40px 1fr;
+  gap: 4px 12px;
+  cursor: pointer;
+  border-left: 6px solid var(--line);
+}
+
+.track-card:disabled {
+  cursor: not-allowed;
+  opacity: 0.8;
+}
+
+.track-card.is-done {
+  border-left-color: var(--ok);
+}
+
+.track-card.is-open,
+.track-card.is-in_progress {
+  border-left-color: var(--brand);
+}
+
+.track-num {
+  grid-row: span 3;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--brand-soft);
+  color: var(--brand);
+  font-weight: 800;
+  display: grid;
+  place-items: center;
+}
+
+.track-title {
+  font-weight: 700;
+}
+
+.track-status {
+  color: var(--ink-soft);
+  font-weight: 600;
+}
+
+.track-hint {
+  color: var(--ink-soft);
+}
+
+.lock-banner {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--warn-bg);
+  border-color: var(--warn);
+}
+
+.lock-banner p {
+  margin: 0;
+}
+
+.lock-icon {
+  font-size: 3rem;
+  margin: 0;
+}
+
+.question-card .q-text {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin: 4px 0 16px;
+}
+
+.scale {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.scale-btn {
+  appearance: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 14px 8px;
+  border: 2px solid var(--line);
+  border-radius: 14px;
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+  cursor: pointer;
+  min-height: 84px;
+}
+
+.scale-btn:hover:not(:disabled) {
+  border-color: var(--brand);
+  background: var(--brand-soft);
+}
+
+.scale-btn:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.scale-face {
+  font-size: 2rem;
+}
+
+.scale-label {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+@media (min-width: 720px) {
+  .track {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .scale {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
