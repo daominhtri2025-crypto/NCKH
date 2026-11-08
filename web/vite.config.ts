@@ -1,14 +1,23 @@
-import { defineConfig } from 'vite';
+import { defineConfig, loadEnv } from 'vite';
 import react from '@vitejs/plugin-react';
 
-// Phát triển cục bộ: API PHP chạy ở 127.0.0.1:8000 (php -S 127.0.0.1:8000 -t api api/router.php).
-// changeOrigin để mặc định (false) để header Host giữ nguyên, khớp với kiểm tra Origin phía máy chủ.
-export default defineConfig({
-  plugins: [react()],
-  server: {
-    port: 5173,
-    proxy: {
-      '/api': { target: 'http://127.0.0.1:8000' },
+// Cấu hình phát triển cục bộ. Có thể đổi trong web/.env (xem web/.env.example).
+// API PHP mặc định chạy ở 127.0.0.1:8000. Dùng 127.0.0.1 (không dùng localhost) để tránh
+// trường hợp localhost phân giải sang IPv6 trong khi máy chủ PHP chỉ lắng nghe IPv4.
+export default defineConfig(({ mode }) => {
+  const env = loadEnv(mode, '.', '');
+  const apiTarget = env.VITE_API_TARGET || 'http://127.0.0.1:8000';
+  const port = Number(env.VITE_PORT || 5173);
+
+  return {
+    plugins: [react()],
+    server: {
+      port,
+      strictPort: true,
+      proxy: {
+        // changeOrigin để mặc định (false): header Host giữ nguyên để khớp kiểm tra Origin phía máy chủ.
+        '/api': { target: apiTarget },
+      },
     },
-  },
+  };
 });

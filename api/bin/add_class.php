@@ -20,5 +20,10 @@ if (!preg_match('/^[A-Z0-9-]{2,40}$/', $code)) {
     exit(1);
 }
 
-(new ClassRepository())->create($code, trim($argv[2]), trim($argv[3]));
+$repo = new ClassRepository();
+if ($repo->exists($code)) {
+    echo "Lớp {$code} đã tồn tại, không tạo lại.\n";
+    exit(0);
+}
+$repo->create($code, trim($argv[2]), trim($argv[3]));
 echo "Đã tạo lớp {$code}.\n";
