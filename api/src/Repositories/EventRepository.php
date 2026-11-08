@@ -26,15 +26,17 @@ final class EventRepository
         bool $isSafe,
         ?int $responseMs,
         string $contentVersion,
+        ?bool $hintUsed = null,
     ): void {
         $stmt = Database::pdo()->prepare(
             'INSERT INTO module_events
-             (participant_id, module, item_id, attempt_no, choice_index, is_safe, response_ms, content_version, created_at)
-             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)'
+             (participant_id, module, item_id, attempt_no, choice_index, is_safe, response_ms, hint_used, content_version, created_at)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
         );
         $stmt->execute([
             $participantId, $module, $itemId, $attemptNo, $choiceIndex,
-            $isSafe ? 1 : 0, $responseMs, $contentVersion, date('Y-m-d H:i:s'),
+            $isSafe ? 1 : 0, $responseMs, $hintUsed === null ? null : ($hintUsed ? 1 : 0),
+            $contentVersion, date('Y-m-d H:i:s'),
         ]);
     }
 

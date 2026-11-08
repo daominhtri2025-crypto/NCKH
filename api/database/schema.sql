@@ -42,6 +42,9 @@ CREATE TABLE IF NOT EXISTS module_events (
   choice_index    TINYINT      NOT NULL,
   is_safe         TINYINT(1)   NOT NULL,
   response_ms     INT          NULL,
+  -- Module 2: học sinh có mở "Đọc từ phải sang trái" trước khi phân loại hay không (NULL với module khác).
+  hint_used       TINYINT(1)   NULL,
+  -- is_safe nghĩa là "trả lời đúng" với Module 2 (phân loại đúng tên miền).
   content_version VARCHAR(20)  NOT NULL,
   created_at      DATETIME     NOT NULL,
   PRIMARY KEY (id),

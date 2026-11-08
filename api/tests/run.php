@@ -188,6 +188,120 @@ check('Đăng xuất (200)', $logout->status === 200);
 $afterLogout = call('GET', '/api/me', null, ['ats_session' => (string) $token]);
 check('Sau đăng xuất, token không còn hiệu lực (401)', $afterLogout->status === 401);
 
+echo "Module 2: thám tử không gian mạng\n";
+$t2 = sessionTokenFrom(call('POST', '/api/participants', ['class_code' => '8A1', 'consent' => true, 'consent_version' => 'v1']));
+$t2Cookie = ['ats_session' => (string) $t2];
+
+$m2Anon = call('GET', '/api/module2');
+check('Module 2 yêu cầu đăng nhập (401)', $m2Anon->status === 401);
+
+$m2 = call('GET', '/api/module2', null, $t2Cookie);
+check('Tổng quan Module 2 (200)', $m2->status === 200);
+$items = $m2->body['items'] ?? [];
+check('Có 12 mục phân loại', count($items) === 12, (string) count($items));
+$m2Json = (string) json_encode($m2->body);
+check('Tổng quan không lộ is_official hay thủ thuật', !str_contains($m2Json, 'is_official') && !str_contains($m2Json, '"trick"'));
+check('Tổng quan có danh sách tên gốc chính thức', count($m2->body['official_roots'] ?? []) === 2);
+check('Quy tắc đọc có 3 bước', count($m2->body['rule']['steps'] ?? []) === 3);
+check('Mỗi mục có host và root_domain để hiển thị cách đọc', isset($items[0]['host'], $items[0]['root_domain']));
+
+$allSafe = true;
+foreach ($items as $it) {
+    $host = (string) parse_url($it['url'], PHP_URL_HOST);
+    $tld = substr($host, strrpos($host, '.') + 1);
+    if (!in_array($tld, ['test', 'example'], true)) {
+        $allSafe = false;
+    }
+}
+check('Mọi tên miền trong Module 2 đều dùng đuôi .test hoặc .example', $allSafe);
+
+$badVerdict = call('POST', '/api/module2/items/m2-06-thay-ky-tu-o-thanh-0/answer', ['verdict' => 'maybe'], $t2Cookie);
+check('Phân loại không hợp lệ bị từ chối (422)', $badVerdict->status === 422);
+
+$badHint = call('POST', '/api/module2/items/m2-06-thay-ky-tu-o-thanh-0/answer', ['verdict' => 'fake', 'hint_used' => 'yes'], $t2Cookie);
+check('hint_used không phải boolean bị từ chối (422)', $badHint->status === 422);
+
+$unknown = call('POST', '/api/module2/items/khong-co/answer', ['verdict' => 'fake'], $t2Cookie);
+check('Mục không tồn tại (404)', $unknown->status === 404);
+
+$ansFake = call('POST', '/api/module2/items/m2-06-thay-ky-tu-o-thanh-0/answer',
+    ['verdict' => 'fake', 'response_ms' => 3100, 'hint_used' => true], $t2Cookie);
+check('Phân loại đúng mục giả mạo (201)', $ansFake->status === 201);
+check('Kết quả: đúng, is_official = false, có giải thích', $ansFake->body['correct'] === true
+    && $ansFake->body['is_official'] === false && $ansFake->body['explanation'] !== '');
+
+$dup = call('POST', '/api/module2/items/m2-06-thay-ky-tu-o-thanh-0/answer', ['verdict' => 'official'], $t2Cookie);
+check('Không được phân loại lại cùng một mục (409)', $dup->status === 409);
+
+$ansWrong = call('POST', '/api/module2/items/m2-01-cong-chinh-tra-cuu/answer',
+    ['verdict' => 'fake', 'response_ms' => 5000, 'hint_used' => false], $t2Cookie);
+check('Phân loại sai mục chính thống: correct = false', $ansWrong->status === 201 && $ansWrong->body['correct'] === false);
+
+$m2After = call('GET', '/api/module2', null, $t2Cookie);
+check('Tiến độ Module 2: 2 đã làm, 1 đúng, độ chính xác 50%',
+    $m2After->body['progress']['answered'] === 2
+    && $m2After->body['progress']['correct'] === 1
+    && $m2After->body['progress']['accuracy_percent'] === 50);
+$row6 = null;
+foreach ($m2After->body['items'] as $it) {
+    if ($it['id'] === 'm2-06-thay-ky-tu-o-thanh-0') {
+        $row6 = $it;
+    }
+}
+check('Mục đã làm hiển thị trạng thái answered và kết quả', $row6 !== null && $row6['status'] === 'answered' && $row6['correct'] === true);
+
+$evt = $pdo->query("SELECT item_id, choice_index, is_safe, hint_used, response_ms FROM module_events WHERE module = 2 ORDER BY id")->fetchAll();
+check('Ghi đúng 2 dòng module_events cho Module 2', count($evt) === 2, (string) count($evt));
+check('Mục giả mạo: choice_index = 1, is_safe = 1, hint_used = 1, response_ms = 3100',
+    isset($evt[0]) && (int) $evt[0]['choice_index'] === 1 && (int) $evt[0]['is_safe'] === 1
+    && (int) $evt[0]['hint_used'] === 1 && (int) $evt[0]['response_ms'] === 3100);
+check('Mục chính thống trả lời sai: choice_index = 1, is_safe = 0, hint_used = 0',
+    isset($evt[1]) && (int) $evt[1]['choice_index'] === 1 && (int) $evt[1]['is_safe'] === 0
+    && (int) $evt[1]['hint_used'] === 0);
+
+$m1Hint = (int) $pdo->query("SELECT COUNT(*) FROM module_events WHERE module = 1 AND hint_used IS NULL")->fetchColumn();
+check('Module 1 không ghi hint_used (NULL)', $m1Hint === (int) $pdo->query("SELECT COUNT(*) FROM module_events WHERE module = 1")->fetchColumn());
+
+echo "Kiểm tra nội dung Module 2 (chốt an toàn)\n";
+function domainCatalogFrom(callable $mutate): string
+{
+    $data = json_decode((string) file_get_contents(dirname(__DIR__) . '/content/module2_domains.json'), true);
+    $mutate($data);
+    $file = tempnam(sys_get_temp_dir(), 'dom');
+    file_put_contents($file, json_encode($data, JSON_UNESCAPED_UNICODE));
+    return $file;
+}
+function expectRejected(string $name, callable $mutate, string $needle): void
+{
+    $file = domainCatalogFrom($mutate);
+    $message = '';
+    try {
+        new AnToanSo\Services\DomainCatalog($file);
+    } catch (RuntimeException $e) {
+        $message = $e->getMessage();
+    }
+    unlink($file);
+    check($name, str_contains($message, $needle), $message);
+}
+$ok = new AnToanSo\Services\DomainCatalog(dirname(__DIR__) . '/content/module2_domains.json');
+check('Nội dung Module 2 hợp lệ (12 mục)', count($ok->items()) === 12);
+expectRejected('Từ chối tên miền thật (.gov.vn)', function (array &$d): void {
+    $d['items'][0]['url'] = 'https://sontra.danang.gov.vn/';
+    $d['items'][0]['root_domain'] = 'danang.gov.vn';
+}, 'Không được dùng tên miền thật');
+expectRejected('Từ chối tên miền thật (.com) trong tên gốc chính thức', function (array &$d): void {
+    $d['official_roots'][] = 'example.com';
+}, 'Không được dùng tên miền thật');
+expectRejected('Từ chối nhãn is_official sai so với danh sách gốc', function (array &$d): void {
+    $d['items'][5]['is_official'] = true;
+}, 'không khớp với danh sách');
+expectRejected('Từ chối tên gốc không nằm cuối tên miền', function (array &$d): void {
+    $d['items'][0]['root_domain'] = 'ngan-hang-mophong.example';
+}, 'không nằm ở cuối');
+expectRejected('Từ chối thủ thuật không hợp lệ', function (array &$d): void {
+    $d['items'][0]['trick'] = 'khac';
+}, 'thủ thuật không hợp lệ');
+
 echo "Kiểm tra nội dung kịch bản\n";
 $catalog = new AnToanSo\Services\ScenarioCatalog(dirname(__DIR__) . '/content/module1_scenarios.json');
 check('Tệp nội dung Module 1 hợp lệ', count($catalog->scenarios()) === 5);

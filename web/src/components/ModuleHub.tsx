@@ -1,5 +1,6 @@
 interface Props {
   onOpenModule1: () => void;
+  onOpenModule2: () => void;
 }
 
 interface ModuleCard {
@@ -11,7 +12,7 @@ interface ModuleCard {
   onOpen?: () => void;
 }
 
-export default function ModuleHub({ onOpenModule1 }: Props) {
+export default function ModuleHub({ onOpenModule1, onOpenModule2 }: Props) {
   const modules: ModuleCard[] = [
     {
       key: 'm1',
@@ -26,7 +27,8 @@ export default function ModuleHub({ onOpenModule1 }: Props) {
       title: 'Thám tử không gian mạng',
       description: 'Phân biệt tên miền thật và giả mạo bằng cách đọc địa chỉ trang web.',
       icon: '🔍',
-      available: false,
+      available: true,
+      onOpen: onOpenModule2,
     },
     {
       key: 'm3',

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace AnToanSo\Http;
 
 use AnToanSo\Controllers\Module1Controller;
+use AnToanSo\Controllers\Module2Controller;
 use AnToanSo\Controllers\ParticipantController;
 
 /**
@@ -28,6 +29,10 @@ final class Routes
         $router->add('GET', '/module1', [$module1, 'overview']);
         $router->add('GET', '/module1/scenarios/{id}', [$module1, 'show']);
         $router->add('POST', '/module1/scenarios/{id}/answer', [$module1, 'answer']);
+
+        $module2 = new Module2Controller();
+        $router->add('GET', '/module2', [$module2, 'overview']);
+        $router->add('POST', '/module2/items/{id}/answer', [$module2, 'answer']);
 
         return $router;
     }

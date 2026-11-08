@@ -54,3 +54,42 @@ export interface AnswerResult {
   red_flags: string[];
   takeaway: string;
 }
+
+export interface Module2Item {
+  id: string;
+  url: string;
+  host: string;
+  root_domain: string;
+  position: number;
+  status: 'new' | 'answered';
+  correct: boolean | null;
+}
+
+export interface Module2Overview {
+  module: number;
+  title: string;
+  content_version: string;
+  rule: { name: string; steps: string[] };
+  official_roots: string[];
+  reference_note: string;
+  items: Module2Item[];
+  progress: {
+    total: number;
+    answered: number;
+    correct: number;
+    accuracy_percent: number;
+  };
+}
+
+export type Verdict = 'official' | 'fake';
+
+export interface Module2Result {
+  item_id: string;
+  verdict: Verdict;
+  correct: boolean;
+  is_official: boolean;
+  root_domain: string;
+  trick: string;
+  explanation: string;
+  official_roots: string[];
+}

@@ -44,6 +44,24 @@ cd web && npm run build
 
 Lưu ý: biến môi trường của tiến trình có ưu tiên hơn tệp `api/.env`, nên có thể đổi CSDL mà không sửa tệp.
 
+### Lưu ý khi cập nhật CSDL đã tạo trước đó
+
+Lược đồ dùng `CREATE TABLE IF NOT EXISTS`, nên không tự thêm cột vào bảng đã có. Với CSDL tạo từ Module 1, chạy thêm một lần:
+
+```sql
+ALTER TABLE module_events ADD COLUMN hint_used TINYINT(1) NULL AFTER response_ms;
+```
+
+Với CSDL triển khai mới, không cần làm gì thêm: `schema.sql` đã có cột này.
+
+### Chọn CSDL cho máy chủ dev
+
+Biến môi trường của tiến trình có ưu tiên hơn `api/.env`. Khi chạy máy chủ dev, nên đặt rõ CSDL để không ghi nhầm vào CSDL kiểm thử:
+
+```bash
+DB_NAME=antoanso_dev php -S 127.0.0.1:8000 -t api api/router.php
+```
+
 ## 3. Triển khai lên iNET
 
 Cấu trúc đề xuất trên `public_html`:
@@ -112,5 +130,5 @@ Lưu ý: nếu iNET không cho phép `RewriteRule ... - [F]`, hãy chặn thư m
 ## 5. Giới hạn đã biết
 
 - Chưa có giới hạn tần suất cho đăng nhập bằng mã. Mã 8 ký tự (khoảng 40 bit) là định danh nghiên cứu, không phải mật khẩu. Nếu lớp học lớn hoặc có rủi ro dò mã, cần bổ sung giới hạn theo IP.
-- Chỉ có Module 1 hoàn thiện. Module 2 và Module 3 đang ở trạng thái "Sắp mở".
+- Module 1 và Module 2 đã hoàn thiện. Module 3 đang ở trạng thái "Sắp mở".
 - Bảng điều khiển quản trị cho giáo viên và chức năng xuất dữ liệu nghiên cứu sẽ được làm sau.

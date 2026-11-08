@@ -7,6 +7,7 @@ import LoginForm from './components/LoginForm';
 import CodeReveal from './components/CodeReveal';
 import ModuleHub from './components/ModuleHub';
 import Module1Page from './modules/module1/Module1Page';
+import Module2Page from './modules/module2/Module2Page';
 
 type View =
   | { name: 'loading' }
@@ -15,7 +16,8 @@ type View =
   | { name: 'login' }
   | { name: 'reveal'; participant: Participant }
   | { name: 'hub' }
-  | { name: 'module1' };
+  | { name: 'module1' }
+  | { name: 'module2' };
 
 export default function App() {
   const [view, setView] = useState<View>({ name: 'loading' });
@@ -99,11 +101,18 @@ export default function App() {
       )}
 
       {view.name === 'hub' && (
-        <ModuleHub onOpenModule1={() => setView({ name: 'module1' })} />
+        <ModuleHub
+          onOpenModule1={() => setView({ name: 'module1' })}
+          onOpenModule2={() => setView({ name: 'module2' })}
+        />
       )}
 
       {view.name === 'module1' && (
         <Module1Page onBack={() => setView({ name: 'hub' })} />
+      )}
+
+      {view.name === 'module2' && (
+        <Module2Page onBack={() => setView({ name: 'hub' })} />
       )}
     </main>
   );

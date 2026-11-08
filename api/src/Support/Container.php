@@ -7,7 +7,9 @@ namespace AnToanSo\Support;
 use AnToanSo\Repositories\ClassRepository;
 use AnToanSo\Repositories\EventRepository;
 use AnToanSo\Repositories\ParticipantRepository;
+use AnToanSo\Services\DomainCatalog;
 use AnToanSo\Services\Module1Service;
+use AnToanSo\Services\Module2Service;
 use AnToanSo\Services\ParticipantService;
 use AnToanSo\Services\ScenarioCatalog;
 
@@ -31,6 +33,14 @@ final class Container
     {
         return self::$instances['module1'] ??= new Module1Service(
             new ScenarioCatalog(dirname(__DIR__, 2) . '/content/module1_scenarios.json'),
+            new EventRepository(),
+        );
+    }
+
+    public static function module2(): Module2Service
+    {
+        return self::$instances['module2'] ??= new Module2Service(
+            new DomainCatalog(dirname(__DIR__, 2) . '/content/module2_domains.json'),
             new EventRepository(),
         );
     }
