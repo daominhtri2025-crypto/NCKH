@@ -12,6 +12,24 @@ CREATE TABLE IF NOT EXISTS classes (
   PRIMARY KEY (code)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- Tài khoản giáo viên: chỉ xem tiến độ của lớp được gán, không xem câu trả lời.
+-- Tài khoản do nhóm kỹ thuật tạo (bin/create_teacher.php). Không lưu họ tên giáo viên.
+CREATE TABLE IF NOT EXISTS teachers (
+  id            BIGINT       NOT NULL AUTO_INCREMENT,
+  username      VARCHAR(60)  NOT NULL,
+  password_hash VARCHAR(255) NOT NULL,
+  class_code    VARCHAR(40)  NOT NULL,
+  token_hash    CHAR(64)     NULL,
+  created_at    DATETIME     NOT NULL,
+  last_login_at DATETIME     NULL,
+  -- Tài khoản bị vô hiệu hóa (khóa mềm): không đăng nhập được, có thể khôi phục.
+  disabled_at   DATETIME     NULL,
+  PRIMARY KEY (id),
+  UNIQUE KEY uq_teachers_username (username),
+  UNIQUE KEY uq_teachers_token (token_hash),
+  CONSTRAINT fk_teachers_class FOREIGN KEY (class_code) REFERENCES classes (code)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 -- Người tham gia nghiên cứu. Thẻ mã do nhóm kỹ thuật in theo lô (bin/issue_cards.php), trạng thái 'issued'.
 -- Học sinh kích hoạt thẻ bằng cách nhập mã và đồng ý tham gia: trạng thái 'active', có consent và token.
 -- token_hash là SHA-256 của cookie phiên; token gốc không bao giờ được lưu.
@@ -26,27 +44,14 @@ CREATE TABLE IF NOT EXISTS participants (
   created_at      DATETIME     NOT NULL,
   claimed_at      DATETIME     NULL,
   last_seen_at    DATETIME     NULL,
+  -- Giáo viên đã tạo thẻ này (NULL nếu do nhóm kỹ thuật phát hành). Phục vụ kiểm tra trách nhiệm.
+  issued_by_teacher_id BIGINT  NULL,
   PRIMARY KEY (id),
   UNIQUE KEY uq_participants_code (code),
   UNIQUE KEY uq_participants_token (token_hash),
   KEY idx_participants_class (class_code),
-  CONSTRAINT fk_participants_class FOREIGN KEY (class_code) REFERENCES classes (code)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- Tài khoản giáo viên: chỉ xem tiến độ của lớp được gán, không xem câu trả lời.
--- Tài khoản do nhóm kỹ thuật tạo (bin/create_teacher.php). Không lưu họ tên giáo viên.
-CREATE TABLE IF NOT EXISTS teachers (
-  id            BIGINT       NOT NULL AUTO_INCREMENT,
-  username      VARCHAR(60)  NOT NULL,
-  password_hash VARCHAR(255) NOT NULL,
-  class_code    VARCHAR(40)  NOT NULL,
-  token_hash    CHAR(64)     NULL,
-  created_at    DATETIME     NOT NULL,
-  last_login_at DATETIME     NULL,
-  PRIMARY KEY (id),
-  UNIQUE KEY uq_teachers_username (username),
-  UNIQUE KEY uq_teachers_token (token_hash),
-  CONSTRAINT fk_teachers_class FOREIGN KEY (class_code) REFERENCES classes (code)
+  CONSTRAINT fk_participants_class FOREIGN KEY (class_code) REFERENCES classes (code),
+  CONSTRAINT fk_participants_issuer FOREIGN KEY (issued_by_teacher_id) REFERENCES teachers (id) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Mọi lần trả lời tình huống đều được ghi lại (kể cả lần thử lại).

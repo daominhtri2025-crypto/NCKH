@@ -35,11 +35,12 @@ final class ParticipantService
     }
 
     /**
-     * Dùng bởi bin/issue_cards.php: tạo n mã mới cho một lớp, trả về danh sách mã.
+     * Phát hành n thẻ mới cho lớp. Dùng bởi bin/issue_cards.php (nhóm kỹ thuật, $teacherId = null)
+     * và bởi giáo viên qua API (có $teacherId và giới hạn tổng số thẻ mỗi lớp).
      *
      * @return list<string>
      */
-    public function issueCards(string $classCode, int $count): array
+    public function issueCards(string $classCode, int $count, ?int $teacherId = null, ?int $maxPerClass = null): array
     {
         if ($count < 1 || $count > 500) {
             throw new RuntimeException('Số thẻ mỗi lần in phải từ 1 đến 500.');
@@ -47,10 +48,13 @@ final class ParticipantService
         if (!$this->classes->exists($classCode)) {
             throw new RuntimeException("Lớp {$classCode} chưa được tạo.");
         }
+        if ($maxPerClass !== null && $this->participants->countInClass($classCode) + $count > $maxPerClass) {
+            throw new RuntimeException("Lớp {$classCode} đã đạt giới hạn {$maxPerClass} thẻ. Liên hệ nhóm kỹ thuật.");
+        }
         $codes = [];
         for ($i = 0; $i < $count; $i++) {
             $code = $this->uniqueCode();
-            $this->participants->insertIssued($code, $classCode);
+            $this->participants->insertIssued($code, $classCode, $teacherId);
             $codes[] = $code;
         }
         return $codes;

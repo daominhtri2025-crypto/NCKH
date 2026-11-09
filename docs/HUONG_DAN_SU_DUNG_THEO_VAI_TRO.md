@@ -90,19 +90,32 @@ Lưu ý:
 - Nếu quên mật khẩu, liên hệ nhóm kỹ thuật để được đặt lại. Không chia sẻ tài khoản cho người khác.
 - Tên đăng nhập và mật khẩu không được gửi qua tin nhắn công khai hay lưu trong ảnh chụp màn hình.
 
-### 2.2. Trước khi học sinh tham gia
+### 2.2. Tạo thẻ mới cho học sinh
+
+Giáo viên tự tạo thẻ mới cho lớp mình trong ba trường hợp: học sinh mới tham gia lớp; học sinh quên mã (thẻ cũ không còn dùng được vì mã không lưu theo tên); học sinh làm mất thẻ.
+
+1. Đăng nhập (mục 2.1), ở phần **Tạo thẻ mới**, nhập số thẻ (từ 1 đến 20 mỗi lần).
+2. Bấm **Tạo thẻ**. Danh sách mã hiện ra. Bấm **In danh sách** để in.
+3. Phát thẻ cho học sinh và ghi vào sổ phát thẻ riêng (thẻ nào cho ai).
+
+Lưu ý:
+- Thẻ mới **không** kế thừa tiến độ cũ. Với học sinh quên mã, tiến độ cũ vẫn nằm ở mã cũ và không chuyển sang được.
+- Mỗi lớp có tổng số thẻ tối đa, do nhóm kỹ thuật đặt (mặc định 300). Khi vượt giới hạn, ứng dụng báo và giáo viên liên hệ nhóm kỹ thuật.
+- Thẻ do giáo viên tạo được ghi nhận là do tài khoản của giáo viên tạo, để có trách nhiệm đối với việc phát thẻ.
+
+### 2.3. Trước khi học sinh tham gia
 
 1. Thống nhất với nhà trường và phụ huynh về việc triển khai nghiên cứu.
-2. Đề nghị nhóm kỹ thuật tạo lớp, in thẻ mã và cấp tài khoản giáo viên.
+2. Đề nghị nhóm kỹ thuật tạo lớp, in lô thẻ đầu tiên và cấp tài khoản giáo viên. Sau đó giáo viên có thể tự tạo thẻ mới cho lớp (mục 2.2).
 3. Nhận thẻ và tài khoản. Chuẩn bị phòng máy hoặc điện thoại có kết nối mạng ổn định.
 
-### 2.3. Trong giờ học
+### 2.4. Trong giờ học
 
 1. Phát thẻ cho học sinh. **Ghi lại thẻ nào phát cho học sinh nào trong sổ riêng của giáo viên**, không ghi vào bất kỳ tệp nào của hệ thống. Sổ này là thông tin nhạy cảm và phải được bảo quản riêng.
 2. Hướng dẫn học sinh kích hoạt thẻ (mục 1.1) và làm theo trình tự (mục 1.3).
 3. Nhắc học sinh giữ thẻ cẩn thận.
 
-### 2.4. Theo dõi tiến độ
+### 2.5. Theo dõi tiến độ
 
 Sau khi đăng nhập, danh sách lớp hiển thị cho mỗi học sinh:
 - **Trạng thái:** đã kích hoạt hay chưa. Thẻ chưa kích hoạt chỉ hiển thị mã.
@@ -113,10 +126,11 @@ Dùng danh sách này để nhắc những học sinh còn thiếu. Khi khảo s
 
 Danh sách chỉ hiển thị số lượng và trạng thái. Giáo viên không xem được câu trả lời, đáp án hay nội dung học sinh nhập.
 
-### 2.5. Điều giáo viên không làm
+### 2.6. Điều giáo viên không làm
 
 - Không yêu cầu học sinh nhập họ tên, email, số điện thoại hay mật khẩu thật vào ứng dụng.
 - Không chia sẻ thẻ mã, mã học sinh hay tài khoản giáo viên.
+- Không tạo thẻ vượt nhu cầu thực tế của lớp; không tự đổi lớp hay mật khẩu (việc này do nhóm kỹ thuật thực hiện).
 - Không cố gắng xem câu trả lời của học sinh; giao diện không hiển thị chúng.
 - Không tự sửa dữ liệu trong cơ sở dữ liệu.
 
@@ -133,50 +147,53 @@ Nhóm kỹ thuật **không đăng nhập vào ứng dụng**. Nhóm làm việc
 
 Quản lý tài khoản hosting và CSDL do nhóm giữ trong bảng điều khiển iNET và phpMyAdmin. Không chia sẻ các thông tin này qua kênh công khai.
 
-### 3.2. Tạo lớp, in thẻ và cấp tài khoản giáo viên
+### 3.2. Quyền quản trị của nhóm kỹ thuật
 
-Mỗi lớp làm một lần, theo đúng thứ tự:
+Nhóm kỹ thuật có **toàn quyền** đối với tài khoản giáo viên và thẻ mã:
+
+| Việc | Lệnh (chạy trên máy chủ, từ thư mục gốc) |
+|---|---|
+| Tạo lớp | `php api/bin/add_class.php <MÃ_LỚP> "<Tên lớp>" "<Tên cơ sở>"` |
+| In lô thẻ | `php api/bin/issue_cards.php <MÃ_LỚP> <SỐ_THẺ> <tệp.csv>` |
+| Xem danh sách giáo viên | `php api/bin/manage_teacher.php list` |
+| Thêm tài khoản giáo viên | `php api/bin/manage_teacher.php create <tên> <MÃ_LỚP>` |
+| Khôi phục mật khẩu giáo viên | `php api/bin/manage_teacher.php reset <tên>` |
+| Sửa lớp của giáo viên | `php api/bin/manage_teacher.php move <tên> <MÃ_LỚP>` |
+| Khóa tài khoản (không xóa dữ liệu) | `php api/bin/manage_teacher.php disable <tên>` |
+| Khôi phục tài khoản đã khóa | `php api/bin/manage_teacher.php enable <tên>` |
+| Xóa hẳn tài khoản | `php api/bin/manage_teacher.php delete <tên>` |
+
+Mật khẩu mới (khi tạo hoặc đặt lại) được in ra **một lần**. Ghi lại và trao cho giáo viên qua kênh trực tiếp.
+
+Phân biệt hai thao tác dễ nhầm:
+- **Khóa (disable)** là tạm dừng: tài khoản không đăng nhập được, dữ liệu và thẻ giữ nguyên, có thể mở lại bằng `enable`.
+- **Xóa (delete)** là xóa hẳn tài khoản. Thẻ đã phát vẫn giữ nguyên; chỉ bỏ liên kết với người tạo.
+
+Mọi thao tác khóa, chuyển lớp, đặt lại mật khẩu hoặc xóa đều thu hồi các phiên đăng nhập đang mở của giáo viên đó.
+
+Sau khi tạo lớp và tài khoản, in lô thẻ đầu tiên:
 
 ```bash
-# 1. Tạo lớp
-php api/bin/add_class.php <MÃ_LỚP> "<Tên lớp>" "<Tên cơ sở>"
-
-# 2. In thẻ mã (mỗi thẻ một mã ngẫu nhiên, không ghi tên)
-php api/bin/issue_cards.php <MÃ_LỚP> <SỐ_THẺ> <tệp_đầu_ra.csv>
-
-# 3. Cấp tài khoản giáo viên (mật khẩu ngẫu nhiên, in ra một lần)
-php api/bin/create_teacher.php <TÊN_ĐĂNG_NHẬP> <MÃ_LỚP>
+php api/bin/issue_cards.php <MÃ_LỚP> <SỐ_THẺ> <tệp.csv>
 ```
 
-Sau đó:
-- Tệp CSV từ bước 2 chứa mã thẻ. In ra, trao cho giáo viên, rồi **xóa tệp khỏi máy chủ**. Không để tệp này trong thư mục công khai.
-- Ghi lại mật khẩu giáo viên từ bước 3 và trao cho giáo viên qua kênh trực tiếp.
-- Ghi vào sổ phát thẻ: thẻ nào đã phát, cho lớp nào, ngày nào. Sổ này lưu riêng, không đưa vào hệ thống.
+Tệp CSV chứa mã thẻ. In ra, trao cho giáo viên, rồi **xóa tệp khỏi máy chủ**. Ghi vào sổ phát thẻ: thẻ nào đã phát, cho lớp nào, ngày nào.
 
-### 3.3. Đặt lại mật khẩu giáo viên
-
-Khi giáo viên quên mật khẩu:
-
-```bash
-php api/bin/reset_teacher_password.php <TÊN_ĐĂNG_NHẬP>
-```
-
-Lệnh in mật khẩu mới một lần và đăng xuất mọi phiên đang mở của giáo viên đó. Trao mật khẩu mới qua kênh trực tiếp.
-
-### 3.4. Xem tiến độ và hỗ trợ
-
-- Tiến độ lớp xem được bằng tài khoản giáo viên. Nhóm kỹ thuật không cần đăng nhập để xem; nếu cần kiểm tra, dùng cùng tài khoản giáo viên đó hoặc đối chiếu trong CSDL.
-- Học sinh quên mã thẻ: giáo viên báo nhóm. Nhóm không khôi phục được mã cũ, vì mã không được lưu gắn với tên. Có thể in thẻ mới, nhưng tiến độ cũ không chuyển sang.
-
-### 3.5. Cấu hình
+### 3.3. Cấu hình liên quan đến thẻ và giáo viên
 
 | Biến trong `api/.env` | Ý nghĩa | Khuyến nghị |
 |---|---|---|
 | `APP_URL` | Địa chỉ ứng dụng (chống CSRF) | Đúng địa chỉ thực tế |
 | `ADMIN_TOKEN` | Khóa xuất dữ liệu qua HTTP | Chuỗi ngẫu nhiên dài; để trống nếu không cần |
 | `DELAYED_MIN_DAYS` | Số ngày trước khảo sát theo dõi | 28 theo đề cương |
+| `CLASS_CARD_LIMIT` | Tổng số thẻ tối đa mỗi lớp (kể cả thẻ giáo viên tự tạo) | 300 hoặc theo sĩ số lớp cộng dự phòng |
 
-### 3.6. Xuất dữ liệu nghiên cứu
+### 3.4. Xem tiến độ và hỗ trợ
+
+- Tiến độ lớp là thông tin của giáo viên. Nhóm kỹ thuật không có màn hình riêng để xem tiến độ; khi cần kiểm tra, dùng công cụ kiểm thử hoặc truy vấn CSDL theo mục 3.6.
+- Học sinh quên mã thẻ: giáo viên báo nhóm. Nhóm không khôi phục được mã cũ, vì mã không được lưu gắn với tên. Có thể in thẻ mới, nhưng tiến độ cũ không chuyển sang.
+
+### 3.5. Xuất dữ liệu nghiên cứu
 
 Hai tệp CSV theo `docs/CODEBOOK_NGHIEN_CUU.md`. Chỉ có học sinh đã kích hoạt được đưa vào tệp.
 
@@ -191,17 +208,18 @@ Hoặc qua HTTP (cần `ADMIN_TOKEN`):
 curl -H "X-Admin-Token: <token>" -o antoanso_wide.csv https://<tên-miền>/api/admin/export/wide.csv
 ```
 
-### 3.7. Bảo mật và đạo đức dữ liệu
+### 3.6. Bảo mật và đạo đức dữ liệu
 
 - Dữ liệu nghiên cứu không chứa họ tên, email, số điện thoại, mật khẩu hay thời điểm đồng ý.
 - **Ranh giới ẩn danh:** giáo viên phát thẻ trực tiếp nên có thể biết thẻ nào thuộc học sinh nào. Ẩn danh đúng với nhóm nghiên cứu và tệp xuất, không đúng với giáo viên. Điều này phải được nêu trong phiếu đồng ý.
+- **Quyền truy cập CSDL:** nhóm kỹ thuật có quyền đọc cơ sở dữ liệu, nên về mặt kỹ thuật có thể xem câu trả lời của học sinh. Chỉ truy cập khi cần cho bảo trì, kiểm tra kỹ thuật hoặc phân tích đã được phê duyệt. Ghi nhật ký mọi truy vấn trực tiếp vào CSDL, và không sao chép dữ liệu thô ra ngoài.
 - Không công bố kết quả theo lớp khi lớp có dưới 5 học sinh.
 - Bảo quản riêng: sổ phát thẻ, tệp CSV chứa mã thẻ, `api/.env`, `ADMIN_TOKEN`, mật khẩu giáo viên.
 - Sao lưu CSDL định kỳ.
 
-### 3.8. Giới hạn đã biết
+### 3.7. Giới hạn đã biết
 
 - Đăng nhập học sinh và giáo viên chưa có giới hạn số lần thử sai.
-- Chưa có giao diện quản trị cho nhóm kỹ thuật; mọi thao tác dùng dòng lệnh.
+- Chưa có giao diện quản trị cho nhóm kỹ thuật; mọi thao tác dùng dòng lệnh trên máy chủ.
 - Mất thẻ không khôi phục được tiến độ cũ.
 - Chưa có cơ chế nhắc khảo sát theo dõi.

@@ -348,7 +348,8 @@ Nếu smoke test báo "Thẻ phải chưa được kích hoạt", hãy in thẻ 
 ```bash
 php api/bin/issue_cards.php 8A1 5 the_thu.csv
 php api/bin/create_teacher.php gv_thu 8A1
-php api/bin/reset_teacher_password.php gv_thu   # khi cần đặt lại mật khẩu
+php api/bin/manage_teacher.php list               # xem tài khoản
+php api/bin/manage_teacher.php reset gv_thu       # đặt lại mật khẩu (xem mục 3.2 hướng dẫn vai trò)
 ```
 
 Ghi lại mật khẩu giáo viên được in ra (chỉ hiện một lần). Đăng nhập tại `http://localhost:5173` bằng "Giáo viên đăng nhập" để xem tiến độ lớp `8A1`. Tài khoản giáo viên chỉ đăng nhập vào ứng dụng trên trình duyệt; nhóm kỹ thuật làm việc bằng dòng lệnh như trên.

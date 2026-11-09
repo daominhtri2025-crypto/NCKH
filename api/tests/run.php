@@ -634,5 +634,53 @@ check('Đặt lại mật khẩu giáo viên: mật khẩu mới đăng nhập �
 
 check('Đăng xuất giáo viên: danh sách không còn truy cập (401)', call('GET', '/api/teacher/roster', null, ['ats_teacher' => (string) $tTok])->status === 401);
 
+echo "Quản trị tài khoản giáo viên và thẻ do giáo viên tạo\n";
+$adm = new AnToanSo\Services\TeacherService(new AnToanSo\Repositories\TeacherRepository());
+$admPass = $adm->createTeacher('gv_quan_tri', '8A1', true);
+$admLogin = call('POST', '/api/teacher/session', ['username' => 'gv_quan_tri', 'password' => $admPass]);
+$admTok = (string) teacherTokenFrom($admLogin);
+check('Giáo viên quản trị đăng nhập được', $admLogin->status === 200);
+$admId = (int) $pdo->query("SELECT id FROM teachers WHERE username = 'gv_quan_tri'")->fetchColumn();
+
+$cur = (new AnToanSo\Repositories\ParticipantRepository())->countInClass('8A1');
+$tc = call('POST', '/api/teacher/cards', ['count' => 2], ['ats_teacher' => $admTok]);
+check('Giáo viên tạo 2 thẻ mới cho lớp mình (201)', $tc->status === 201 && count($tc->body['codes'] ?? []) === 2);
+$issuerRows = $pdo->query("SELECT issued_by_teacher_id, class_code, status FROM participants WHERE code IN ('" . implode("','", $tc->body['codes']) . "')")->fetchAll();
+check('Thẻ ghi nhận người tạo và đúng lớp, ở trạng thái issued', count($issuerRows) === 2
+    && (int) $issuerRows[0]['issued_by_teacher_id'] === $admId && $issuerRows[0]['class_code'] === '8A1' && $issuerRows[0]['status'] === 'issued');
+check('Số thẻ 0 bị từ chối (422)', call('POST', '/api/teacher/cards', ['count' => 0], ['ats_teacher' => $admTok])->status === 422);
+check('Số thẻ 21 bị từ chối (422)', call('POST', '/api/teacher/cards', ['count' => 21], ['ats_teacher' => $admTok])->status === 422);
+check('Số thẻ không phải số nguyên bị từ chối (422)', call('POST', '/api/teacher/cards', ['count' => '3'], ['ats_teacher' => $admTok])->status === 422);
+check('Tạo thẻ khi chưa đăng nhập (401)', call('POST', '/api/teacher/cards', ['count' => 1])->status === 401);
+
+AnToanSo\Support\Env::set('CLASS_CARD_LIMIT', (string) ($cur + 4));
+check('Vượt giới hạn tổng thẻ của lớp (422)', call('POST', '/api/teacher/cards', ['count' => 3], ['ats_teacher' => $admTok])->status === 422);
+check('Trong giới hạn vẫn tạo được (201)', call('POST', '/api/teacher/cards', ['count' => 1], ['ats_teacher' => $admTok])->status === 201);
+AnToanSo\Support\Env::set('CLASS_CARD_LIMIT', '300');
+
+$adm->disableTeacher('gv_quan_tri');
+check('Khóa tài khoản: đăng nhập bị từ chối (401)', call('POST', '/api/teacher/session', ['username' => 'gv_quan_tri', 'password' => $admPass])->status === 401);
+check('Khóa tài khoản: phiên đang mở bị thu hồi ngay (401)', call('GET', '/api/teacher/roster', null, ['ats_teacher' => $admTok])->status === 401);
+$adm->enableTeacher('gv_quan_tri');
+check('Khôi phục tài khoản: đăng nhập lại được (200)', call('POST', '/api/teacher/session', ['username' => 'gv_quan_tri', 'password' => $admPass])->status === 200);
+
+(new AnToanSo\Repositories\ClassRepository())->create('8C1', 'Lớp 8C1', 'THCS Thử nghiệm');
+$adm->moveTeacher('gv_quan_tri', '8C1', true);
+$movedLogin = call('POST', '/api/teacher/session', ['username' => 'gv_quan_tri', 'password' => $admPass]);
+$movedRoster = call('GET', '/api/teacher/roster', null, ['ats_teacher' => (string) teacherTokenFrom($movedLogin)]);
+check('Chuyển lớp: danh sách hiển thị lớp mới', $movedRoster->body['class_code'] === '8C1');
+check('Chuyển lớp: thẻ của lớp cũ vẫn thuộc lớp cũ', (int) $pdo->query("SELECT COUNT(*) FROM participants WHERE class_code = '8A1' AND issued_by_teacher_id = {$admId}")->fetchColumn() >= 3);
+
+$adm->deleteTeacher('gv_quan_tri');
+check('Xóa tài khoản: không còn đăng nhập được (401)', call('POST', '/api/teacher/session', ['username' => 'gv_quan_tri', 'password' => $admPass])->status === 401);
+check('Xóa tài khoản: thẻ đã phát vẫn giữ, người phát được gỡ liên kết', (int) $pdo->query("SELECT COUNT(*) FROM participants WHERE code IN ('" . implode("','", $tc->body['codes']) . "') AND issued_by_teacher_id IS NULL")->fetchColumn() === 2);
+check('Quản trị: thao tác với tài khoản không tồn tại báo lỗi', (function () use ($adm) {
+    try { $adm->disableTeacher('khong_co_ten'); return false; } catch (RuntimeException $e) { return true; }
+})());
+check('Quản trị: danh sách có tài khoản giáo viên thử nghiệm và không chứa mật khẩu', (function () use ($adm) {
+    $list = $adm->listTeachers();
+    return count(array_filter($list, fn ($t) => $t['username'] === 'gv_thu_nghiem')) === 1 && !array_key_exists('password_hash', $list[0]);
+})());
+
 echo "\nKết quả: {$passed} đạt, {$failed} lỗi.\n";
 exit($failed === 0 ? 0 : 1);

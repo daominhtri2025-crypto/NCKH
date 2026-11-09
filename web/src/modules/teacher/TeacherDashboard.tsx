@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import { api, ApiError } from '../../lib/api';
 
 interface Student {
@@ -33,6 +33,24 @@ function bar(n: number, total: number) {
 export default function TeacherDashboard({ onLogout }: Props) {
   const [roster, setRoster] = useState<Roster | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [cardCount, setCardCount] = useState(1);
+  const [newCodes, setNewCodes] = useState<string[] | null>(null);
+  const [cardError, setCardError] = useState<string | null>(null);
+  const [creating, setCreating] = useState(false);
+
+  async function createCards(event: FormEvent) {
+    event.preventDefault();
+    setCardError(null);
+    setCreating(true);
+    try {
+      const data = await api.post<{ codes: string[] }>('/teacher/cards', { count: cardCount });
+      setNewCodes(data.codes);
+    } catch (err) {
+      setCardError(err instanceof ApiError ? err.message : 'Không tạo được thẻ.');
+    } finally {
+      setCreating(false);
+    }
+  }
 
   useEffect(() => {
     api
@@ -72,6 +90,34 @@ export default function TeacherDashboard({ onLogout }: Props) {
       <p className="small muted">
         Đã cấp {t.students} thẻ · đã kích hoạt {t.active}. Trang này chỉ hiển thị tiến độ, không hiển thị nội dung câu trả lời.
       </p>
+
+      <section className="card card-new-cards" aria-labelledby="new-cards-title">
+        <h3 id="new-cards-title">Tạo thẻ mới</h3>
+        <p className="small muted">
+          Dùng cho học sinh mới tham gia lớp, hoặc học sinh quên mã. Thẻ mới không kế thừa tiến độ cũ.
+          Mỗi lần tạo tối đa 20 thẻ. Thẻ được ghi nhận là do tài khoản của em tạo.
+        </p>
+        <form onSubmit={createCards} className="stack-row">
+          <label className="field">
+            <span>Số thẻ</span>
+            <input type="number" min={1} max={20} value={cardCount}
+              onChange={(e) => setCardCount(Number(e.target.value))} required />
+          </label>
+          <button className="btn btn-primary" type="submit" disabled={creating}>
+            {creating ? 'Đang tạo…' : 'Tạo thẻ'}
+          </button>
+        </form>
+        {cardError && <p className="alert" role="alert">{cardError}</p>}
+        {newCodes && (
+          <div className="new-codes">
+            <p><strong>Mã thẻ mới (in và phát cho học sinh):</strong></p>
+            <ul className="code-list">
+              {newCodes.map((c) => <li key={c}><code>{c}</code></li>)}
+            </ul>
+            <button className="btn" onClick={() => window.print()}>In danh sách</button>
+          </div>
+        )}
+      </section>
 
       <ul className="student-list">
         {roster.students.map((s) => (

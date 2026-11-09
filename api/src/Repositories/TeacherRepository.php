@@ -26,7 +26,7 @@ final class TeacherRepository
     /** @return array<string,mixed>|null */
     public function findByTokenHash(string $tokenHash): ?array
     {
-        $stmt = $this->db()->prepare('SELECT * FROM teachers WHERE token_hash = ? LIMIT 1');
+        $stmt = $this->db()->prepare('SELECT * FROM teachers WHERE token_hash = ? AND disabled_at IS NULL LIMIT 1');
         $stmt->execute([$tokenHash]);
         $row = $stmt->fetch();
         return $row === false ? null : $row;
@@ -38,6 +38,32 @@ final class TeacherRepository
             'INSERT INTO teachers (username, password_hash, class_code, created_at) VALUES (?, ?, ?, ?)'
         );
         $stmt->execute([$username, $passwordHash, $classCode, date('Y-m-d H:i:s')]);
+    }
+
+    /** @return list<array<string,mixed>> */
+    public function listAll(): array
+    {
+        return $this->db()->query('SELECT id, username, class_code, created_at, last_login_at, disabled_at FROM teachers ORDER BY username')->fetchAll();
+    }
+
+    /** Vô hiệu hóa (khóa mềm) hoặc khôi phục; khi vô hiệu hóa, thu hồi mọi phiên đang mở. */
+    public function setDisabled(int $id, bool $disabled): void
+    {
+        $stmt = $this->db()->prepare('UPDATE teachers SET disabled_at = ?, token_hash = NULL WHERE id = ?');
+        $stmt->execute([$disabled ? date('Y-m-d H:i:s') : null, $id]);
+    }
+
+    public function setClass(int $id, string $classCode): void
+    {
+        $stmt = $this->db()->prepare('UPDATE teachers SET class_code = ?, token_hash = NULL WHERE id = ?');
+        $stmt->execute([$classCode, $id]);
+    }
+
+    /** Xóa hẳn tài khoản. Thẻ đã phát bởi giáo viên này vẫn giữ, chỉ bỏ liên kết người phát. */
+    public function delete(int $id): void
+    {
+        $stmt = $this->db()->prepare('DELETE FROM teachers WHERE id = ?');
+        $stmt->execute([$id]);
     }
 
     /** Đặt mật khẩu mới và thu hồi mọi phiên đăng nhập hiện có của giáo viên. */

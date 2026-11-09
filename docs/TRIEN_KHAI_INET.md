@@ -16,7 +16,8 @@ Nhóm kỹ thuật là vai trò duy nhất có quyền chạy lệnh trên máy 
 | Tạo lớp | Nhóm kỹ thuật | `php api/bin/add_class.php` |
 | In thẻ mã cho lớp | Nhóm kỹ thuật | `php api/bin/issue_cards.php` |
 | Tạo tài khoản giáo viên | Nhóm kỹ thuật | `php api/bin/create_teacher.php` |
-| Đặt lại mật khẩu giáo viên | Nhóm kỹ thuật | `php api/bin/reset_teacher_password.php` |
+| Quản lý tài khoản giáo viên (thêm, sửa lớp, khóa, khôi phục, xóa, đặt lại mật khẩu) | Nhóm kỹ thuật | `php api/bin/manage_teacher.php` |
+| Tạo thẻ mới cho lớp | Giáo viên (trên ứng dụng) hoặc nhóm kỹ thuật (`issue_cards.php`) | Giới hạn bởi `CLASS_CARD_LIMIT` |
 | Xuất dữ liệu nghiên cứu | Nhóm kỹ thuật | `php api/bin/export_assessments.php` hoặc HTTP với `ADMIN_TOKEN` |
 
 ## 2. Cấu trúc thư mục trên hosting
@@ -58,6 +59,7 @@ public_html/
    DB_PASS=<mật khẩu CSDL>
    ADMIN_TOKEN=<chuỗi ngẫu nhiên dài, hoặc để trống để tắt xuất HTTP>
    DELAYED_MIN_DAYS=28
+   CLASS_CARD_LIMIT=300
    ```
    `APP_URL` phải khớp chính xác với địa chỉ người dùng truy cập, vì đây là một phần của kiểm tra CSRF.
 6. Nạp lược đồ:
@@ -85,7 +87,18 @@ php api/bin/create_teacher.php gv_8a1 8A1
 Sau khi chạy xong:
 - Tệp `the_8A1.csv` chứa mã thẻ. Tải về máy cá nhân để in, rồi xóa khỏi hosting. Chỉ giữ bản in và sổ phát thẻ. Không để tệp này trên `public_html`, vì thư mục đó có thể bị truy cập qua trình duyệt.
 - Mật khẩu giáo viên chỉ hiện một lần. Ghi lại và trao cho giáo viên qua kênh trực tiếp.
-- Nếu giáo viên quên mật khẩu, chạy `php api/bin/reset_teacher_password.php gv_8a1`. Lệnh này cũng đăng xuất mọi phiên đang mở của giáo viên đó.
+- Quản lý tài khoản giáo viên bằng một lệnh duy nhất:
+
+```bash
+php api/bin/manage_teacher.php list                 # xem danh sách
+php api/bin/manage_teacher.php reset gv_8a1         # quên mật khẩu
+php api/bin/manage_teacher.php move gv_8a1 8B1      # chuyển lớp
+php api/bin/manage_teacher.php disable gv_8a1       # tạm khóa
+php api/bin/manage_teacher.php enable gv_8a1        # mở lại
+php api/bin/manage_teacher.php delete gv_8a1        # xóa hẳn
+```
+
+Mọi thao tác khóa, chuyển lớp, đặt lại mật khẩu hoặc xóa đều đăng xuất các phiên đang mở của giáo viên đó.
 
 Cách thay thế khi không có Terminal: không có cách đơn giản. Cần nhờ nhà cung cấp hosting bật Terminal, hoặc chuyển dữ liệu lớp và thẻ bằng SQL trong phpMyAdmin, điều này không khuyến nghị vì dễ sai mã và không sinh được mật khẩu băm đúng.
 

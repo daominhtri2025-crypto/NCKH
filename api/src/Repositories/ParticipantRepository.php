@@ -32,12 +32,21 @@ final class ParticipantRepository
         return $row === false ? null : $row;
     }
 
-    public function insertIssued(string $code, string $classCode): void
+    public function insertIssued(string $code, string $classCode, ?int $issuedByTeacherId): void
     {
         $stmt = $this->db()->prepare(
-            "INSERT INTO participants (code, class_code, status, created_at) VALUES (?, ?, 'issued', ?)"
+            "INSERT INTO participants (code, class_code, status, created_at, issued_by_teacher_id)
+             VALUES (?, ?, 'issued', ?, ?)"
         );
-        $stmt->execute([$code, $classCode, date('Y-m-d H:i:s')]);
+        $stmt->execute([$code, $classCode, date('Y-m-d H:i:s'), $issuedByTeacherId]);
+    }
+
+    /** Tổng số thẻ đã phát của lớp (kể cả chưa kích hoạt), dùng để giới hạn số thẻ mỗi lớp. */
+    public function countInClass(string $classCode): int
+    {
+        $stmt = $this->db()->prepare('SELECT COUNT(*) FROM participants WHERE class_code = ?');
+        $stmt->execute([$classCode]);
+        return (int) $stmt->fetchColumn();
     }
 
     /** Kích hoạt thẻ: chỉ thành công khi thẻ còn ở trạng thái 'issued'. */

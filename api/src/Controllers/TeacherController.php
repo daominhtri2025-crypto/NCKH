@@ -34,4 +34,21 @@ final class TeacherController
         $teacher = Container::teachers()->authenticate($request);
         return Response::json(Container::teachers()->roster($teacher));
     }
+
+    /** POST /api/teacher/cards  body: {count} — tạo thẻ mới cho lớp của giáo viên. */
+    public function issueCards(Request $request): Response
+    {
+        $teacher = Container::teachers()->authenticate($request);
+        $body = $request->json();
+        $count = $body['count'] ?? null;
+        if (!is_int($count)) {
+            return Response::json(['error' => 'Số thẻ phải là số nguyên.'], 422);
+        }
+        $codes = Container::teachers()->issueCardsForTeacher($teacher, $count);
+        return Response::json([
+            'class_code' => $teacher['class_code'],
+            'codes' => $codes,
+            'note' => 'Thẻ mới dùng cho học sinh tham gia mới hoặc học sinh quên mã. Tiến độ cũ không chuyển sang thẻ mới.',
+        ], 201);
+    }
 }

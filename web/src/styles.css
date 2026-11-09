@@ -1255,3 +1255,10 @@ h3 {
 .metric .mini-bar > div { height: 100%; background: var(--brand); }
 .link-btn.inline { padding: 0; min-height: 0; }
 @media (min-width: 720px) { .student-list { grid-template-columns: 1fr 1fr; } }
+
+/* Giáo viên: tạo thẻ mới */
+.card-new-cards { margin-bottom: 16px; }
+.new-codes { margin-top: 12px; }
+.code-list { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 8px; }
+.code-list code { display: block; font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 1.1rem; font-weight: 700; background: var(--brand-soft); padding: 8px; border-radius: 8px; text-align: center; }
+@media print { .site-footer, .topbar, .card-new-cards form, .link-btn, .btn { display: none !important; } }
