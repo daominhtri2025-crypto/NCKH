@@ -628,6 +628,10 @@ check('Danh sách không lộ đáp án, lựa chọn hay nội dung câu trả 
     !preg_match('/is_correct|answer_index|answer_value|choice_index|is_safe|verdict|explanation|"correct"/', $rosterJson));
 check('Danh sách không lộ mật khẩu hay token', !str_contains($rosterJson, $tPass) && !str_contains($rosterJson, (string) $tTok));
 call('DELETE', '/api/teacher/session', null, ['ats_teacher' => (string) $tTok]);
+$newPass = $teacherSvc->resetPassword('gv_thu_nghiem');
+check('Đặt lại mật khẩu giáo viên: mật khẩu cũ không còn dùng được (401)', call('POST', '/api/teacher/session', ['username' => 'gv_thu_nghiem', 'password' => $tPass])->status === 401);
+check('Đặt lại mật khẩu giáo viên: mật khẩu mới đăng nhập được (200)', call('POST', '/api/teacher/session', ['username' => 'gv_thu_nghiem', 'password' => $newPass])->status === 200);
+
 check('Đăng xuất giáo viên: danh sách không còn truy cập (401)', call('GET', '/api/teacher/roster', null, ['ats_teacher' => (string) $tTok])->status === 401);
 
 echo "\nKết quả: {$passed} đạt, {$failed} lỗi.\n";

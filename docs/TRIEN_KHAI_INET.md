@@ -1,76 +1,31 @@
-# Hướng dẫn triển khai: An Toàn Số Học Đường
+# Hướng dẫn triển khai lên hosting iNET
 
-Tài liệu dành cho người phụ trách kỹ thuật. Mục tiêu: chạy thử cục bộ, sau đó đưa lên hosting chia sẻ iNET (PHP 8.1+ và MySQL/MariaDB).
+Tài liệu dành cho nhóm kỹ thuật. Mục tiêu: đưa ứng dụng lên hosting chia sẻ iNET (PHP 8.1 trở lên, MySQL/MariaDB) sau khi đã kiểm thử cục bộ theo `docs/CHAY_CUC_BO.md`.
 
-## 1. Yêu cầu
+Trước khi triển khai, cần xác nhận:
+- Trên hosting có PHP 8.1 trở lên, extension `pdo_mysql`, và chức năng Terminal hoặc SSH để chạy lệnh `php`. Nếu không có Terminal, các lệnh trong mục 4 không thực hiện được và phải dùng cách thay thế ghi ở đó.
+- Đã có phiếu đồng ý và phê duyệt đạo đức (xem mục 6).
 
-- PHP 8.1 trở lên, các extension: `pdo_mysql`, `json`, `mbstring`.
-- MySQL 8.0 hoặc MariaDB 10.6 trở lên.
-- Node.js 20 trở lên (chỉ để build giao diện, không cần trên máy chủ).
+## 1. Ai làm gì trên hosting
 
-## 2. Chạy thử cục bộ
+Nhóm kỹ thuật là vai trò duy nhất có quyền chạy lệnh trên máy chủ. Giáo viên và học sinh không đăng nhập vào hosting; họ chỉ dùng trình duyệt trên ứng dụng.
 
-```bash
-# CSDL
-mysql -uroot -e "CREATE DATABASE antoanso_dev CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
-mysql -uroot -e "CREATE USER 'antoanso'@'localhost' IDENTIFIED BY 'đổi_mật_khẩu'; GRANT ALL ON antoanso_dev.* TO 'antoanso'@'localhost';"
+| Việc | Ai làm | Cách làm |
+|---|---|---|
+| Tạo CSDL, nạp lược đồ | Nhóm kỹ thuật | Terminal hoặc phpMyAdmin |
+| Tạo lớp | Nhóm kỹ thuật | `php api/bin/add_class.php` |
+| In thẻ mã cho lớp | Nhóm kỹ thuật | `php api/bin/issue_cards.php` |
+| Tạo tài khoản giáo viên | Nhóm kỹ thuật | `php api/bin/create_teacher.php` |
+| Đặt lại mật khẩu giáo viên | Nhóm kỹ thuật | `php api/bin/reset_teacher_password.php` |
+| Xuất dữ liệu nghiên cứu | Nhóm kỹ thuật | `php api/bin/export_assessments.php` hoặc HTTP với `ADMIN_TOKEN` |
 
-# Cấu hình API
-cp api/.env.example api/.env        # sau đó sửa DB_NAME, DB_USER, DB_PASS
-
-# Tạo bảng và lớp học thử
-php api/bin/migrate.php
-php api/bin/add_class.php 8A1 "Lớp 8A1" "THCS Thử nghiệm"
-
-# Terminal 1: API
-php -S 127.0.0.1:8000 -t api api/router.php
-
-# Terminal 2: giao diện (proxy /api về cổng 8000)
-cd web && npm install && npm run dev
-```
-
-Mở `http://localhost:5173`.
-
-### Kiểm thử
-
-```bash
-# Bộ kiểm thử XÓA SẠCH dữ liệu, bắt buộc dùng CSDL có tên kết thúc bằng _test
-mysql -uroot -e "CREATE DATABASE antoanso_test CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
-DB_NAME=antoanso_test php api/tests/run.php
-
-# Kiểm tra kiểu và build giao diện
-cd web && npm run build
-```
-
-Lưu ý: biến môi trường của tiến trình có ưu tiên hơn tệp `api/.env`, nên có thể đổi CSDL mà không sửa tệp.
-
-### Lưu ý khi cập nhật CSDL đã tạo trước đó
-
-Lược đồ dùng `CREATE TABLE IF NOT EXISTS`, nên không tự thêm cột vào bảng đã có. Với CSDL tạo từ Module 1, chạy thêm một lần:
-
-```sql
-ALTER TABLE module_events ADD COLUMN hint_used TINYINT(1) NULL AFTER response_ms;
-```
-
-Với CSDL triển khai mới, không cần làm gì thêm: `schema.sql` đã có cột này.
-
-### Chọn CSDL cho máy chủ dev
-
-Biến môi trường của tiến trình có ưu tiên hơn `api/.env`. Khi chạy máy chủ dev, nên đặt rõ CSDL để không ghi nhầm vào CSDL kiểm thử:
-
-```bash
-DB_NAME=antoanso_dev php -S 127.0.0.1:8000 -t api api/router.php
-```
-
-## 3. Triển khai lên iNET
-
-Cấu trúc đề xuất trên `public_html`:
+## 2. Cấu trúc thư mục trên hosting
 
 ```
 public_html/
-├── index.html            ← từ web/dist/
-├── assets/               ← từ web/dist/assets/
-├── .htaccess             ← định tuyến /api về api/index.php, và chuyển mọi đường dẫn khác về index.html
+├── index.html               ← từ web/dist/
+├── assets/                  ← từ web/dist/assets/
+├── .htaccess                ← mục 5
 └── api/
     ├── index.php
     ├── bootstrap.php
@@ -78,21 +33,63 @@ public_html/
     ├── content/
     ├── database/schema.sql
     ├── bin/
-    └── .env              ← tạo trên máy chủ, KHÔNG tải lên kho mã
+    └── .env                 ← tạo trên máy chủ, KHÔNG tải lên kho mã
 ```
 
-Các bước:
+## 3. Đưa mã lên và cấu hình
 
-1. Build giao diện: `cd web && npm ci && npm run build`. Kết quả nằm trong `web/dist/`.
+1. Trên máy cá nhân, build giao diện:
+   ```bash
+   cd web
+   npm ci
+   npm run build
+   ```
+   Kết quả nằm trong `web/dist/`.
 2. Tải nội dung `web/dist/` lên `public_html/`.
-3. Tải thư mục `api/` (không gồm `tests/`, `router.php` và `.env`) lên `public_html/api/`.
-4. Tạo CSDL và người dùng MySQL trong bảng điều khiển iNET, sau đó tạo `public_html/api/.env` theo `api/.env.example` với thông tin thật.
-5. Chạy `php public_html/api/bin/migrate.php` qua SSH hoặc chức năng Terminal (nếu có). Nếu không có SSH, chạy `schema.sql` trong phpMyAdmin.
-6. Thêm lớp học bằng `php api/bin/add_class.php` hoặc trực tiếp bằng SQL vào bảng `classes`.
-7. Đặt `APP_URL=https://<tên-miền-của-bạn>` trong `api/.env`. Giá trị này phải khớp chính xác với nguồn truy cập (dùng để chống CSRF).
-8. Kiểm tra: `https://<tên-miền>/api/health` phải trả về `{"ok":true}`.
+3. Tải thư mục `api/` lên `public_html/api/`. Không tải `api/tests/`, `api/router.php` và `api/.env`.
+4. Tạo CSDL và user MySQL trong bảng điều khiển iNET. Ghi lại tên CSDL, tên user, mật khẩu và host.
+5. Tạo `public_html/api/.env` từ `api/.env.example`:
+   ```ini
+   APP_URL=https://<tên-miền-của-bạn>
+   DB_HOST=<host CSDL do iNET cấp>
+   DB_PORT=3306
+   DB_NAME=<tên CSDL>
+   DB_USER=<user CSDL>
+   DB_PASS=<mật khẩu CSDL>
+   ADMIN_TOKEN=<chuỗi ngẫu nhiên dài, hoặc để trống để tắt xuất HTTP>
+   DELAYED_MIN_DAYS=28
+   ```
+   `APP_URL` phải khớp chính xác với địa chỉ người dùng truy cập, vì đây là một phần của kiểm tra CSRF.
+6. Nạp lược đồ:
+   ```bash
+   cd public_html
+   php api/bin/migrate.php
+   ```
+   Nếu không có Terminal, mở phpMyAdmin, chọn CSDL, tab **Import**, chọn `api/database/schema.sql`, rồi bấm **Go**.
 
-### Mẫu `.htaccess` (đặt tại `public_html/.htaccess`)
+## 4. Tạo lớp, in thẻ và cấp tài khoản giáo viên
+
+Làm theo thứ tự, mỗi lớp một lần. Chạy từ thư mục `public_html`.
+
+```bash
+# 1. Tạo lớp
+php api/bin/add_class.php 8A1 "Lớp 8A1" "<Tên cơ sở giáo dục>"
+
+# 2. In thẻ mã (ví dụ 40 thẻ), lưu thành tệp CSV
+php api/bin/issue_cards.php 8A1 40 the_8A1.csv
+
+# 3. Tạo tài khoản giáo viên (mật khẩu được in ra một lần)
+php api/bin/create_teacher.php gv_8a1 8A1
+```
+
+Sau khi chạy xong:
+- Tệp `the_8A1.csv` chứa mã thẻ. Tải về máy cá nhân để in, rồi xóa khỏi hosting. Chỉ giữ bản in và sổ phát thẻ. Không để tệp này trên `public_html`, vì thư mục đó có thể bị truy cập qua trình duyệt.
+- Mật khẩu giáo viên chỉ hiện một lần. Ghi lại và trao cho giáo viên qua kênh trực tiếp.
+- Nếu giáo viên quên mật khẩu, chạy `php api/bin/reset_teacher_password.php gv_8a1`. Lệnh này cũng đăng xuất mọi phiên đang mở của giáo viên đó.
+
+Cách thay thế khi không có Terminal: không có cách đơn giản. Cần nhờ nhà cung cấp hosting bật Terminal, hoặc chuyển dữ liệu lớp và thẻ bằng SQL trong phpMyAdmin, điều này không khuyến nghị vì dễ sai mã và không sinh được mật khẩu băm đúng.
+
+## 5. Mẫu `.htaccess` (đặt tại `public_html/.htaccess`)
 
 ```apache
 RewriteEngine On
@@ -118,17 +115,30 @@ RewriteRule ^ index.html [L]
 </IfModule>
 ```
 
-Lưu ý: nếu iNET không cho phép `RewriteRule ... - [F]`, hãy chặn thư mục bằng `api/src/.htaccess` với nội dung `Require all denied`.
+Nếu iNET không cho phép `RewriteRule ... - [F]`, chặn thư mục bằng `api/src/.htaccess` với nội dung `Require all denied`, và làm tương tự cho `api/bin/`, `api/database/`, `api/content/`, `api/tests/`.
 
-## 4. Vận hành và đạo đức nghiên cứu
+## 6. Kiểm tra sau triển khai
 
-- Chỉ đưa dữ liệu ra ngoài sau khi đã ẩn danh. Hệ thống không lưu họ tên, email, số điện thoại.
-- Mã học sinh là định danh duy nhất. Không in mã kèm tên học sinh trên cùng một tờ giấy.
-- Sao lưu CSDL định kỳ và lưu bản sao ngoài máy chủ.
-- Khi kết thúc nghiên cứu, xóa dữ liệu theo quy định đã ghi trong phiếu đồng ý.
+1. Mở `https://<tên-miền>/api/health`. Kết quả phải là `{"ok":true}`.
+2. Kiểm tra thẻ: chạy smoke test trỏ tới tên miền thật với một thẻ chưa kích hoạt:
+   ```bash
+   SMOKE_BASE=https://<tên-miền> SMOKE_CARD=XXXX-XXXX node scripts/smoke-test.mjs
+   ```
+   Thẻ này sẽ bị kích hoạt. Dùng một thẻ thử nghiệm riêng, không dùng thẻ của học sinh thật.
+3. Đăng nhập giáo viên bằng tài khoản thử nghiệm và kiểm tra danh sách lớp.
+4. Nếu bật xuất HTTP, kiểm tra `GET /api/admin/export/wide.csv` với header `X-Admin-Token` đúng và sai.
 
-## 5. Giới hạn đã biết
+## 7. Vận hành và đạo đức nghiên cứu
 
-- Chưa có giới hạn tần suất cho đăng nhập bằng mã. Mã 8 ký tự (khoảng 40 bit) là định danh nghiên cứu, không phải mật khẩu. Nếu lớp học lớn hoặc có rủi ro dò mã, cần bổ sung giới hạn theo IP.
-- Module 1 và Module 2 đã hoàn thiện. Module 3 đang ở trạng thái "Sắp mở".
-- Bảng điều khiển quản trị cho giáo viên và chức năng xuất dữ liệu nghiên cứu sẽ được làm sau.
+- Sao lưu CSDL định kỳ và lưu bản sao ngoài hosting.
+- Sổ phát thẻ (ai nhận thẻ nào) là thông tin nhạy cảm. Bảo quản riêng, không lưu trên hosting, không đưa vào kho mã.
+- Không công bố kết quả theo lớp khi lớp có dưới 5 học sinh.
+- Khi kết thúc nghiên cứu, xóa dữ liệu theo phiếu đồng ý và xóa tài khoản giáo viên.
+
+## 8. Giới hạn đã biết
+
+- Đăng nhập học sinh và giáo viên chưa có giới hạn số lần thử. Cần bổ sung trước khi triển khai rộng.
+- Chưa có giao diện quản trị cho nhóm kỹ thuật; mọi thao tác trên mục 4 dùng dòng lệnh.
+- Chưa có cơ chế nhắc khảo sát theo dõi.
+- Chưa thử nghiệm trên hosting iNET thật. Mục 6 là bước bắt buộc để xác nhận.
+- Lược đồ hiện tại chưa được triển khai lên hosting nào. Nếu CSDL đã được tạo bằng một phiên bản lược đồ cũ trong môi trường thử nghiệm, phải tạo lại CSDL trên hosting.

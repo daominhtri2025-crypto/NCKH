@@ -40,6 +40,13 @@ final class TeacherRepository
         $stmt->execute([$username, $passwordHash, $classCode, date('Y-m-d H:i:s')]);
     }
 
+    /** Đặt mật khẩu mới và thu hồi mọi phiên đăng nhập hiện có của giáo viên. */
+    public function resetPassword(int $id, string $passwordHash): void
+    {
+        $stmt = $this->db()->prepare('UPDATE teachers SET password_hash = ?, token_hash = NULL WHERE id = ?');
+        $stmt->execute([$passwordHash, $id]);
+    }
+
     public function setToken(int $id, ?string $tokenHash): void
     {
         $stmt = $this->db()->prepare('UPDATE teachers SET token_hash = ?, last_login_at = ? WHERE id = ?');

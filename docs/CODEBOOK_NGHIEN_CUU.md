@@ -10,13 +10,18 @@ Tài liệu này mô tả các cột trong tệp xuất `antoanso_long.csv` và 
 | Hậu kiểm (post-test) | `post` | Đã hoàn thành pre-test và cả 3 hoạt động |
 | Theo dõi (delayed test) | `delayed` | Đã hoàn thành post-test và đã qua `DELAYED_MIN_DAYS` ngày (mặc định 28) |
 
-## 2. Bảo mật dữ liệu
+## 2. Phạm vi xuất dữ liệu
+
+- Chỉ học sinh đã kích hoạt thẻ (`status = active`) được đưa vào tệp xuất. Thẻ đã in nhưng chưa kích hoạt không xuất hiện.
+- Tài khoản giáo viên không có trong tệp xuất và không có trường nào ghi người phát thẻ.
+
+## 3. Bảo mật dữ liệu
 
 - Mã định danh duy nhất là `pseudonym` (dạng XXXX-XXXX, do hệ thống cấp).
 - Không xuất họ tên, email, số điện thoại, thời điểm đồng ý, hay bất kỳ nội dung mật khẩu nào.
 - Đề nghị không công bố bảng kết quả theo lớp khi số học sinh trong lớp dưới 5 (nguy cơ suy luận lại danh tính).
 
-## 3. Tệp dài: `antoanso_long.csv`
+## 4. Tệp dài: `antoanso_long.csv`
 
 Một dòng cho mỗi lần trả lời câu khảo sát.
 
@@ -25,7 +30,7 @@ Một dòng cho mỗi lần trả lời câu khảo sát.
 | `pseudonym` | Mã giả danh |
 | `class_code` | Mã lớp |
 | `phase` | `pre`, `post`, hoặc `delayed` |
-| `item_id` | Mã câu hỏi (xem mục 5) |
+| `item_id` | Mã câu hỏi (xem mục 6) |
 | `instrument` | `knowledge` hoặc `behavior` |
 | `is_correct` | 1 đúng, 0 sai (chỉ với `knowledge`; trống với `behavior`) |
 | `answer_index` | Lựa chọn 0-based (chỉ với `knowledge`) |
@@ -34,7 +39,7 @@ Một dòng cho mỗi lần trả lời câu khảo sát.
 | `content_version` | Phiên bản bộ câu hỏi |
 | `answered_at` | Thời điểm trả lời |
 
-## 4. Tệp rộng: `antoanso_wide.csv`
+## 5. Tệp rộng: `antoanso_wide.csv`
 
 Một dòng cho mỗi học sinh.
 
@@ -42,7 +47,7 @@ Một dòng cho mỗi học sinh.
 |---|---|
 | `{phase}_knowledge_correct` | Số câu kiến thức đúng (0–10) |
 | `{phase}_knowledge_pct` | `knowledge_correct / 10 × 100` |
-| `{phase}_behavior_mean_adj` | Trung bình mức hành vi sau khi đảo chiều các câu có `reverse = true` (xem mục 5) |
+| `{phase}_behavior_mean_adj` | Trung bình mức hành vi sau khi đảo chiều các câu có `reverse = true` (xem mục 6) |
 | `{phase}_mean_response_ms` | Trung bình thời gian phản hồi của mọi câu trong giai đoạn |
 | `m1_items_answered` | Số tình huống đã trả lời trong Module 1 (tối đa 5) |
 | `m2_items_answered` | Số URL đã phân loại trong Module 2 (tối đa 12) |
@@ -51,7 +56,7 @@ Một dòng cho mỗi học sinh.
 
 Ô trống nghĩa là học sinh chưa làm giai đoạn đó.
 
-## 5. Bộ câu hỏi (phiên bản `a-v1`)
+## 6. Bộ câu hỏi (phiên bản `a-v1`)
 
 | Mã | Loại | Module liên quan | Nội dung | Mã hóa |
 |---|---|---|---|---|
@@ -77,7 +82,7 @@ Lưu ý phân tích:
 - Pre-test và post-test dùng cùng bộ câu hỏi, nên có thể xảy ra hiệu ứng luyện tập. Cần nêu trong phần hạn chế của đề tài. Có thể cân nhắc bộ câu song song nếu cần kiểm soát hiệu ứng này.
 - Các câu hành vi là tự báo cáo, có thể sai lệch do mong muốn xã hội.
 
-## 6. Cách xuất dữ liệu
+## 7. Cách xuất dữ liệu
 
 - Qua HTTP (cần đặt `ADMIN_TOKEN` trong `api/.env`):
   ```bash

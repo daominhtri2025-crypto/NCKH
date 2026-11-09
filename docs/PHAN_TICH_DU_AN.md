@@ -35,7 +35,7 @@ Dự án kế thừa cấu trúc frontend React + Vite và backend PHP + PDO MyS
 
 **Bước 1: Đăng ký bằng mã lớp**
 1. Mở ứng dụng, chọn "Em chưa có mã học sinh".
-2. Nhập mã lớp do giáo viên cung cấp.
+2. Kích hoạt thẻ mã do giáo viên phát (nhập mã trên thẻ và đồng ý tham gia).
 3. Đọc phiếu đồng ý (thu thập gì, không thu gì, quyền rút lui, cách dùng kết quả).
 4. Tích đồng ý, bấm "Tạo mã và bắt đầu". Nút chỉ bật khi đã có mã lớp và đã tích đồng ý.
 5. Hệ thống hiện mã học sinh dạng `XXXX-XXXX`. Học sinh ghi lại mã; mã không chứa tên.
@@ -81,7 +81,7 @@ Dự án kế thừa cấu trúc frontend React + Vite và backend PHP + PDO MyS
 **Những việc giáo viên không làm**
 - Không yêu cầu học sinh nhập mật khẩu thật, số điện thoại, email vào ứng dụng.
 - Không chia sẻ mã học sinh hoặc mã lớp ra ngoài nhóm nghiên cứu.
-- Không truy cập hoặc sửa dữ liệu trong cơ sở dữ liệu. Giáo viên không có tài khoản quản trị trong ứng dụng.
+- Không truy cập hoặc sửa dữ liệu trong cơ sở dữ liệu. Giáo viên có tài khoản riêng để xem tiến độ lớp mình, không xem câu trả lời và không có quyền quản trị.
 
 ### 2.3. Nhóm kỹ thuật và nghiên cứu
 

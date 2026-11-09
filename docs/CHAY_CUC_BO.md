@@ -214,7 +214,7 @@ mysql -u antoanso -p antoanso_dev < api/database/schema.sql
 php api/bin/migrate.php
 ```
 
-Sau đó tạo một lớp thử để học sinh đăng ký:
+Sau đó tạo một lớp thử, rồi in thẻ mã cho lớp đó (học sinh kích hoạt thẻ, không tự đăng ký):
 
 ```bash
 php api/bin/add_class.php 8A1 "Lớp 8A1" "THCS Thử nghiệm"
@@ -321,7 +321,7 @@ Lệnh này chạy `tsc --noEmit` rồi `vite build`. Không được có lỗi.
 ### 8.4. Kiểm thử nhanh luồng học sinh (smoke test)
 
 Chạy khi **API và Vite đang chạy** (mục 7). Kịch bản đi qua đường `localhost:5173` như trình duyệt, và thực hiện:
-đăng ký bằng mã giả danh → pre-test → đăng nhập lại bằng mã → Module 1, 2, 3 → post-test → kiểm tra khóa delayed.
+kích hoạt thẻ mã → pre-test → đăng nhập lại bằng mã → Module 1, 2, 3 → post-test → kiểm tra khóa delayed.
 
 ```bash
 node scripts/smoke-test.mjs
@@ -348,9 +348,12 @@ Nếu smoke test báo "Thẻ phải chưa được kích hoạt", hãy in thẻ 
 ```bash
 php api/bin/issue_cards.php 8A1 5 the_thu.csv
 php api/bin/create_teacher.php gv_thu 8A1
+php api/bin/reset_teacher_password.php gv_thu   # khi cần đặt lại mật khẩu
 ```
 
-Ghi lại mật khẩu giáo viên được in ra (chỉ hiện một lần). Đăng nhập tại `http://localhost:5173` bằng "Giáo viên đăng nhập" để xem tiến độ lớp `8A1`.
+Ghi lại mật khẩu giáo viên được in ra (chỉ hiện một lần). Đăng nhập tại `http://localhost:5173` bằng "Giáo viên đăng nhập" để xem tiến độ lớp `8A1`. Tài khoản giáo viên chỉ đăng nhập vào ứng dụng trên trình duyệt; nhóm kỹ thuật làm việc bằng dòng lệnh như trên.
+
+Lưu ý: CSDL dev tạo trước khi có thẻ mã cần tạo lại (xóa và nạp lại `schema.sql`), vì bảng `participants` và `teachers` đã thay đổi cấu trúc.
 
 ## 9. Xử lý sự cố thường gặp
 

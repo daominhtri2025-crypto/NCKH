@@ -1,3 +1,5 @@
+> **Đã thay thế.** Bản chính thức là `docs/BAO_CAO_NCKH_ChinhThuc.md` (và `.docx`). Tệp này giữ lại để đối chiếu lịch sử.
+
 # An Toàn Số Học Đường: Hệ thống web tương tác nâng cao nhận thức và hành vi an toàn thông tin cho học sinh trung học cơ sở
 
 **Hồ sơ dự thi Khoa học kỹ thuật cấp học dành cho học sinh trung học cơ sở**

@@ -54,6 +54,21 @@ final class TeacherService
         return $password;
     }
 
+    /**
+     * Đặt lại mật khẩu cho giáo viên (nhóm kỹ thuật chạy trên máy chủ). Thu hồi mọi phiên đang mở.
+     * Trả về mật khẩu mới để in một lần.
+     */
+    public function resetPassword(string $username): string
+    {
+        $row = $this->teachers->findByUsername(strtolower(trim($username)));
+        if ($row === null) {
+            throw new RuntimeException("Không có tài khoản giáo viên '{$username}'.");
+        }
+        $password = $this->randomPassword();
+        $this->teachers->resetPassword((int) $row['id'], password_hash($password, PASSWORD_DEFAULT));
+        return $password;
+    }
+
     /** @return array{teacher:array<string,mixed>, token:string} */
     public function login(array $input): array
     {
