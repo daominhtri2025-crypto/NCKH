@@ -14,7 +14,7 @@ Hồ sơ dự thi Khoa học kỹ thuật cấp học dành cho học sinh trung
 
 Nghiên cứu này thiết kế, xây dựng và kiểm chứng kỹ thuật một hệ thống web tương tác về an toàn thông tin dành cho học sinh trung học cơ sở, cùng mô hình đo lường nhận thức và hành vi theo ba giai đoạn: tiền kiểm, hậu kiểm và theo dõi sau 28 ngày. Hệ thống gồm ba hoạt động: sân chơi tình huống lừa đảo, nhận diện tên miền giả mạo bằng quy tắc đọc từ phải sang trái, và phòng thí nghiệm tài khoản gồm đánh giá mật khẩu cục bộ và checklist quyền riêng tư. Thiết kế bảo đảm ẩn danh bằng mã giả danh, không thu họ tên, email hay số điện thoại; mật khẩu thử nghiệm không rời trình duyệt.
 
-Hệ thống đã hoàn thành các thành phần chức năng và đạt toàn bộ các kiểm thử tích hợp (183 kiểm tra), kiểm thử đơn vị (14 kiểm thử) và kiểm thử luồng người dùng (23 bước). Nghiên cứu chưa thu thập dữ liệu thực nghiệm; vì vậy báo cáo trình bày thiết kế, phương pháp và khung phân tích, không trình bày kết quả. Ba giả thuyết về sự gia tăng điểm nhận thức và hành vi sau can thiệp, cùng khả năng duy trì kết quả sau 28 ngày, sẽ được kiểm định khi có dữ liệu.
+Hệ thống đã hoàn thành các thành phần chức năng và đạt toàn bộ các kiểm thử tích hợp (197 kiểm tra), kiểm thử đơn vị (14 kiểm thử) và kiểm thử luồng người dùng (23 bước). Nghiên cứu chưa thu thập dữ liệu thực nghiệm; vì vậy báo cáo trình bày thiết kế, phương pháp và khung phân tích, không trình bày kết quả. Ba giả thuyết về sự gia tăng điểm nhận thức và hành vi sau can thiệp, cùng khả năng duy trì kết quả sau 28 ngày, sẽ được kiểm định khi có dữ liệu.
 
 **Từ khóa:** an toàn thông tin; giáo dục an toàn số; học sinh trung học cơ sở; hệ thống web tương tác; đo lường tiền–hậu–theo dõi; quyền riêng tư theo thiết kế.
 
@@ -291,7 +291,7 @@ Hệ thống đã hoàn thành các thành phần chức năng: kích hoạt th�
 
 | Loại kiểm thử | Phạm vi | Kết quả |
 |---|---|---|
-| Tích hợp API | Kích hoạt thẻ, xác thực, tài khoản giáo viên, ba hoạt động, khảo sát, khóa trình tự, xuất dữ liệu, bảo mật | 183 kiểm tra, đạt toàn bộ |
+| Tích hợp API | Kích hoạt thẻ, cấp lại thẻ, xác thực, tài khoản giáo viên, ba hoạt động, khảo sát, khóa trình tự, xuất dữ liệu, bảo mật | 197 kiểm tra, đạt toàn bộ |
 | Đơn vị | Bộ đánh giá mật khẩu | 14 kiểm thử, đạt toàn bộ |
 | Biên dịch và đóng gói giao diện | Kiểm tra kiểu nghiêm ngặt, đóng gói | Đạt |
 | Luồng người dùng qua máy chủ trung gian | Từ kích hoạt thẻ đến khảo sát theo dõi | 23 bước, đạt toàn bộ |
@@ -401,6 +401,7 @@ Bảng dưới đây là khung để ghi kết quả khi có dữ liệu. Các �
 | G11 | Chưa có giao diện quản trị cho giáo viên | Phụ thuộc nhóm nghiên cứu để quản lý lớp | Phát triển giao diện quản trị đơn giản ở giai đoạn sau |
 | G12 | Quy mô mẫu nhỏ | Độ mạnh thống kê hạn chế | Báo cáo kích thước hiệu ứng và khoảng tin cậy; không khái quát hóa |
 | G13 | Giáo viên phát thẻ nên biết danh tính gắn với mã | Ẩn danh không đầy đủ đối với giáo viên | Quản lý sổ phát thẻ riêng; nêu trong phiếu đồng ý; hội đồng đạo đức phê duyệt |
+| G14 | Cấp lại thẻ phụ thuộc sổ phát thẻ | Không có sổ thì không tìm lại được học sinh có mã cũ | Bảo quản sổ phát thẻ; ghi nhật ký cấp lại |
 
 Tổng quan tài liệu còn hạn chế về các chương trình giáo dục an toàn thông tin đã triển khai tại Việt Nam, và chưa có đánh giá về mức độ phổ biến của từng hình thức lừa đảo đối với học sinh. Hai điểm này cần được bổ sung khi có điều kiện tra cứu đầy đủ.
 

@@ -19,7 +19,7 @@ Nguyên tắc chung: học sinh không tự tạo mã. Nhóm kỹ thuật in th�
 ### 1.1. Cách đăng nhập lần đầu: kích hoạt thẻ mã
 
 1. Nhận thẻ mã từ giáo viên. Thẻ ghi mã dạng `XXXX-XXXX`.
-2. Mở ứng dụng trên điện thoại hoặc máy tính. Trang đầu có ba lựa chọn.
+2. Mở ứng dụng trên điện thoại hoặc máy tính. Trang đầu có hai nút chính, và một liên kết nhỏ dành cho giáo viên ở cuối trang.
 3. Chọn **"Em có thẻ mã từ giáo viên"**.
 4. Nhập mã trên thẻ. Đọc phiếu đồng ý và tích **"Em đã đọc và đồng ý tham gia nghiên cứu"**.
 5. Bấm **"Kích hoạt và bắt đầu"**. Ứng dụng đưa em vào màn hình chính.
