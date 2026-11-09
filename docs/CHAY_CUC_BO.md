@@ -66,10 +66,12 @@ curl http://127.0.0.1:8000/api/health
 
 Kết quả phải là `{"ok":true}`.
 
-Muốn chạy smoke test luồng học sinh (cần Node.js):
+Muốn chạy smoke test luồng học sinh (cần Node.js và một thẻ mã chưa kích hoạt):
 
 ```bat
 cd /d D:\UNG_DUNG_VIBE\NCKH
+"C:\xampp\php\php.exe" api\bin\issue_cards.php 8A1 1 the_thu.csv
+set SMOKE_CARD=<mã trong the_thu.csv, dạng XXXX-XXXX>
 node scripts\smoke-test.mjs
 ```
 
@@ -328,7 +330,7 @@ node scripts/smoke-test.mjs
 Tùy chọn qua biến môi trường:
 
 ```bash
-SMOKE_CLASS=8A1 SMOKE_ADMIN_TOKEN=token_cua_em node scripts/smoke-test.mjs
+SMOKE_CARD=XXXX-XXXX SMOKE_ADMIN_TOKEN=token_cua_em node scripts/smoke-test.mjs
 ```
 
 Windows (PowerShell):
@@ -339,7 +341,16 @@ $env:SMOKE_ADMIN_TOKEN="token_cua_em"; node scripts/smoke-test.mjs
 
 Kết quả mong đợi: `Kết quả: N đạt, 0 lỗi.` và mã thoát 0.
 
-Nếu thấy lỗi "Mã lớp không hợp lệ", hãy chạy lại bước 5 để tạo lớp `8A1`.
+Nếu smoke test báo "Thẻ phải chưa được kích hoạt", hãy in thẻ mới bằng `issue_cards.php`, vì mỗi thẻ chỉ kích hoạt một lần.
+
+### 8.5. Thẻ mã và tài khoản giáo viên (thử nghiệm)
+
+```bash
+php api/bin/issue_cards.php 8A1 5 the_thu.csv
+php api/bin/create_teacher.php gv_thu 8A1
+```
+
+Ghi lại mật khẩu giáo viên được in ra (chỉ hiện một lần). Đăng nhập tại `http://localhost:5173` bằng "Giáo viên đăng nhập" để xem tiến độ lớp `8A1`.
 
 ## 9. Xử lý sự cố thường gặp
 

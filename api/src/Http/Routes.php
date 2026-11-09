@@ -10,6 +10,7 @@ use AnToanSo\Controllers\Module1Controller;
 use AnToanSo\Controllers\Module2Controller;
 use AnToanSo\Controllers\Module3Controller;
 use AnToanSo\Controllers\ParticipantController;
+use AnToanSo\Controllers\TeacherController;
 
 /**
  * Bảng định tuyến của toàn bộ API. Các module mới được thêm vào đây.
@@ -23,7 +24,7 @@ final class Routes
         $router->add('GET', '/health', static fn (Request $r) => Response::json(['ok' => true]));
 
         $participants = new ParticipantController();
-        $router->add('POST', '/participants', [$participants, 'register']);
+        $router->add('POST', '/participants/claim', [$participants, 'claim']);
         $router->add('POST', '/session', [$participants, 'login']);
         $router->add('DELETE', '/session', [$participants, 'logout']);
         $router->add('GET', '/me', [$participants, 'me']);
@@ -46,6 +47,11 @@ final class Routes
         $router->add('GET', '/assessments', [$assessment, 'status']);
         $router->add('GET', '/assessments/{phase}', [$assessment, 'show']);
         $router->add('POST', '/assessments/{phase}/items/{id}/answer', [$assessment, 'answer']);
+
+        $teacher = new TeacherController();
+        $router->add('POST', '/teacher/session', [$teacher, 'login']);
+        $router->add('DELETE', '/teacher/session', [$teacher, 'logout']);
+        $router->add('GET', '/teacher/roster', [$teacher, 'roster']);
 
         $admin = new AdminController();
         $router->add('GET', '/admin/export/long.csv', [$admin, 'exportLong']);

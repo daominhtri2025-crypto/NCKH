@@ -1,9 +1,10 @@
 interface Props {
-  onNewParticipant: () => void;
+  onClaimCard: () => void;
   onHaveCode: () => void;
+  onTeacher: () => void;
 }
 
-export default function Welcome({ onNewParticipant, onHaveCode }: Props) {
+export default function Welcome({ onClaimCard, onHaveCode, onTeacher }: Props) {
   return (
     <section className="card welcome">
       <p className="eyebrow">Dự án nghiên cứu khoa học học đường</p>
@@ -14,16 +15,17 @@ export default function Welcome({ onNewParticipant, onHaveCode }: Props) {
       </p>
 
       <div className="stack">
-        <button className="btn btn-primary btn-xl" onClick={onNewParticipant}>
-          Em chưa có mã học sinh
+        <button className="btn btn-primary btn-xl" onClick={onClaimCard}>
+          Em có thẻ mã từ giáo viên
         </button>
         <button className="btn btn-ghost btn-xl" onClick={onHaveCode}>
-          Em đã có mã, đăng nhập
+          Em đã kích hoạt, đăng nhập
         </button>
       </div>
 
       <p className="fineprint">
         Chương trình chỉ dành cho học sinh tham gia nghiên cứu có phụ huynh và nhà trường đồng ý.
+        Giáo viên đăng nhập để xem tiến độ lớp: <button className="link-btn inline" onClick={onTeacher}>Giáo viên đăng nhập</button>
       </p>
     </section>
   );

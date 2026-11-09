@@ -5,16 +5,13 @@ import type { Participant } from '../lib/types';
 const CONSENT_VERSION = 'v1';
 
 interface Props {
-  onRegistered: (participant: Participant) => void;
+  onActivated: (participant: Participant) => void;
   onBack: () => void;
 }
 
-interface RegisterResponse {
-  participant: Participant;
-}
-
-export default function ConsentForm({ onRegistered, onBack }: Props) {
-  const [classCode, setClassCode] = useState('');
+/** Kích hoạt thẻ mã đã được giáo viên phát: nhập mã trên thẻ và đồng ý tham gia. */
+export default function ClaimForm({ onActivated, onBack }: Props) {
+  const [code, setCode] = useState('');
   const [agreed, setAgreed] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
@@ -24,12 +21,12 @@ export default function ConsentForm({ onRegistered, onBack }: Props) {
     setError(null);
     setSubmitting(true);
     try {
-      const data = await api.post<RegisterResponse>('/participants', {
-        class_code: classCode.trim(),
+      const data = await api.post<{ participant: Participant }>('/participants/claim', {
+        code: code.trim().toUpperCase(),
         consent: agreed,
         consent_version: CONSENT_VERSION,
       });
-      onRegistered(data.participant);
+      onActivated(data.participant);
     } catch (err) {
       setError(err instanceof ApiError ? err.message : 'Không kết nối được máy chủ.');
     } finally {
@@ -40,25 +37,27 @@ export default function ConsentForm({ onRegistered, onBack }: Props) {
   return (
     <section className="card">
       <button className="link-btn" onClick={onBack}>← Quay lại</button>
-      <h2>Phiếu đồng ý tham gia nghiên cứu</h2>
+      <h2>Kích hoạt thẻ mã</h2>
+      <p className="lead">Nhập mã ghi trên thẻ do giáo viên phát. Mã có dạng XXXX-XXXX.</p>
 
       <div className="consent-box">
-        <p><strong>Chúng tôi thu thập:</strong> mã học sinh do hệ thống cấp, mã lớp, và kết quả em trả lời trong các tình huống và bài kiểm tra.</p>
+        <p><strong>Chúng tôi thu thập:</strong> mã trên thẻ, và kết quả em trả lời trong các hoạt động và khảo sát.</p>
         <p><strong>Chúng tôi KHÔNG thu thập:</strong> họ tên, email, số điện thoại, ảnh, hay mật khẩu của em.</p>
-        <p><strong>Quyền của em:</strong> tham gia là tự nguyện. Em có thể dừng bất cứ lúc nào mà không bị ảnh hưởng điểm số ở trường.</p>
-        <p><strong>Kết quả:</strong> chỉ dùng để nghiên cứu, được báo cáo dưới dạng tổng hợp và không gắn với tên của em.</p>
+        <p><strong>Quyền của em:</strong> tham gia là tự nguyện. Em có thể dừng bất cứ lúc nào.</p>
+        <p><strong>Kết quả:</strong> chỉ dùng cho nghiên cứu, báo cáo dưới dạng tổng hợp.</p>
       </div>
 
       <form onSubmit={submit} className="stack">
         <label className="field">
-          <span>Mã lớp (giáo viên cung cấp)</span>
+          <span>Mã trên thẻ</span>
           <input
-            value={classCode}
-            onChange={(e) => setClassCode(e.target.value)}
-            placeholder="Ví dụ: 8A1"
+            value={code}
+            onChange={(e) => setCode(e.target.value.toUpperCase())}
+            placeholder="XXXX-XXXX"
             autoComplete="off"
+            autoCapitalize="characters"
             required
-            maxLength={40}
+            maxLength={12}
           />
         </label>
 
@@ -69,8 +68,8 @@ export default function ConsentForm({ onRegistered, onBack }: Props) {
 
         {error && <p className="alert" role="alert">{error}</p>}
 
-        <button className="btn btn-primary btn-xl" type="submit" disabled={!agreed || submitting || !classCode.trim()}>
-          {submitting ? 'Đang tạo mã…' : 'Tạo mã và bắt đầu'}
+        <button className="btn btn-primary btn-xl" type="submit" disabled={!agreed || submitting || !code.trim()}>
+          {submitting ? 'Đang kích hoạt…' : 'Kích hoạt và bắt đầu'}
         </button>
       </form>
     </section>

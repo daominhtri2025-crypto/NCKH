@@ -24,7 +24,7 @@ export default function Footer() {
           <section className="footer-block footer-wide">
             <h3>Hướng dẫn sử dụng</h3>
             <ul className="footer-list footer-steps">
-              <li>Đăng ký bằng mã lớp do giáo viên cung cấp, hoặc đăng nhập bằng mã học sinh.</li>
+              <li>Kích hoạt thẻ mã do giáo viên phát, hoặc đăng nhập bằng mã học sinh đã kích hoạt.</li>
               <li>Làm khảo sát đầu vào trước, rồi lần lượt thực hiện các hoạt động.</li>
               <li>Mọi thắc mắc về nội dung đề tài, xin liên hệ giáo viên hướng dẫn.</li>
             </ul>

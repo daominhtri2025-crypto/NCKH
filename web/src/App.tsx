@@ -2,9 +2,8 @@ import { useEffect, useState } from 'react';
 import { api, ApiError } from './lib/api';
 import type { AssessmentStatus, Participant, PhaseName } from './lib/types';
 import Welcome from './components/Welcome';
-import ConsentForm from './components/ConsentForm';
+import ClaimForm from './components/ClaimForm';
 import LoginForm from './components/LoginForm';
-import CodeReveal from './components/CodeReveal';
 import ModuleHub from './components/ModuleHub';
 import Footer from './components/Footer';
 import Module1Page from './modules/module1/Module1Page';
@@ -12,13 +11,16 @@ import Module2Page from './modules/module2/Module2Page';
 import Module3Page from './modules/module3/Module3Page';
 import AssessmentPage from './modules/assessment/AssessmentPage';
 import AssessmentPanel from './modules/assessment/AssessmentPanel';
+import TeacherLogin from './modules/teacher/TeacherLogin';
+import TeacherDashboard from './modules/teacher/TeacherDashboard';
 
 type View =
   | { name: 'loading' }
   | { name: 'welcome' }
-  | { name: 'consent' }
+  | { name: 'claim' }
   | { name: 'login' }
-  | { name: 'reveal'; participant: Participant }
+  | { name: 'teacherLogin' }
+  | { name: 'teacher' }
   | { name: 'hub' }
   | { name: 'module1' }
   | { name: 'module2' }
@@ -100,28 +102,31 @@ export default function App() {
 
       {view.name === 'welcome' && (
         <Welcome
-          onNewParticipant={() => setView({ name: 'consent' })}
+          onClaimCard={() => setView({ name: 'claim' })}
           onHaveCode={() => setView({ name: 'login' })}
+          onTeacher={() => setView({ name: 'teacherLogin' })}
         />
       )}
 
-      {view.name === 'consent' && (
-        <ConsentForm
-          onRegistered={(p) => setView({ name: 'reveal', participant: p })}
+      {view.name === 'claim' && (
+        <ClaimForm onActivated={enter} onBack={() => setView({ name: 'welcome' })} />
+      )}
+
+      {view.name === 'teacherLogin' && (
+        <TeacherLogin
+          onLoggedIn={() => setView({ name: 'teacher' })}
           onBack={() => setView({ name: 'welcome' })}
         />
+      )}
+
+      {view.name === 'teacher' && (
+        <TeacherDashboard onLogout={() => setView({ name: 'welcome' })} />
       )}
 
       {view.name === 'login' && (
         <LoginForm onLoggedIn={enter} onBack={() => setView({ name: 'welcome' })} />
       )}
 
-      {view.name === 'reveal' && (
-        <CodeReveal
-          participant={view.participant}
-          onContinue={() => enter(view.participant)}
-        />
-      )}
 
       {view.name === 'hub' && (
         <>

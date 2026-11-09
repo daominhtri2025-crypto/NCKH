@@ -53,7 +53,7 @@ final class AssessmentExportService
         }
 
         $participants = Database::pdo()->query(
-            'SELECT id, code, class_code FROM participants ORDER BY id'
+            "SELECT id, code, class_code FROM participants WHERE status = 'active' ORDER BY id"
         )->fetchAll();
 
         $answers = [];

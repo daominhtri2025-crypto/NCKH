@@ -11,17 +11,17 @@ use AnToanSo\Support\Container;
 
 final class ParticipantController
 {
-    /** POST /api/participants — đăng ký mới sau khi đồng ý tham gia. */
-    public function register(Request $request): Response
+    /** POST /api/participants/claim — kích hoạt thẻ mã đã được phát cho lớp. */
+    public function claim(Request $request): Response
     {
-        $result = Container::participants()->register($request->json());
+        $result = Container::participants()->claim($request->json());
         return Response::json([
             'participant' => ParticipantService::publicView($result['participant']),
-            'message' => 'Hãy ghi lại mã học sinh của em. Mã này dùng để đăng nhập lại.',
+            'message' => 'Đã kích hoạt thẻ. Hãy giữ thẻ để đăng nhập lại.',
         ], 201)->withHeader('Set-Cookie: ' . ParticipantService::sessionCookie($result['token'], $request->isHttps()));
     }
 
-    /** POST /api/session — đăng nhập bằng mã học sinh. */
+    /** POST /api/session — đăng nhập bằng mã đã kích hoạt. */
     public function login(Request $request): Response
     {
         $result = Container::participants()->login($request->json());

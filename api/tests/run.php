@@ -24,7 +24,7 @@ if (!str_ends_with($dbName, '_test')) {
 
 Env::set('APP_URL', 'http://localhost:5173');
 $pdo = Database::pdo();
-foreach (['assessments_self', 'module_events', 'participants', 'classes'] as $table) {
+foreach (['assessments_self', 'module_events', 'participants', 'teachers', 'classes'] as $table) {
     $pdo->exec("DROP TABLE IF EXISTS {$table}");
 }
 Migrator::run($pdo, dirname(__DIR__) . '/database/schema.sql');
@@ -77,26 +77,56 @@ function sessionTokenFrom(Response $response): ?string
     return null;
 }
 
-echo "Kiểm thử đăng ký và đồng ý\n";
-$noConsent = call('POST', '/api/participants', ['class_code' => '8A1', 'consent' => false, 'consent_version' => 'v1']);
-check('Từ chối đăng ký khi chưa đồng ý (422)', $noConsent->status === 422, (string) $noConsent->status);
+/** Cấp một thẻ mã mới cho lớp (giống bin/issue_cards.php). */
+function issueCard(string $classCode = '8A1'): string
+{
+    $svc = new AnToanSo\Services\ParticipantService(new AnToanSo\Repositories\ParticipantRepository(), new AnToanSo\Repositories\ClassRepository());
+    return $svc->issueCards($classCode, 1)[0];
+}
 
-$badClass = call('POST', '/api/participants', ['class_code' => 'KHONGCO', 'consent' => true, 'consent_version' => 'v1']);
-check('Từ chối mã lớp không tồn tại (422)', $badClass->status === 422);
+/** Kích hoạt thẻ bằng API. */
+function claimCard(string $code, bool $consent = true, string $version = 'v1', array $headers = []): Response
+{
+    return call('POST', '/api/participants/claim', ['code' => $code, 'consent' => $consent, 'consent_version' => $version], [], $headers);
+}
 
-$badVersion = call('POST', '/api/participants', ['class_code' => '8A1', 'consent' => true, 'consent_version' => 'v0']);
-check('Từ chối phiên bản phiếu đồng ý cũ (422)', $badVersion->status === 422);
+/** Học sinh mới: cấp thẻ rồi kích hoạt. */
+function newStudent(): Response
+{
+    return claimCard(issueCard('8A1'));
+}
 
-$reg = call('POST', '/api/participants', ['class_code' => '8a1', 'consent' => true, 'consent_version' => 'v1']);
-check('Đăng ký thành công (201)', $reg->status === 201, (string) $reg->status);
-$code = $reg->body['participant']['code'] ?? '';
-check('Mã học sinh đúng định dạng XXXX-XXXX', (bool) preg_match('/^[23456789A-HJKMNP-Z]{4}-[23456789A-HJKMNP-Z]{4}$/', $code), $code);
+/** Lấy token cookie ats_teacher từ phản hồi đăng nhập giáo viên. */
+function teacherTokenFrom(Response $response): ?string
+{
+    foreach ($response->headers() as $line) {
+        if (preg_match('/^Set-Cookie: ats_teacher=([^;]*)/', $line, $m)) {
+            return $m[1] === '' ? null : $m[1];
+        }
+    }
+    return null;
+}
+
+echo "Kiểm thử thẻ mã và kích hoạt\n";
+$card = issueCard('8A1');
+check('In thẻ: mã đúng định dạng XXXX-XXXX', (bool) preg_match('/^[23456789A-HJKMNP-Z]{4}-[23456789A-HJKMNP-Z]{4}$/', $card), $card);
+check('Thẻ mới ở trạng thái issued', $pdo->query("SELECT status FROM participants WHERE code = '{$card}'")->fetchColumn() === 'issued');
+$earlyLogin = call('POST', '/api/session', ['code' => $card]);
+check('Thẻ chưa kích hoạt không đăng nhập được (403)', $earlyLogin->status === 403, (string) $earlyLogin->status);
+check('Từ chối kích hoạt khi chưa đồng ý (422)', claimCard($card, false)->status === 422);
+check('Từ chối phiên bản phiếu đồng ý cũ (422)', claimCard($card, true, 'v0')->status === 422);
+check('Từ chối mã không tồn tại (422, thông điệp chung)', claimCard('ZZZZ-ZZZZ')->status === 422);
+
+$reg = claimCard($card);
+check('Kích hoạt thẻ thành công (201)', $reg->status === 201, (string) $reg->status);
+$code = $card;
 $token = sessionTokenFrom($reg);
-check('Cookie phiên được cấp', $token !== null && strlen($token) === 64);
-$stored = $pdo->query("SELECT token_hash FROM participants WHERE code = '{$code}'")->fetchColumn();
-check('CSDL chỉ lưu băm của token, không lưu token gốc', $stored === hash('sha256', (string) $token) && $stored !== $token);
-$regResponse = json_encode($reg->body, JSON_UNESCAPED_UNICODE);
-check('Phản hồi đăng ký không chứa token', $token === null || !str_contains((string) $regResponse, $token));
+check('Cookie phiên được cấp khi kích hoạt', $token !== null && strlen($token) === 64);
+$row = $pdo->query("SELECT token_hash, status, consent_version, claimed_at FROM participants WHERE code = '{$code}'")->fetch();
+check('CSDL: trạng thái active, phiên bản phiếu v1, có thời điểm kích hoạt', $row['status'] === 'active' && $row['consent_version'] === 'v1' && $row['claimed_at'] !== null);
+check('CSDL chỉ lưu băm của token, không lưu token gốc', $row['token_hash'] === hash('sha256', (string) $token) && $row['token_hash'] !== $token);
+check('Phản hồi kích hoạt không chứa token', $token === null || !str_contains((string) json_encode($reg->body), $token));
+check('Kích hoạt lại cùng thẻ bị từ chối (422)', claimCard($card)->status === 422);
 
 echo "Xác thực phiên\n";
 $anon = call('GET', '/api/module1');
@@ -108,10 +138,10 @@ check('GET /api/me với cookie hợp lệ (200)', $me->status === 200 && $me->b
 $badLogin = call('POST', '/api/session', ['code' => 'ZZZZ-ZZZZ']);
 check('Đăng nhập sai mã (401)', $badLogin->status === 401);
 
-$csrf = call('POST', '/api/participants', ['class_code' => '8A1', 'consent' => true, 'consent_version' => 'v1'], [], ['origin' => 'https://evil-run.app.example.com']);
+$csrf = claimCard(issueCard('8A1'), true, 'v1', ['origin' => 'https://evil-run.app.example.com']);
 check('Chặn Origin lạ (403)', $csrf->status === 403, (string) $csrf->status);
 
-$notJson = call('POST', '/api/participants', ['class_code' => '8A1', 'consent' => true, 'consent_version' => 'v1'], [], ['content-type' => 'text/plain']);
+$notJson = claimCard(issueCard('8A1'), true, 'v1', ['content-type' => 'text/plain']);
 check('Chặn ghi không phải JSON (415)', $notJson->status === 415, (string) $notJson->status);
 
 $login = call('POST', '/api/session', ['code' => strtolower(substr($code, 0, 4) . substr($code, 5))]);
@@ -222,7 +252,7 @@ $afterLogout = call('GET', '/api/me', null, ['ats_session' => (string) $token]);
 check('Sau đăng xuất, token không còn hiệu lực (401)', $afterLogout->status === 401);
 
 echo "Khảo sát tiền–hậu–theo dõi và mở khóa\n";
-$ta = sessionTokenFrom(call('POST', '/api/participants', ['class_code' => '8A1', 'consent' => true, 'consent_version' => 'v1']));
+$ta = sessionTokenFrom(newStudent());
 $taCookie = ['ats_session' => (string) $ta];
 $taCode = (string) call('GET', '/api/me', null, $taCookie)->body['participant']['code'];
 
@@ -335,7 +365,7 @@ check('Long CSV: có dòng câu kiến thức sai với is_correct = 0', str_con
 check('Long CSV không có cột định danh thật', !preg_match('/^pseudonym,class_code,phase,item_id,instrument,is_correct,answer_index,answer_value,response_ms,content_version,answered_at\r?\n/m', '') && !str_contains(explode("\n", $longText)[0], 'email'));
 
 echo "Module 2: thám tử không gian mạng\n";
-$t2 = sessionTokenFrom(call('POST', '/api/participants', ['class_code' => '8A1', 'consent' => true, 'consent_version' => 'v1']));
+$t2 = sessionTokenFrom(newStudent());
 $t2Cookie = ['ats_session' => (string) $t2];
 $call2Code = (string) call('GET', '/api/me', null, $t2Cookie)->body['participant']['code'];
 completePhase((string) $t2, 'pre');
@@ -369,7 +399,7 @@ check('Mỗi mục có thứ tự nút đáp án hợp lệ', count(array_filter
 check('Thứ tự nút ngẫu nhiên giữa các mục (có cả hai kiểu)', in_array('official_first', $orders, true) && in_array('fake_first', $orders, true));
 $again = call('GET', '/api/module2', null, $t2Cookie);
 check('Thứ tự nút ổn định khi tải lại trang', array_column($again->body['items'], 'button_order') === $orders);
-$otherStudent = sessionTokenFrom(call('POST', '/api/participants', ['class_code' => '8A1', 'consent' => true, 'consent_version' => 'v1']));
+$otherStudent = sessionTokenFrom(newStudent());
 completePhase((string) $otherStudent, 'pre');
 $otherOrders = array_column(call('GET', '/api/module2', null, ['ats_session' => (string) $otherStudent])->body['items'], 'button_order');
 check('Thứ tự nút khác nhau giữa các học sinh', $otherOrders !== $orders);
@@ -423,7 +453,7 @@ $m1Hint = (int) $pdo->query("SELECT COUNT(*) FROM module_events WHERE module = 1
 check('Module 1 không ghi hint_used (NULL)', $m1Hint === (int) $pdo->query("SELECT COUNT(*) FROM module_events WHERE module = 1")->fetchColumn());
 
 echo "Module 3: phòng thí nghiệm bảo mật tài khoản\n";
-$t3 = sessionTokenFrom(call('POST', '/api/participants', ['class_code' => '8A1', 'consent' => true, 'consent_version' => 'v1']));
+$t3 = sessionTokenFrom(newStudent());
 $t3Cookie = ['ats_session' => (string) $t3];
 completePhase((string) $t3, 'pre');
 check('Module 3 yêu cầu đăng nhập (401)', call('GET', '/api/module3')->status === 401);
@@ -562,6 +592,43 @@ try {
 }
 check('Từ chối tình huống không có lựa chọn an toàn', $rejected);
 unlink($invalid);
+
+echo "Giáo viên: tiến độ lớp, không lộ câu trả lời, cách ly giữa các lớp\n";
+(new AnToanSo\Repositories\ClassRepository())->create('8B1', 'Lớp 8B1', 'THCS Thử nghiệm');
+$teacherSvc = new AnToanSo\Services\TeacherService(new AnToanSo\Repositories\TeacherRepository());
+$tPass = $teacherSvc->createTeacher('gv_thu_nghiem', '8A1', true);
+check('Tạo tài khoản giáo viên với mật khẩu ngẫu nhiên 12 ký tự', strlen($tPass) === 12);
+check('Không tạo trùng tên đăng nhập', (function () use ($teacherSvc) {
+    try { $teacherSvc->createTeacher('gv_thu_nghiem', '8A1', true); return false; } catch (RuntimeException $e) { return true; }
+})());
+check('Đăng nhập giáo viên sai mật khẩu (401)', call('POST', '/api/teacher/session', ['username' => 'gv_thu_nghiem', 'password' => 'sai'])->status === 401);
+check('Đăng nhập tên không tồn tại (401, cùng thông điệp)', call('POST', '/api/teacher/session', ['username' => 'khong_co', 'password' => 'x'])->status === 401);
+check('Xem danh sách khi chưa đăng nhập (401)', call('GET', '/api/teacher/roster')->status === 401);
+$tLogin = call('POST', '/api/teacher/session', ['username' => 'gv_thu_nghiem', 'password' => $tPass]);
+check('Đăng nhập giáo viên thành công (200)', $tLogin->status === 200);
+$tTok = teacherTokenFrom($tLogin);
+check('Cookie ats_teacher được cấp', $tTok !== null && strlen($tTok) === 64);
+check('CSDL chỉ lưu băm token giáo viên', $pdo->query("SELECT token_hash FROM teachers WHERE username = 'gv_thu_nghiem'")->fetchColumn() === hash('sha256', (string) $tTok));
+
+$unclaimed = issueCard('8A1');
+$otherClassCard = issueCard('8B1');
+$roster = call('GET', '/api/teacher/roster', null, ['ats_teacher' => (string) $tTok]);
+check('Danh sách lớp (200)', $roster->status === 200);
+check('Danh sách đúng lớp được gán', $roster->body['class_code'] === '8A1');
+$byCode = [];
+foreach ($roster->body['students'] as $st) { $byCode[$st['code']] = $st; }
+check('Thẻ chưa kích hoạt hiển thị trạng thái issued', ($byCode[$unclaimed]['status'] ?? '') === 'issued');
+check('Học sinh đã làm đủ ba giai đoạn hiển thị 16/16/16', isset($byCode[$taCode])
+    && $byCode[$taCode]['phases'] === ['pre' => 16, 'post' => 16, 'delayed' => 16], json_encode($byCode[$taCode]['phases'] ?? null));
+check('Học sinh đã hoàn thành ba hoạt động hiển thị đủ số liệu', isset($byCode[$taCode])
+    && $byCode[$taCode]['modules'] === ['m1' => 5, 'm2' => 12, 'm3_steps' => 8, 'lab' => true]);
+check('Không hiển thị thẻ của lớp khác', !isset($byCode[$otherClassCard]));
+$rosterJson = (string) json_encode($roster->body, JSON_UNESCAPED_UNICODE);
+check('Danh sách không lộ đáp án, lựa chọn hay nội dung câu trả lời',
+    !preg_match('/is_correct|answer_index|answer_value|choice_index|is_safe|verdict|explanation|"correct"/', $rosterJson));
+check('Danh sách không lộ mật khẩu hay token', !str_contains($rosterJson, $tPass) && !str_contains($rosterJson, (string) $tTok));
+call('DELETE', '/api/teacher/session', null, ['ats_teacher' => (string) $tTok]);
+check('Đăng xuất giáo viên: danh sách không còn truy cập (401)', call('GET', '/api/teacher/roster', null, ['ats_teacher' => (string) $tTok])->status === 401);
 
 echo "\nKết quả: {$passed} đạt, {$failed} lỗi.\n";
 exit($failed === 0 ? 0 : 1);

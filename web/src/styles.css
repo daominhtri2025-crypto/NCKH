@@ -1242,3 +1242,16 @@ h3 {
     grid-column: 1 / -1;
   }
 }
+
+/* Giáo viên: danh sách tiến độ */
+.student-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; grid-template-columns: 1fr; }
+.student-card { margin-bottom: 0; }
+.student-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; }
+.code-chip { font-family: ui-monospace, Menlo, Consolas, monospace; font-weight: 700; background: var(--brand-soft); padding: 4px 10px; border-radius: 8px; }
+.metric { display: grid; grid-template-columns: 1fr auto; gap: 2px 8px; margin: 8px 0; font-size: 0.95rem; }
+.metric span { color: var(--ink-soft); }
+.metric strong { text-align: right; }
+.metric .mini-bar { grid-column: 1 / -1; height: 8px; background: var(--line); border-radius: 999px; overflow: hidden; }
+.metric .mini-bar > div { height: 100%; background: var(--brand); }
+.link-btn.inline { padding: 0; min-height: 0; }
+@media (min-width: 720px) { .student-list { grid-template-columns: 1fr 1fr; } }

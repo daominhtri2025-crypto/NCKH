@@ -14,7 +14,7 @@ Hồ sơ dự thi Khoa học kỹ thuật cấp học dành cho học sinh trung
 
 Nghiên cứu này thiết kế, xây dựng và kiểm chứng kỹ thuật một hệ thống web tương tác về an toàn thông tin dành cho học sinh trung học cơ sở, cùng mô hình đo lường nhận thức và hành vi theo ba giai đoạn: tiền kiểm, hậu kiểm và theo dõi sau 28 ngày. Hệ thống gồm ba hoạt động: sân chơi tình huống lừa đảo, nhận diện tên miền giả mạo bằng quy tắc đọc từ phải sang trái, và phòng thí nghiệm tài khoản gồm đánh giá mật khẩu cục bộ và checklist quyền riêng tư. Thiết kế bảo đảm ẩn danh bằng mã giả danh, không thu họ tên, email hay số điện thoại; mật khẩu thử nghiệm không rời trình duyệt.
 
-Hệ thống đã hoàn thành các thành phần chức năng và đạt toàn bộ các kiểm thử tích hợp (142 kiểm tra), kiểm thử đơn vị (14 kiểm thử) và kiểm thử luồng người dùng (26 bước). Nghiên cứu chưa thu thập dữ liệu thực nghiệm; vì vậy báo cáo trình bày thiết kế, phương pháp và khung phân tích, không trình bày kết quả. Ba giả thuyết về sự gia tăng điểm nhận thức và hành vi sau can thiệp, cùng khả năng duy trì kết quả sau 28 ngày, sẽ được kiểm định khi có dữ liệu.
+Hệ thống đã hoàn thành các thành phần chức năng và đạt toàn bộ các kiểm thử tích hợp (163 kiểm tra), kiểm thử đơn vị (14 kiểm thử) và kiểm thử luồng người dùng (23 bước). Nghiên cứu chưa thu thập dữ liệu thực nghiệm; vì vậy báo cáo trình bày thiết kế, phương pháp và khung phân tích, không trình bày kết quả. Ba giả thuyết về sự gia tăng điểm nhận thức và hành vi sau can thiệp, cùng khả năng duy trì kết quả sau 28 ngày, sẽ được kiểm định khi có dữ liệu.
 
 **Từ khóa:** an toàn thông tin; giáo dục an toàn số; học sinh trung học cơ sở; hệ thống web tương tác; đo lường tiền–hậu–theo dõi; quyền riêng tư theo thiết kế.
 
@@ -159,7 +159,7 @@ Nghiên cứu sử dụng thiết kế bán thực nghiệm, không ngẫu nhiê
 
 | Giai đoạn | Mã | Thời điểm | Điều kiện mở | Nội dung |
 |---|---|---|---|---|
-| Tiền kiểm | pre | Trước can thiệp | Đã đăng ký | 16 câu: 10 kiến thức, 6 hành vi |
+| Tiền kiểm | pre | Trước can thiệp | Đã kích hoạt thẻ | 16 câu: 10 kiến thức, 6 hành vi |
 | Hậu kiểm | post | Sau khi hoàn thành ba hoạt động | Đã hoàn thành pre và ba hoạt động | Cùng bộ 16 câu |
 | Theo dõi | delayed | 28 ngày sau hậu kiểm | Đã hoàn thành post và đủ 28 ngày | Cùng bộ 16 câu |
 
@@ -238,14 +238,14 @@ Gồm hai phần.
 
 Quy trình gồm sáu bước. Giáo viên hướng dẫn trình tự và không tiếp cận dữ liệu của học sinh.
 
-1. **Chuẩn bị.** Nhà trường thống nhất triển khai theo quy định của cơ sở. Nhóm nghiên cứu tạo mã lớp, và giáo viên thông báo mã lớp cho học sinh.
-2. **Đăng ký.** Học sinh nhập mã lớp, đọc phiếu đồng ý, tích đồng ý và nhận mã học sinh dạng XXXX-XXXX. Mã không chứa họ tên.
+1. **Chuẩn bị.** Nhà trường thống nhất triển khai theo quy định của cơ sở. Nhóm nghiên cứu tạo lớp, in lô thẻ mã (mỗi thẻ một mã ngẫu nhiên, không ghi tên) và cấp tài khoản giáo viên. Giáo viên nhận thẻ và tài khoản của lớp mình.
+2. **Kích hoạt thẻ.** Học sinh nhập mã trên thẻ, đọc phiếu đồng ý và tích đồng ý. Mỗi thẻ chỉ kích hoạt một lần. Mã không chứa họ tên, và học sinh không tự tạo mã.
 3. **Khảo sát đầu vào.** Học sinh làm 16 câu, không có phản hồi đúng sai.
 4. **Can thiệp.** Học sinh thực hiện ba hoạt động theo thứ tự tùy chọn.
 5. **Hậu kiểm.** Sau khi hoàn thành ba hoạt động, học sinh làm lại 16 câu.
 6. **Theo dõi.** Sau 28 ngày, khảo sát theo dõi mở và học sinh làm lại 16 câu.
 
-Học sinh đăng nhập lại bằng mã; mã này là cách duy nhất để tiếp tục phiên làm việc. Học sinh quên mã không thể khôi phục, và giáo viên chuyển yêu cầu đến nhóm nghiên cứu, không tự tìm kiếm trong dữ liệu.
+Học sinh đăng nhập lại bằng mã trên thẻ; mã này là cách duy nhất để tiếp tục phiên làm việc. Thẻ bị mất không khôi phục được tiến độ cũ. Giáo viên xem được tiến độ lớp mình qua tài khoản được cấp, nhưng không xem được câu trả lời.
 
 ![Hình 3. Luồng dữ liệu và ranh giới quyền riêng tư](hinh/hinh3_quyen_rieng_tu.png){width=85%}
 
@@ -254,11 +254,13 @@ Học sinh đăng nhập lại bằng mã; mã này là cách duy nhất để t
 Thiết kế áp dụng sáu nguyên tắc sau, tương ứng với các điểm kiểm soát trong mã nguồn.
 
 1. **Tối thiểu hóa dữ liệu.** Hệ thống không thu họ tên, email, số điện thoại, ảnh hay thông tin cá nhân khác. Thời điểm đồng ý và phiên bản phiếu được lưu trong CSDL để kiểm soát phiên bản, nhưng không xuất ra tệp nghiên cứu.
-2. **Định danh giả.** Mã học sinh do hệ thống cấp ngẫu nhiên từ bảng ký tự 32 ký tự, loại bỏ các ký tự dễ nhầm lẫn; không gian mã khoảng 40 bit. Mã được kiểm tra trùng khi cấp. Mã là định danh nghiên cứu, không phải mật khẩu.
+2. **Định danh giả.** Mã học sinh do hệ thống cấp ngẫu nhiên từ bảng ký tự 32 ký tự, loại bỏ các ký tự dễ nhầm lẫn; không gian mã khoảng 40 bit. Mã được kiểm tra trùng khi cấp và được in trên thẻ không ghi tên. Mã là định danh nghiên cứu, không phải mật khẩu.
+
+**Ranh giới của tính ẩn danh.** Giáo viên phát thẻ trực tiếp nên có thể biết thẻ nào thuộc học sinh nào. Vì vậy dữ liệu ẩn danh đối với nhóm nghiên cứu và đối với tệp xuất, nhưng không ẩn danh đối với giáo viên phụ trách lớp. Ranh giới này được nêu trong phiếu đồng ý và được quản lý bằng sổ phát thẻ bảo quản riêng.
 3. **Băm phiên đăng nhập.** Cơ sở dữ liệu chỉ lưu băm SHA-256 của token phiên. Đăng nhập lại làm vô hiệu token cũ.
 4. **Mật khẩu không rời trình duyệt.** Máy chủ từ chối mọi yêu cầu có trường mật khẩu và chỉ nhận mức đánh giá tổng hợp (yếu, trung bình, mạnh).
 5. **Không dùng dịch vụ bên ngoài để kiểm tra mật khẩu.** Tích hợp kiểm tra mật khẩu bị rò rỉ theo mô hình k-anonymity của một dịch vụ bên ngoài không được sử dụng trong hệ thống, vì ngay cả tiền tố băm cũng gắn với mật khẩu của học sinh.
-6. **Tự nguyện và rút lui.** Phiếu đồng ý nêu rõ quyền dừng bất cứ lúc nào. Yêu cầu ghi đăng ký bị từ chối nếu phiên bản phiếu không khớp.
+6. **Tự nguyện và rút lui.** Phiếu đồng ý nêu rõ quyền dừng bất cứ lúc nào. Yêu cầu kích hoạt thẻ bị từ chối nếu phiên bản phiếu không khớp, và học sinh không thể kích hoạt lại một thẻ đã dùng.
 
 ### Đạo đức nghiên cứu
 
@@ -283,16 +285,16 @@ Kế hoạch phân tích được xác định trước khi thu dữ liệu, nh�
 
 ## 3.1. Sản phẩm và kết quả kiểm chứng kỹ thuật
 
-Hệ thống đã hoàn thành các thành phần chức năng: đăng ký và xác thực bằng mã, ba hoạt động, khảo sát ba giai đoạn với trình tự mở khóa, và xuất dữ liệu. Các kết quả dưới đây là kiểm chứng kỹ thuật, không phải kết quả nghiên cứu.
+Hệ thống đã hoàn thành các thành phần chức năng: kích hoạt thẻ mã và xác thực bằng mã, tài khoản giáo viên xem tiến độ lớp, ba hoạt động, khảo sát ba giai đoạn với trình tự mở khóa, và xuất dữ liệu. Các kết quả dưới đây là kiểm chứng kỹ thuật, không phải kết quả nghiên cứu.
 
 **Bảng 5. Kết quả kiểm chứng kỹ thuật**
 
 | Loại kiểm thử | Phạm vi | Kết quả |
 |---|---|---|
-| Tích hợp API | Đăng ký, xác thực, ba hoạt động, khảo sát, khóa trình tự, xuất dữ liệu, bảo mật | 142 kiểm tra, đạt toàn bộ |
+| Tích hợp API | Kích hoạt thẻ, xác thực, tài khoản giáo viên, ba hoạt động, khảo sát, khóa trình tự, xuất dữ liệu, bảo mật | 163 kiểm tra, đạt toàn bộ |
 | Đơn vị | Bộ đánh giá mật khẩu | 14 kiểm thử, đạt toàn bộ |
 | Biên dịch và đóng gói giao diện | Kiểm tra kiểu nghiêm ngặt, đóng gói | Đạt |
-| Luồng người dùng qua máy chủ trung gian | Từ đăng ký đến khảo sát theo dõi | 26 bước, đạt toàn bộ |
+| Luồng người dùng qua máy chủ trung gian | Từ kích hoạt thẻ đến khảo sát theo dõi | 23 bước, đạt toàn bộ |
 | Trình duyệt | Luồng học sinh, khóa hoạt động, bố cục điện thoại và máy tính | Đạt |
 
 Kiểm thử bảo mật xác nhận các hành vi sau: yêu cầu ghi từ nguồn không được phép bị từ chối; yêu cầu không đúng định dạng JSON bị từ chối; truy cập khi chưa đăng nhập bị từ chối; đáp án đúng không xuất hiện trong phản hồi khảo sát; và mật khẩu thử nghiệm không xuất hiện trong bất kỳ yêu cầu gửi đi nào. Các kiểm thử được chạy trong quá trình phát triển và cần chạy lại trước khi nộp.
@@ -308,7 +310,8 @@ Bốn bảng chính được mô tả trong Bảng 6.
 | Bảng | Trường chính | Mục đích |
 |---|---|---|
 | classes | Mã lớp, tên lớp, tên cơ sở, thời điểm tạo | Danh sách lớp tham gia |
-| participants | Mã học sinh, mã lớp, băm token phiên, phiên bản phiếu, thời điểm đồng ý | Định danh giả và kiểm soát phiên |
+| participants | Mã học sinh, mã lớp, trạng thái thẻ (đã phát hoặc đã kích hoạt), băm token phiên, phiên bản phiếu, thời điểm kích hoạt | Định danh giả và kiểm soát phiên |
+| teachers | Tên đăng nhập, băm mật khẩu, lớp được gán, băm token phiên | Tài khoản giáo viên, chỉ xem tiến độ lớp được gán |
 | module_events | Mã học sinh, hoạt động, mã mục, số lần thử, lựa chọn, đúng hoặc sai, thời gian phản hồi, cờ gợi ý, phiên bản nội dung | Nhật ký ba hoạt động |
 | assessments_self | Mã học sinh, giai đoạn, mã câu, đáp án hoặc mức, đúng hoặc sai, thời gian phản hồi, phiên bản | Kết quả khảo sát ba giai đoạn |
 
@@ -397,6 +400,7 @@ Bảng dưới đây là khung để ghi kết quả khi có dữ liệu. Các �
 | G10 | Chưa kiểm thử trên máy chủ lưu trữ thực tế | Chưa xác nhận hiệu năng triển khai | Kiểm thử trên máy chủ thực tế trước khi thu dữ liệu |
 | G11 | Chưa có giao diện quản trị cho giáo viên | Phụ thuộc nhóm nghiên cứu để quản lý lớp | Phát triển giao diện quản trị đơn giản ở giai đoạn sau |
 | G12 | Quy mô mẫu nhỏ | Độ mạnh thống kê hạn chế | Báo cáo kích thước hiệu ứng và khoảng tin cậy; không khái quát hóa |
+| G13 | Giáo viên phát thẻ nên biết danh tính gắn với mã | Ẩn danh không đầy đủ đối với giáo viên | Quản lý sổ phát thẻ riêng; nêu trong phiếu đồng ý; hội đồng đạo đức phê duyệt |
 
 Tổng quan tài liệu còn hạn chế về các chương trình giáo dục an toàn thông tin đã triển khai tại Việt Nam, và chưa có đánh giá về mức độ phổ biến của từng hình thức lừa đảo đối với học sinh. Hai điểm này cần được bổ sung khi có điều kiện tra cứu đầy đủ.
 

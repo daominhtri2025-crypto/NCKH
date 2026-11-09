@@ -44,4 +44,5 @@ export const api = {
   get: <T,>(path: string) => request<T>('GET', path),
   post: <T,>(path: string, body?: unknown) => request<T>('POST', path, body),
   logout: () => request<{ ok: boolean }>('DELETE', '/session'),
+  logoutTeacher: () => request<{ ok: boolean }>('DELETE', '/teacher/session'),
 };

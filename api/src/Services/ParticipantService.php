@@ -7,15 +7,16 @@ namespace AnToanSo\Services;
 use AnToanSo\Http\Request;
 use AnToanSo\Repositories\ClassRepository;
 use AnToanSo\Repositories\ParticipantRepository;
+use AnToanSo\Support\Database;
 use AnToanSo\Support\HttpException;
 use RuntimeException;
 
 /**
- * Đăng ký và xác thực học sinh theo mã giả danh.
+ * Thẻ mã và đăng nhập học sinh.
  *
- * Nguyên tắc nghiên cứu: không thu thập họ tên, email hay số điện thoại. Mã "XXXX-XXXX"
- * do hệ thống cấp là định danh duy nhất, học sinh giữ mã để đăng nhập lại và để nhóm
- * nghiên cứu nối kết quả trước/sau. Cookie phiên là token ngẫu nhiên 256 bit, chỉ lưu băm.
+ * Luồng: nhóm kỹ thuật in lô thẻ (issueCards) → giáo viên phát thẻ → học sinh kích hoạt thẻ bằng cách
+ * nhập mã và đồng ý tham gia (claim) → đăng nhập lại bằng mã (login). Học sinh không tự tạo mã.
+ * Mã không gắn với tên; cookie phiên là token ngẫu nhiên 256 bit, chỉ lưu băm.
  */
 final class ParticipantService
 {
@@ -34,14 +35,36 @@ final class ParticipantService
     }
 
     /**
+     * Dùng bởi bin/issue_cards.php: tạo n mã mới cho một lớp, trả về danh sách mã.
+     *
+     * @return list<string>
+     */
+    public function issueCards(string $classCode, int $count): array
+    {
+        if ($count < 1 || $count > 500) {
+            throw new RuntimeException('Số thẻ mỗi lần in phải từ 1 đến 500.');
+        }
+        if (!$this->classes->exists($classCode)) {
+            throw new RuntimeException("Lớp {$classCode} chưa được tạo.");
+        }
+        $codes = [];
+        for ($i = 0; $i < $count; $i++) {
+            $code = $this->uniqueCode();
+            $this->participants->insertIssued($code, $classCode);
+            $codes[] = $code;
+        }
+        return $codes;
+    }
+
+    /**
      * @param array<string,mixed> $input
      * @return array{participant:array<string,mixed>, token:string}
      */
-    public function register(array $input): array
+    public function claim(array $input): array
     {
-        $classCode = strtoupper(trim((string) ($input['class_code'] ?? '')));
-        if (!preg_match('/^[A-Z0-9-]{2,40}$/', $classCode) || !$this->classes->exists($classCode)) {
-            throw new HttpException(422, 'Mã lớp không hợp lệ. Vui lòng hỏi giáo viên phụ trách.');
+        $code = $this->normalizeCode((string) ($input['code'] ?? ''));
+        if (!preg_match(self::CODE_PATTERN, $code)) {
+            throw new HttpException(422, 'Mã trên thẻ có dạng XXXX-XXXX.');
         }
         if (($input['consent'] ?? false) !== true) {
             throw new HttpException(422, 'Cần đồng ý tham gia nghiên cứu để tiếp tục.');
@@ -50,14 +73,13 @@ final class ParticipantService
             throw new HttpException(422, 'Phiên bản phiếu đồng ý đã thay đổi. Vui lòng tải lại trang.');
         }
 
-        $code = $this->uniqueCode();
         $token = $this->newToken();
-        $this->participants->create($code, $classCode, self::CONSENT_VERSION, hash('sha256', $token));
-
-        return [
-            'participant' => ['code' => $code, 'class_code' => $classCode],
-            'token' => $token,
-        ];
+        // Thông điệp chung cho mã không tồn tại và mã đã kích hoạt, để không lộ trạng thái thẻ.
+        if (!$this->participants->activate($code, hash('sha256', $token), self::CONSENT_VERSION)) {
+            throw new HttpException(422, 'Mã không hợp lệ hoặc thẻ đã được kích hoạt.');
+        }
+        $row = $this->participants->findByCode($code);
+        return ['participant' => self::publicView($row ?? ['code' => $code, 'class_code' => '']), 'token' => $token];
     }
 
     /**
@@ -74,11 +96,13 @@ final class ParticipantService
         if ($row === null) {
             throw new HttpException(401, 'Mã học sinh không đúng.');
         }
+        if ($row['status'] !== 'active') {
+            throw new HttpException(403, 'Thẻ này chưa được kích hoạt. Hãy chọn "Em có thẻ mã" và nhập mã trên thẻ.');
+        }
 
         $token = $this->newToken();
         $this->participants->rotateToken((int) $row['id'], hash('sha256', $token));
-
-        return ['participant' => ['code' => $row['code'], 'class_code' => $row['class_code']], 'token' => $token];
+        return ['participant' => self::publicView($row), 'token' => $token];
     }
 
     /** @return array<string,mixed> dòng CSDL của học sinh đang đăng nhập */
@@ -137,7 +161,7 @@ final class ParticipantService
                 return $code;
             }
         }
-        throw new RuntimeException('Không thể cấp mã học sinh mới.');
+        throw new RuntimeException('Không thể cấp mã mới sau nhiều lần thử.');
     }
 
     private function generateCode(): string

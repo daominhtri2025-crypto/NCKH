@@ -1,10 +1,10 @@
 // Kiểm thử nhanh (smoke test) luồng học sinh đầy đủ qua HTTP, chạy trên máy đang bật API và Vite.
 //
 // Cách dùng (sau khi đã bật php -S 127.0.0.1:8000 và npm run dev):
-//   node scripts/smoke-test.mjs
+//   SMOKE_CARD=XXXX-XXXX node scripts/smoke-test.mjs   (thẻ đã in, chưa kích hoạt)
 // Tùy chọn (biến môi trường):
 //   SMOKE_BASE=http://localhost:5173   địa chỉ đi qua proxy Vite (mặc định), hoặc http://127.0.0.1:8000 để gọi thẳng API
-//   SMOKE_CLASS=8A1                    mã lớp đã tạo bằng bin/add_class.php
+//   SMOKE_CLASS=8A1                    mã lớp (dùng cho thông báo hướng dẫn)
 //   SMOKE_ADMIN_TOKEN=...              nếu có, kiểm tra thêm chức năng xuất CSV
 //
 // Yêu cầu: Node.js 18 trở lên (có sẵn fetch). Không cần thư viện ngoài.
@@ -75,21 +75,25 @@ async function main() {
     throw new Error('Không kết nối được API. Dừng kiểm thử.');
   }
 
-  section('2. Đăng ký bằng mã giả danh (đồng ý tham gia)');
-  const reg = await call('POST', '/participants', {
-    body: { class_code: CLASS, consent: true, consent_version: 'v1' },
+  section('2. Kích hoạt thẻ mã (đồng ý tham gia)');
+  const card = process.env.SMOKE_CARD;
+  if (!card) {
+    throw new Error('Cần SMOKE_CARD: một mã thẻ chưa kích hoạt. Tạo bằng: php api/bin/issue_cards.php ' + CLASS + ' 1 thẻ.csv');
+  }
+  const reg = await call('POST', '/participants/claim', {
+    body: { code: card, consent: true, consent_version: 'v1' },
   });
-  check('Đăng ký thành công (201)', reg.status === 201,
-    `HTTP ${reg.status}: ${reg.body?.error ?? ''}. Nếu báo mã lớp không hợp lệ, hãy chạy: php api/bin/add_class.php ${CLASS} "Lớp ${CLASS}" "THCS thử nghiệm"`);
+  check('Kích hoạt thẻ thành công (201)', reg.status === 201,
+    `HTTP ${reg.status}: ${reg.body?.error ?? ''}. Thẻ phải chưa được kích hoạt và mã lớp phải đúng.`);
   const code = reg.body?.participant?.code;
   check('Mã học sinh đúng định dạng XXXX-XXXX', /^[23456789A-HJKMNP-Z]{4}-[23456789A-HJKMNP-Z]{4}$/.test(code ?? ''), String(code));
   let token = reg.token;
   check('Cấp cookie phiên', !!token);
   if (!token) {
-    throw new Error('Không đăng ký được học sinh thử nghiệm, dừng kiểm thử. Kiểm tra lớp và cấu hình CSDL.');
+    throw new Error('Không kích hoạt được thẻ, dừng kiểm thử.');
   }
   const bodyText = JSON.stringify(reg.body);
-  check('Phản hồi đăng ký không chứa cookie phiên', !token || !bodyText.includes(token));
+  check('Phản hồi kích hoạt không chứa cookie phiên', !bodyText.includes(token));
 
   section('3. Khóa trình tự: module bị chặn trước pre-test');
   const lockedM1 = await call('GET', '/module1', { token });

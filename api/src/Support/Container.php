@@ -16,6 +16,8 @@ use AnToanSo\Services\DomainCatalog;
 use AnToanSo\Services\Module1Service;
 use AnToanSo\Services\Module2Service;
 use AnToanSo\Services\Module3Service;
+use AnToanSo\Services\TeacherService;
+use AnToanSo\Repositories\TeacherRepository;
 use AnToanSo\Services\ParticipantService;
 use AnToanSo\Services\ScenarioCatalog;
 
@@ -80,6 +82,11 @@ final class Container
         return self::$instances['assessmentCatalog'] ??= new AssessmentCatalog(
             dirname(__DIR__, 2) . '/content/assessment_items.json'
         );
+    }
+
+    public static function teachers(): TeacherService
+    {
+        return self::$instances['teachers'] ??= new TeacherService(new TeacherRepository());
     }
 
     public static function reset(): void
