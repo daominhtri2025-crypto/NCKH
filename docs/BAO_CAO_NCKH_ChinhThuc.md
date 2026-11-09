@@ -303,19 +303,20 @@ Kiểm thử bảo mật xác nhận các hành vi sau: yêu cầu ghi từ ngu�
 
 ### Cấu trúc cơ sở dữ liệu
 
-Bốn bảng chính được mô tả trong Bảng 6.
+Các bảng dữ liệu chính được mô tả trong Bảng 6.
 
 **Bảng 6. Cấu trúc các bảng dữ liệu chính**
 
 | Bảng | Trường chính | Mục đích |
 |---|---|---|
 | classes | Mã lớp, tên lớp, tên cơ sở, thời điểm tạo | Danh sách lớp tham gia |
-| participants | Mã học sinh, mã lớp, trạng thái thẻ (đã phát hoặc đã kích hoạt), băm token phiên, phiên bản phiếu, thời điểm kích hoạt | Định danh giả và kiểm soát phiên |
+| participants | Mã học sinh, mã lớp, trạng thái thẻ (đã phát hoặc đã kích hoạt), băm token phiên, phiên bản phiếu, thời điểm kích hoạt, số lần cấp lại thẻ | Định danh giả và kiểm soát phiên |
 | teachers | Tên đăng nhập, băm mật khẩu, lớp được gán, băm token phiên | Tài khoản giáo viên, chỉ xem tiến độ lớp được gán |
 | module_events | Mã học sinh, hoạt động, mã mục, số lần thử, lựa chọn, đúng hoặc sai, thời gian phản hồi, cờ gợi ý, phiên bản nội dung | Nhật ký ba hoạt động |
 | assessments_self | Mã học sinh, giai đoạn, mã câu, đáp án hoặc mức, đúng hoặc sai, thời gian phản hồi, phiên bản | Kết quả khảo sát ba giai đoạn |
+| audit_log | Thời điểm, loại người thực hiện (giáo viên hoặc nhóm kỹ thuật), mã người thực hiện, thao tác, mã học sinh, mã cũ, mã mới, việc đã xác nhận đối chiếu sổ | Nhật ký trách nhiệm cho thao tác cấp lại thẻ; không đưa vào tệp xuất nghiên cứu |
 
-Ràng buộc duy nhất trên `assessments_self` theo bộ ba (học sinh, giai đoạn, mã câu) bảo đảm mỗi câu chỉ được trả lời một lần trong một giai đoạn. Cột `is_safe` trong `module_events` mang nghĩa phân loại đúng (hoặc đạt yêu cầu) đối với các hoạt động.
+Bảng `audit_log` không chứa câu trả lời và không được xuất cùng dữ liệu nghiên cứu; mục đích duy nhất là truy vết trách nhiệm khi cấp lại thẻ. Ràng buộc duy nhất trên `assessments_self` theo bộ ba (học sinh, giai đoạn, mã câu) bảo đảm mỗi câu chỉ được trả lời một lần trong một giai đoạn. Cột `is_safe` trong `module_events` mang nghĩa phân loại đúng (hoặc đạt yêu cầu) đối với các hoạt động.
 
 ### Codebook
 

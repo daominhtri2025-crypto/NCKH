@@ -228,7 +228,9 @@ Kiểm tra bảng đã được tạo:
 mysql -u antoanso -p antoanso_dev -e "SHOW TABLES;"
 ```
 
-Kết quả phải có: `classes`, `participants`, `module_events`, `assessments_self`.
+Kết quả phải có: `classes`, `teachers`, `participants`, `module_events`, `assessments_self`, `audit_log`.
+
+> Nếu CSDL đã tồn tại từ trước, chạy lại `php api/bin/migrate.php` sẽ thêm các bảng còn thiếu (lược đồ dùng `CREATE TABLE IF NOT EXISTS`). Lệnh này không thay đổi các bảng đã có. Nếu cần đổi cột của một bảng đã có, phải tạo lại CSDL dev.
 
 ## 6. Cài gói phụ thuộc phía giao diện
 
@@ -376,6 +378,8 @@ Lưu ý: CSDL dev tạo trước khi có thẻ mã cần tạo lại (xóa và n
 | Smoke test báo "Mã lớp không hợp lệ" | Chưa tạo lớp trong CSDL mà API đang dùng | Kiểm tra `DB_NAME` trong `api/.env`, rồi chạy lại mục 5 |
 | Xuất CSV trả về 503 | `ADMIN_TOKEN` chưa được đặt trong `api/.env` | Đặt `ADMIN_TOKEN` rồi thử lại |
 | Xuất CSV trả về 401 | Token gửi lên không khớp | Kiểm tra header `X-Admin-Token` |
+| Cấp lại thẻ trả về 422 "Cần xác nhận đã đối chiếu" | Yêu cầu thiếu `ledger_confirmed: true` | Trên giao diện: tích ô xác nhận trước khi bấm nút. Trên dòng lệnh: thêm cờ `--da-doi-chieu-so` |
+| `reissue_card.php` in ra "Cách dùng" và thoát | Thiếu cờ `--da-doi-chieu-so` | Đây là chủ ý. Chỉ thêm cờ sau khi đã đối chiếu sổ phát thẻ |
 
 ## 10. Dừng các dịch vụ
 

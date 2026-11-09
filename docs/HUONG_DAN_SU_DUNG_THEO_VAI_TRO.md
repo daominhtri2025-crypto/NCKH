@@ -211,7 +211,16 @@ Tệp CSV chứa mã thẻ. In ra, trao cho giáo viên, rồi **xóa tệp kh�
 ### 3.4. Xem tiến độ và hỗ trợ
 
 - Tiến độ lớp là thông tin của giáo viên. Nhóm kỹ thuật không có màn hình riêng để xem tiến độ; khi cần kiểm tra, dùng công cụ kiểm thử hoặc truy vấn CSDL theo mục 3.6.
-- Học sinh làm mất thẻ đã kích hoạt: giáo viên đối chiếu sổ phát thẻ rồi tự cấp thẻ mới (mục 2.3). Nếu giáo viên không còn sổ, nhóm kỹ thuật **không tìm được** mã cũ vì hệ thống không lưu tên; khi đó học sinh phải bắt đầu với thẻ mới.
+- Học sinh làm mất thẻ đã kích hoạt: giáo viên đối chiếu sổ phát thẻ rồi tự cấp thẻ mới (mục 2.2). Nếu giáo viên không còn sổ, nhóm kỹ thuật **không tìm được** mã cũ vì hệ thống không lưu tên; khi đó học sinh phải bắt đầu với thẻ mới.
+- Nhóm kỹ thuật có thể cấp lại bằng dòng lệnh, nhưng phải có cờ `--da-doi-chieu-so` (mục 3.3). Lệnh này chỉ dùng khi giáo viên không thể thao tác trên ứng dụng và đã đối chiếu sổ.
+- **Xem nhật ký cấp lại thẻ** (chỉ nhóm kỹ thuật, qua CSDL): mỗi lần cấp lại có một dòng trong bảng `audit_log`. Truy vấn mẫu:
+
+  ```sql
+  SELECT created_at, actor_type, actor_id, old_code, new_code, ledger_confirmed
+  FROM audit_log WHERE action = 'reissue_card' ORDER BY created_at DESC LIMIT 50;
+  ```
+
+  `actor_type = teacher` kèm `actor_id` là mã tài khoản giáo viên (bảng `teachers`); `actor_type = technical` và `actor_id` trống là nhóm kỹ thuật. Bảng này chỉ dùng để truy vết trách nhiệm, không đưa vào phân tích nghiên cứu.
 
 ### 3.5. Xuất dữ liệu nghiên cứu
 
@@ -241,5 +250,5 @@ curl -H "X-Admin-Token: <token>" -o antoanso_wide.csv https://<tên-miền>/api/
 
 - Đăng nhập học sinh và giáo viên chưa có giới hạn số lần thử sai.
 - Chưa có giao diện quản trị cho nhóm kỹ thuật; mọi thao tác dùng dòng lệnh trên máy chủ.
-
 - Chưa có cơ chế nhắc khảo sát theo dõi.
+- Nhật ký `audit_log` ghi lại việc cấp lại thẻ nhưng chưa có màn hình xem; cần truy vấn trực tiếp.
