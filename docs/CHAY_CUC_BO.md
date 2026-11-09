@@ -296,7 +296,7 @@ DB_NAME=antoanso_test php api/tests/run.php
 
 Windows (PowerShell): `$env:DB_NAME="antoanso_test"; php api/tests/run.php`
 
-Kết quả mong đợi: dòng cuối là `Kết quả: 197 đạt, 0 lỗi.` (số lượng có thể tăng khi thêm kiểm tra).
+Kết quả mong đợi: dòng cuối là `Kết quả: 205 đạt, 0 lỗi.` (số lượng có thể tăng khi thêm kiểm tra).
 
 ### 8.2. Kiểm thử đơn vị bộ đánh giá mật khẩu (Node)
 
@@ -351,8 +351,9 @@ php api/bin/create_teacher.php gv_thu 8A1
 php api/bin/manage_teacher.php list               # xem tài khoản
 php api/bin/manage_teacher.php reset gv_thu       # đặt lại mật khẩu (xem mục 3.2 hướng dẫn vai trò)
 
-# Cấp lại thẻ cho học sinh đã kích hoạt (làm mất thẻ), giữ tiến độ. Cần mã cũ lấy từ sổ phát thẻ.
-php api/bin/reissue_card.php <MÃ_CŨ>
+# Cấp lại thẻ cho học sinh đã kích hoạt (làm mất thẻ), giữ tiến độ.
+# Cần mã cũ lấy từ sổ phát thẻ. Cờ --da-doi-chieu-so là bắt buộc để xác nhận đã đối chiếu sổ; thao tác được ghi nhật ký.
+php api/bin/reissue_card.php <MÃ_CŨ> --da-doi-chieu-so
 ```
 
 Ghi lại mật khẩu giáo viên được in ra (chỉ hiện một lần). Đăng nhập tại `http://localhost:5173` bằng "Giáo viên đăng nhập" để xem tiến độ lớp `8A1`. Tài khoản giáo viên chỉ đăng nhập vào ứng dụng trên trình duyệt; nhóm kỹ thuật làm việc bằng dòng lệnh như trên.

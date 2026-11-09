@@ -101,3 +101,19 @@ CREATE TABLE IF NOT EXISTS assessments_self (
   KEY idx_assessment_phase (participant_id, phase),
   CONSTRAINT fk_assessment_participant FOREIGN KEY (participant_id) REFERENCES participants (id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Nhật ký kiểm toán cho các thao tác có trách nhiệm (cấp lại thẻ, và các thao tác quản trị).
+-- Chỉ dùng nội bộ để truy vết. Không đưa vào tệp xuất dữ liệu nghiên cứu.
+CREATE TABLE IF NOT EXISTS audit_log (
+  id             BIGINT       NOT NULL AUTO_INCREMENT,
+  created_at     DATETIME     NOT NULL,
+  actor_type     ENUM('teacher','technical') NOT NULL,
+  actor_id       BIGINT       NULL,
+  action         VARCHAR(40)  NOT NULL,
+  participant_id BIGINT       NULL,
+  old_code       CHAR(9)      NULL,
+  new_code       CHAR(9)      NULL,
+  ledger_confirmed TINYINT(1) NULL,
+  PRIMARY KEY (id),
+  KEY idx_audit_action (action, created_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

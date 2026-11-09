@@ -24,7 +24,7 @@ if (!str_ends_with($dbName, '_test')) {
 
 Env::set('APP_URL', 'http://localhost:5173');
 $pdo = Database::pdo();
-foreach (['assessments_self', 'module_events', 'participants', 'teachers', 'classes'] as $table) {
+foreach (['audit_log', 'assessments_self', 'module_events', 'participants', 'teachers', 'classes'] as $table) {
     $pdo->exec("DROP TABLE IF EXISTS {$table}");
 }
 Migrator::run($pdo, dirname(__DIR__) . '/database/schema.sql');
@@ -689,9 +689,21 @@ $oldCodeForReissue = $taCode;
 $liveLogin = call('POST', '/api/session', ['code' => $oldCodeForReissue]);
 $liveTok = (string) sessionTokenFrom($liveLogin);
 $beforeProg = call('GET', '/api/module2', null, ['ats_session' => $liveTok])->body['progress']['answered'] ?? -1;
-$re = call('POST', '/api/teacher/students/' . $oldCodeForReissue . '/reissue', [], ['ats_teacher' => $rtTok]);
-check('Giáo viên cấp lại thẻ cho học sinh lớp mình (200)', $re->status === 200 && isset($re->body['new_code']), (string) $re->status);
+$noConfirm = call('POST', '/api/teacher/students/' . $oldCodeForReissue . '/reissue', [], ['ats_teacher' => $rtTok]);
+check('Cấp lại thẻ không có xác nhận đối chiếu sổ bị từ chối (422)', $noConfirm->status === 422, (string) $noConfirm->status);
+check('Mã cũ vẫn đăng nhập được sau lần từ chối', call('POST', '/api/session', ['code' => $oldCodeForReissue])->status === 200);
+$falseConfirm = call('POST', '/api/teacher/students/' . $oldCodeForReissue . '/reissue', ['ledger_confirmed' => 'yes'], ['ats_teacher' => $rtTok]);
+check('Xác nhận không phải true (chuỗi "yes") bị từ chối (422)', $falseConfirm->status === 422, (string) $falseConfirm->status);
+$liveLogin = call('POST', '/api/session', ['code' => $oldCodeForReissue]);
+$liveTok = (string) sessionTokenFrom($liveLogin);
+$re = call('POST', '/api/teacher/students/' . $oldCodeForReissue . '/reissue', ['ledger_confirmed' => true], ['ats_teacher' => $rtTok]);
+check('Giáo viên cấp lại thẻ có xác nhận đối chiếu sổ (200)', $re->status === 200 && isset($re->body['new_code']), (string) $re->status);
 $newCodeRe = (string) ($re->body['new_code'] ?? '');
+$auditTeacher = $pdo->query("SELECT actor_type, actor_id, old_code, new_code, ledger_confirmed FROM audit_log WHERE action = 'reissue_card' AND new_code = '{$newCodeRe}'")->fetch();
+check('Nhật ký ghi lần cấp lại của giáo viên (người thực hiện, mã cũ, mã mới, đã xác nhận)', is_array($auditTeacher)
+    && $auditTeacher['actor_type'] === 'teacher' && (int) $auditTeacher['actor_id'] === (int) $pdo->query("SELECT id FROM teachers WHERE username = 'gv_thu_nghiem'")->fetchColumn()
+    && $auditTeacher['old_code'] === $oldCodeForReissue && (int) $auditTeacher['ledger_confirmed'] === 1);
+check('Lần từ chối không ghi nhật ký', (int) $pdo->query("SELECT COUNT(*) FROM audit_log WHERE old_code = '{$oldCodeForReissue}'")->fetchColumn() === 1);
 check('Mã mới khác mã cũ và đúng định dạng', $newCodeRe !== $oldCodeForReissue && (bool) preg_match('/^[23456789A-HJKMNP-Z]{4}-[23456789A-HJKMNP-Z]{4}$/', $newCodeRe));
 check('Mã cũ không còn đăng nhập được (401)', call('POST', '/api/session', ['code' => $oldCodeForReissue])->status === 401);
 check('Phiên cũ của học sinh bị thu hồi (401)', call('GET', '/api/me', null, ['ats_session' => $liveTok])->status === 401);
@@ -705,17 +717,25 @@ check('Khảo sát đầu vào vẫn đủ 16 câu sau khi cấp lại', $preAft
 
 $otherClassStudent = issueCard('8B1');
 claimCard($otherClassStudent);
-check('Giáo viên lớp 8A1 không cấp lại được thẻ học sinh lớp 8B1 (404)', call('POST', '/api/teacher/students/' . $otherClassStudent . '/reissue', [], ['ats_teacher' => $rtTok])->status === 404);
+check('Giáo viên lớp 8A1 không cấp lại được thẻ học sinh lớp 8B1 (404)', call('POST', '/api/teacher/students/' . $otherClassStudent . '/reissue', ['ledger_confirmed' => true], ['ats_teacher' => $rtTok])->status === 404);
 $unclaimedCard = issueCard('8A1');
-check('Không cấp lại cho thẻ chưa kích hoạt (404)', call('POST', '/api/teacher/students/' . $unclaimedCard . '/reissue', [], ['ats_teacher' => $rtTok])->status === 404);
-check('Mã không đúng định dạng bị từ chối (422)', call('POST', '/api/teacher/students/abc/reissue', [], ['ats_teacher' => $rtTok])->status === 422);
+check('Không cấp lại cho thẻ chưa kích hoạt (404)', call('POST', '/api/teacher/students/' . $unclaimedCard . '/reissue', ['ledger_confirmed' => true], ['ats_teacher' => $rtTok])->status === 404);
+check('Mã không đúng định dạng bị từ chối (422)', call('POST', '/api/teacher/students/abc/reissue', ['ledger_confirmed' => true], ['ats_teacher' => $rtTok])->status === 422);
 check('Không có quyền khi chưa đăng nhập giáo viên (401)', call('POST', '/api/teacher/students/' . $newCodeRe . '/reissue', [])->status === 401);
 
-$techNew = (new AnToanSo\Services\ParticipantService(new AnToanSo\Repositories\ParticipantRepository(), new AnToanSo\Repositories\ClassRepository()))
-    ->reissueCard($newCodeRe, null, null);
-check('Nhóm kỹ thuật cấp lại thẻ (không ràng buộc lớp)', preg_match('/^[23456789A-HJKMNP-Z]{4}-[23456789A-HJKMNP-Z]{4}$/', $techNew) === 1 && $techNew !== $newCodeRe);
+$techSvc = new AnToanSo\Services\ParticipantService(new AnToanSo\Repositories\ParticipantRepository(), new AnToanSo\Repositories\ClassRepository());
+$techRejected = (function () use ($techSvc, $newCodeRe) {
+    try { $techSvc->reissueCard($newCodeRe, null, 'technical', null, false); return false; }
+    catch (AnToanSo\Support\HttpException $e) { return $e->status === 422; }
+})();
+check('Nhóm kỹ thuật không xác nhận đối chiếu sổ thì bị từ chối (422)', $techRejected);
+check('Mã không đổi sau lần từ chối của nhóm kỹ thuật', (int) $pdo->query("SELECT COUNT(*) FROM participants WHERE code = '{$newCodeRe}' AND status = 'active'")->fetchColumn() === 1);
+$techNew = $techSvc->reissueCard($newCodeRe, null, 'technical', null, true);
+check('Nhóm kỹ thuật cấp lại thẻ có xác nhận (không ràng buộc lớp)', preg_match('/^[23456789A-HJKMNP-Z]{4}-[23456789A-HJKMNP-Z]{4}$/', $techNew) === 1 && $techNew !== $newCodeRe);
 check('Số lần cấp lại được ghi nhận', (int) $pdo->query("SELECT card_reissues FROM participants WHERE code = '{$techNew}'")->fetchColumn() === 2);
 check('Lần cấp lại của nhóm kỹ thuật không ghi giáo viên là người cấp', $pdo->query("SELECT reissued_by_teacher_id FROM participants WHERE code = '{$techNew}'")->fetchColumn() === null);
+$auditTech = $pdo->query("SELECT actor_type, actor_id, ledger_confirmed FROM audit_log WHERE action = 'reissue_card' AND new_code = '{$techNew}'")->fetch();
+check('Nhật ký ghi lần cấp lại của nhóm kỹ thuật (actor_type technical, đã xác nhận)', is_array($auditTech) && $auditTech['actor_type'] === 'technical' && $auditTech['actor_id'] === null && (int) $auditTech['ledger_confirmed'] === 1);
 
 echo "\nKết quả: {$passed} đạt, {$failed} lỗi.\n";
 exit($failed === 0 ? 0 : 1);

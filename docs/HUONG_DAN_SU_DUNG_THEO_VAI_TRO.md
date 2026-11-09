@@ -114,8 +114,11 @@ Lưu ý:
 
 1. Mở sổ phát thẻ, tìm mã đã phát cho học sinh đó. Đây là bước bắt buộc: danh sách lớp chỉ hiển thị mã, không hiển thị tên.
 2. Trong danh sách lớp, tìm đúng mã đó (đối chiếu số lượng câu đã làm với học sinh), rồi bấm **Cấp thẻ mới**.
-3. Xác nhận trong hộp thoại. Mã mới hiện ra; in và phát cho học sinh.
-4. Ghi vào sổ: mã cũ, mã mới, học sinh nào, ngày nào.
+3. Trong khối xác nhận hiện ra dưới tên học sinh, **tích ô "Tôi đã đối chiếu mã cũ với sổ phát thẻ"**, rồi bấm **Xác nhận cấp thẻ mới**. Nút này chỉ bật khi đã tích ô.
+4. Mã mới hiện ra; in và phát cho học sinh.
+5. Ghi vào sổ: mã cũ, mã mới, học sinh nào, ngày nào.
+
+Mỗi lần cấp lại được hệ thống ghi nhật ký (người thực hiện, mã cũ, mã mới, thời điểm, việc đã xác nhận đối chiếu) để truy vết trách nhiệm. Nhật ký này chỉ dùng nội bộ, không nằm trong tệp xuất nghiên cứu. Yêu cầu không tích ô xác nhận sẽ bị từ chối và mã không đổi.
 
 Mã cũ mất hiệu lực ngay. Học sinh đăng nhập lại bằng mã mới và tiếp tục từ chỗ đã dừng. Chỉ cấp lại được cho học sinh của lớp mình.
 
@@ -174,7 +177,7 @@ Nhóm kỹ thuật có **toàn quyền** đối với tài khoản giáo viên v
 | Xem danh sách giáo viên | `php api/bin/manage_teacher.php list` |
 | Thêm tài khoản giáo viên | `php api/bin/manage_teacher.php create <tên> <MÃ_LỚP>` |
 | Khôi phục mật khẩu giáo viên | `php api/bin/manage_teacher.php reset <tên>` |
-| Cấp thẻ mới cho học sinh đã có tiến độ (làm mất thẻ) | `php api/bin/reissue_card.php <MÃ_CŨ>` |
+| Cấp thẻ mới cho học sinh đã có tiến độ (làm mất thẻ) | `php api/bin/reissue_card.php <MÃ_CŨ> --da-doi-chieu-so` (cờ bắt buộc: xác nhận đã đối chiếu sổ phát thẻ) |
 | Sửa lớp của giáo viên | `php api/bin/manage_teacher.php move <tên> <MÃ_LỚP>` |
 | Khóa tài khoản (không xóa dữ liệu) | `php api/bin/manage_teacher.php disable <tên>` |
 | Khôi phục tài khoản đã khóa | `php api/bin/manage_teacher.php enable <tên>` |

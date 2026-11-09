@@ -38,19 +38,37 @@ export default function TeacherDashboard({ onLogout }: Props) {
   const [cardError, setCardError] = useState<string | null>(null);
   const [creating, setCreating] = useState(false);
   const [reissued, setReissued] = useState<{ old: string; next: string } | null>(null);
+  const [reissueTarget, setReissueTarget] = useState<string | null>(null);
+  const [ledgerChecked, setLedgerChecked] = useState(false);
+  const [reissuing, setReissuing] = useState(false);
 
+  function openReissue(code: string) {
+    setReissueTarget(code);
+    setLedgerChecked(false);
+  }
+
+  function closeReissue() {
+    setReissueTarget(null);
+    setLedgerChecked(false);
+  }
+
+  /** Chỉ gửi yêu cầu khi giáo viên đã tích xác nhận đối chiếu mã cũ với sổ phát thẻ. Hệ thống ghi nhật ký thao tác. */
   async function reissue(code: string) {
-    const ok = window.confirm(
-      `Cấp thẻ mới cho học sinh có mã ${code}?\n\nMã cũ sẽ không còn dùng được. Tiến độ của học sinh được giữ nguyên.\nĐối chiếu với sổ phát thẻ trước khi xác nhận.`
-    );
-    if (!ok) return;
+    if (!ledgerChecked) return;
+    setReissuing(true);
     try {
-      const data = await api.post<{ new_code: string }>(`/teacher/students/${encodeURIComponent(code)}/reissue`, {});
+      const data = await api.post<{ new_code: string }>(
+        `/teacher/students/${encodeURIComponent(code)}/reissue`,
+        { ledger_confirmed: true }
+      );
       setReissued({ old: code, next: data.new_code });
+      closeReissue();
       setRoster(null);
       api.get<Roster>('/teacher/roster').then(setRoster);
     } catch (err) {
       setError(err instanceof ApiError ? err.message : 'Không cấp lại được thẻ.');
+    } finally {
+      setReissuing(false);
     }
   }
 
@@ -152,7 +170,24 @@ export default function TeacherDashboard({ onLogout }: Props) {
             </div>
             {s.status === 'active' && (
               <>
-                <button className="btn btn-ghost small-btn" onClick={() => reissue(s.code)}>Cấp thẻ mới (học sinh làm mất thẻ)</button>
+                {reissueTarget === s.code ? (
+                  <div className="reissue-panel">
+                    <p>Cấp thẻ mới cho học sinh có mã {s.code}. Mã cũ sẽ không còn dùng được; tiến độ được giữ nguyên.</p>
+                    <label className="check-row">
+                      <input type="checkbox" checked={ledgerChecked} onChange={(e) => setLedgerChecked(e.target.checked)} />
+                      <span>Tôi đã đối chiếu mã cũ với sổ phát thẻ</span>
+                    </label>
+                    <div className="row-actions">
+                      <button className="btn btn-primary small-btn" disabled={!ledgerChecked || reissuing} onClick={() => reissue(s.code)}>
+                        {reissuing ? 'Đang cấp…' : 'Xác nhận cấp thẻ mới'}
+                      </button>
+                      <button className="btn btn-ghost small-btn" onClick={closeReissue} disabled={reissuing}>Hủy</button>
+                    </div>
+                    <p className="fineprint">Thao tác được ghi nhật ký để truy vết trách nhiệm.</p>
+                  </div>
+                ) : (
+                  <button className="btn btn-ghost small-btn" onClick={() => openReissue(s.code)}>Cấp thẻ mới (học sinh làm mất thẻ)</button>
+                )}
                 <div className="metric"><span>Khảo sát đầu vào</span><strong>{s.phases.pre}/{t.items_per_phase}</strong>{bar(s.phases.pre, t.items_per_phase)}</div>
                 <div className="metric"><span>Sân chơi tình huống</span><strong>{s.modules.m1}/{t.m1}</strong>{bar(s.modules.m1, t.m1)}</div>
                 <div className="metric"><span>Thám tử tên miền</span><strong>{s.modules.m2}/{t.m2}</strong>{bar(s.modules.m2, t.m2)}</div>

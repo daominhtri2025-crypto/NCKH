@@ -93,3 +93,7 @@ Lưu ý phân tích:
   php api/bin/export_assessments.php wide antoanso_wide.csv
   php api/bin/export_assessments.php long antoanso_long.csv
   ```
+
+## 8. Dữ liệu không xuất
+
+Bảng `audit_log` (nhật ký cấp lại thẻ và thao tác quản trị) và bảng tài khoản giáo viên không nằm trong tệp xuất nghiên cứu. Bảng `audit_log` chỉ phục vụ truy vết trách nhiệm nội bộ, không dùng cho phân tích.

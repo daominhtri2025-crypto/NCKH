@@ -17,7 +17,7 @@ Nhóm kỹ thuật là vai trò duy nhất có quyền chạy lệnh trên máy 
 | In thẻ mã cho lớp | Nhóm kỹ thuật | `php api/bin/issue_cards.php` |
 | Tạo tài khoản giáo viên | Nhóm kỹ thuật | `php api/bin/create_teacher.php` |
 | Quản lý tài khoản giáo viên (thêm, sửa lớp, khóa, khôi phục, xóa, đặt lại mật khẩu) | Nhóm kỹ thuật | `php api/bin/manage_teacher.php` |
-| Cấp thẻ mới cho học sinh đã có tiến độ (làm mất thẻ) | Nhóm kỹ thuật (`reissue_card.php`) hoặc giáo viên trên ứng dụng | Giữ nguyên tiến độ |
+| Cấp thẻ mới cho học sinh đã có tiến độ (làm mất thẻ) | Nhóm kỹ thuật (`reissue_card.php --da-doi-chieu-so`) hoặc giáo viên trên ứng dụng (bắt buộc tích xác nhận đối chiếu sổ) | Giữ nguyên tiến độ; ghi nhật ký `audit_log` |
 | Tạo thẻ mới cho lớp | Giáo viên (trên ứng dụng) hoặc nhóm kỹ thuật (`issue_cards.php`) | Giới hạn bởi `CLASS_CARD_LIMIT` |
 | Xuất dữ liệu nghiên cứu | Nhóm kỹ thuật | `php api/bin/export_assessments.php` hoặc HTTP với `ADMIN_TOKEN` |
 
@@ -146,6 +146,7 @@ Nếu iNET không cho phép `RewriteRule ... - [F]`, chặn thư mục bằng `a
 
 - Sao lưu CSDL định kỳ và lưu bản sao ngoài hosting.
 - Sổ phát thẻ (ai nhận thẻ nào) là thông tin nhạy cảm. Bảo quản riêng, không lưu trên hosting, không đưa vào kho mã.
+- Bảng `audit_log` (nhật ký cấp lại thẻ) nằm trong cùng CSDL nên được sao lưu cùng. Bảng này không nằm trong tệp xuất nghiên cứu; chỉ nhóm kỹ thuật được xem.
 - Không công bố kết quả theo lớp khi lớp có dưới 5 học sinh.
 - Khi kết thúc nghiên cứu, xóa dữ liệu theo phiếu đồng ý và xóa tài khoản giáo viên.
 

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace AnToanSo\Services;
 
 use AnToanSo\Http\Request;
+use AnToanSo\Repositories\AuditRepository;
 use AnToanSo\Repositories\ClassRepository;
 use AnToanSo\Repositories\ParticipantRepository;
 use AnToanSo\Support\Database;
@@ -61,11 +62,17 @@ final class ParticipantService
     }
 
     /**
-     * Cấp lại thẻ cho học sinh đã kích hoạt (làm mất thẻ). Trả về mã mới; tiến độ được giữ nguyên.
-     * Nếu $classCode khác null, chỉ đổi khi mã cũ thuộc lớp đó (giáo viên chỉ đổi được học sinh của lớp mình).
+     * Cấp lại thẻ cho học sinh đã kích hoạt (làm mất thẻ). Tiến độ được giữ nguyên.
+     *
+     * Bắt buộc $ledgerConfirmed === true: người thực hiện xác nhận đã đối chiếu mã cũ với sổ phát thẻ.
+     * Mọi lần cấp lại được ghi vào nhật ký kiểm toán (người thực hiện, mã cũ, mã mới, thời điểm).
+     * Nếu $classCode khác null, chỉ đổi khi mã cũ thuộc lớp đó.
      */
-    public function reissueCard(string $oldCode, ?string $classCode, ?int $teacherId): string
+    public function reissueCard(string $oldCode, ?string $classCode, string $actorType, ?int $actorId, mixed $ledgerConfirmed): string
     {
+        if ($ledgerConfirmed !== true) {
+            throw new HttpException(422, 'Cần xác nhận đã đối chiếu mã cũ với sổ phát thẻ trước khi cấp lại.');
+        }
         $oldCode = $this->normalizeCode($oldCode);
         if (!preg_match(self::CODE_PATTERN, $oldCode)) {
             throw new HttpException(422, 'Mã cũ không đúng định dạng XXXX-XXXX.');
@@ -75,9 +82,11 @@ final class ParticipantService
             throw new HttpException(404, 'Không tìm thấy học sinh đã kích hoạt với mã này trong phạm vi của bạn.');
         }
         $newCode = $this->uniqueCode();
+        $teacherId = $actorType === 'teacher' ? $actorId : null;
         if (!$this->participants->replaceCode($oldCode, $newCode, $classCode, $teacherId)) {
             throw new HttpException(409, 'Không cấp lại được thẻ. Thử lại sau.');
         }
+        (new AuditRepository())->log($actorType, $actorId, 'reissue_card', (int) $row['id'], $oldCode, $newCode, true);
         return $newCode;
     }
 

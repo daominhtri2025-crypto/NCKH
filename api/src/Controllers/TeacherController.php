@@ -56,7 +56,13 @@ final class TeacherController
     public function reissue(Request $request, array $params): Response
     {
         $teacher = Container::teachers()->authenticate($request);
-        $newCode = Container::participants()->reissueCard($params['code'], (string) $teacher['class_code'], (int) $teacher['id']);
+        $newCode = Container::participants()->reissueCard(
+            $params['code'],
+            (string) $teacher['class_code'],
+            'teacher',
+            (int) $teacher['id'],
+            $request->json()['ledger_confirmed'] ?? null,
+        );
         return Response::json([
             'new_code' => $newCode,
             'note' => 'Mã cũ đã mất hiệu lực. Tiến độ của học sinh được giữ nguyên. Học sinh đăng nhập lại bằng mã mới.',
