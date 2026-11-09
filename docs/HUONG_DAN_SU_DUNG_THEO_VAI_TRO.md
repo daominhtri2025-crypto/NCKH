@@ -69,7 +69,7 @@ Màn hình chính hiển thị tiến trình và lý do khi một bước còn k
 
 - Không nhập mật khẩu thật vào ứng dụng.
 - Không đọc mã OTP cho bất kỳ ai.
-- Giữ thẻ mã. Thẻ mất không khôi phục được tiến độ cũ.
+- Giữ thẻ mã. Nếu làm mất thẻ, báo giáo viên để được cấp thẻ mới; tiến độ được giữ nguyên nếu giáo viên đối chiếu được sổ phát thẻ.
 - Tham gia là tự nguyện. Em có thể dừng bất cứ lúc nào; hãy báo giáo viên nếu muốn rút khỏi nghiên cứu.
 
 ---
@@ -92,16 +92,32 @@ Lưu ý:
 
 ### 2.2. Tạo thẻ mới cho học sinh
 
-Giáo viên tự tạo thẻ mới cho lớp mình trong ba trường hợp: học sinh mới tham gia lớp; học sinh quên mã (thẻ cũ không còn dùng được vì mã không lưu theo tên); học sinh làm mất thẻ.
+Chọn đúng thao tác theo tình huống. Điều quan trọng nhất là **không tạo thẻ mới cho học sinh đã có tiến độ**, vì sẽ làm mất tiến độ cũ.
+
+| Tình huống | Thao tác | Tiến độ |
+|---|---|---|
+| Học sinh mới của lớp, chưa có thẻ | Tạo thẻ mới (mục dưới) | Bắt đầu từ đầu |
+| Thẻ đã phát nhưng chưa ai kích hoạt | Tạo thẻ mới; bỏ thẻ cũ | Bắt đầu từ đầu |
+| Học sinh **đã kích hoạt**, làm mất hoặc quên mã | **Cấp thẻ mới** trên danh sách lớp (cần đối chiếu sổ phát thẻ) | **Giữ nguyên** |
+| Học sinh đã kích hoạt, quên mã và không có sổ phát thẻ | Không tìm lại được mã cũ. Tạo thẻ mới | Mất tiến độ cũ |
 
 1. Đăng nhập (mục 2.1), ở phần **Tạo thẻ mới**, nhập số thẻ (từ 1 đến 20 mỗi lần).
 2. Bấm **Tạo thẻ**. Danh sách mã hiện ra. Bấm **In danh sách** để in.
 3. Phát thẻ cho học sinh và ghi vào sổ phát thẻ riêng (thẻ nào cho ai).
 
 Lưu ý:
-- Thẻ mới **không** kế thừa tiến độ cũ. Với học sinh quên mã, tiến độ cũ vẫn nằm ở mã cũ và không chuyển sang được.
+- Thẻ mới **không** kế thừa tiến độ cũ. Với học sinh đã kích hoạt, dùng **Cấp thẻ mới** trên danh sách lớp thay vì tạo thẻ mới.
 - Mỗi lớp có tổng số thẻ tối đa, do nhóm kỹ thuật đặt (mặc định 300). Khi vượt giới hạn, ứng dụng báo và giáo viên liên hệ nhóm kỹ thuật.
 - Thẻ do giáo viên tạo được ghi nhận là do tài khoản của giáo viên tạo, để có trách nhiệm đối với việc phát thẻ.
+
+**Cấp thẻ mới cho học sinh đã có tiến độ (làm mất thẻ):**
+
+1. Mở sổ phát thẻ, tìm mã đã phát cho học sinh đó. Đây là bước bắt buộc: danh sách lớp chỉ hiển thị mã, không hiển thị tên.
+2. Trong danh sách lớp, tìm đúng mã đó (đối chiếu số lượng câu đã làm với học sinh), rồi bấm **Cấp thẻ mới**.
+3. Xác nhận trong hộp thoại. Mã mới hiện ra; in và phát cho học sinh.
+4. Ghi vào sổ: mã cũ, mã mới, học sinh nào, ngày nào.
+
+Mã cũ mất hiệu lực ngay. Học sinh đăng nhập lại bằng mã mới và tiếp tục từ chỗ đã dừng. Chỉ cấp lại được cho học sinh của lớp mình.
 
 ### 2.3. Trước khi học sinh tham gia
 
@@ -158,6 +174,7 @@ Nhóm kỹ thuật có **toàn quyền** đối với tài khoản giáo viên v
 | Xem danh sách giáo viên | `php api/bin/manage_teacher.php list` |
 | Thêm tài khoản giáo viên | `php api/bin/manage_teacher.php create <tên> <MÃ_LỚP>` |
 | Khôi phục mật khẩu giáo viên | `php api/bin/manage_teacher.php reset <tên>` |
+| Cấp thẻ mới cho học sinh đã có tiến độ (làm mất thẻ) | `php api/bin/reissue_card.php <MÃ_CŨ>` |
 | Sửa lớp của giáo viên | `php api/bin/manage_teacher.php move <tên> <MÃ_LỚP>` |
 | Khóa tài khoản (không xóa dữ liệu) | `php api/bin/manage_teacher.php disable <tên>` |
 | Khôi phục tài khoản đã khóa | `php api/bin/manage_teacher.php enable <tên>` |
@@ -191,7 +208,7 @@ Tệp CSV chứa mã thẻ. In ra, trao cho giáo viên, rồi **xóa tệp kh�
 ### 3.4. Xem tiến độ và hỗ trợ
 
 - Tiến độ lớp là thông tin của giáo viên. Nhóm kỹ thuật không có màn hình riêng để xem tiến độ; khi cần kiểm tra, dùng công cụ kiểm thử hoặc truy vấn CSDL theo mục 3.6.
-- Học sinh quên mã thẻ: giáo viên báo nhóm. Nhóm không khôi phục được mã cũ, vì mã không được lưu gắn với tên. Có thể in thẻ mới, nhưng tiến độ cũ không chuyển sang.
+- Học sinh làm mất thẻ đã kích hoạt: giáo viên đối chiếu sổ phát thẻ rồi tự cấp thẻ mới (mục 2.3). Nếu giáo viên không còn sổ, nhóm kỹ thuật **không tìm được** mã cũ vì hệ thống không lưu tên; khi đó học sinh phải bắt đầu với thẻ mới.
 
 ### 3.5. Xuất dữ liệu nghiên cứu
 
@@ -221,5 +238,5 @@ curl -H "X-Admin-Token: <token>" -o antoanso_wide.csv https://<tên-miền>/api/
 
 - Đăng nhập học sinh và giáo viên chưa có giới hạn số lần thử sai.
 - Chưa có giao diện quản trị cho nhóm kỹ thuật; mọi thao tác dùng dòng lệnh trên máy chủ.
-- Mất thẻ không khôi phục được tiến độ cũ.
+
 - Chưa có cơ chế nhắc khảo sát theo dõi.

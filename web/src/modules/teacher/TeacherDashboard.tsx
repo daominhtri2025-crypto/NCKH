@@ -37,6 +37,22 @@ export default function TeacherDashboard({ onLogout }: Props) {
   const [newCodes, setNewCodes] = useState<string[] | null>(null);
   const [cardError, setCardError] = useState<string | null>(null);
   const [creating, setCreating] = useState(false);
+  const [reissued, setReissued] = useState<{ old: string; next: string } | null>(null);
+
+  async function reissue(code: string) {
+    const ok = window.confirm(
+      `Cấp thẻ mới cho học sinh có mã ${code}?\n\nMã cũ sẽ không còn dùng được. Tiến độ của học sinh được giữ nguyên.\nĐối chiếu với sổ phát thẻ trước khi xác nhận.`
+    );
+    if (!ok) return;
+    try {
+      const data = await api.post<{ new_code: string }>(`/teacher/students/${encodeURIComponent(code)}/reissue`, {});
+      setReissued({ old: code, next: data.new_code });
+      setRoster(null);
+      api.get<Roster>('/teacher/roster').then(setRoster);
+    } catch (err) {
+      setError(err instanceof ApiError ? err.message : 'Không cấp lại được thẻ.');
+    }
+  }
 
   async function createCards(event: FormEvent) {
     event.preventDefault();
@@ -108,6 +124,12 @@ export default function TeacherDashboard({ onLogout }: Props) {
           </button>
         </form>
         {cardError && <p className="alert" role="alert">{cardError}</p>}
+        {reissued && (
+          <div className="new-codes">
+            <p><strong>Đã cấp thẻ mới.</strong> Thẻ cũ {reissued.old} không còn dùng được. Mã mới để in và phát:</p>
+            <p><code className="code-chip">{reissued.next}</code></p>
+          </div>
+        )}
         {newCodes && (
           <div className="new-codes">
             <p><strong>Mã thẻ mới (in và phát cho học sinh):</strong></p>
@@ -130,6 +152,7 @@ export default function TeacherDashboard({ onLogout }: Props) {
             </div>
             {s.status === 'active' && (
               <>
+                <button className="btn btn-ghost small-btn" onClick={() => reissue(s.code)}>Cấp thẻ mới (học sinh làm mất thẻ)</button>
                 <div className="metric"><span>Khảo sát đầu vào</span><strong>{s.phases.pre}/{t.items_per_phase}</strong>{bar(s.phases.pre, t.items_per_phase)}</div>
                 <div className="metric"><span>Sân chơi tình huống</span><strong>{s.modules.m1}/{t.m1}</strong>{bar(s.modules.m1, t.m1)}</div>
                 <div className="metric"><span>Thám tử tên miền</span><strong>{s.modules.m2}/{t.m2}</strong>{bar(s.modules.m2, t.m2)}</div>

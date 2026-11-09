@@ -46,12 +46,17 @@ CREATE TABLE IF NOT EXISTS participants (
   last_seen_at    DATETIME     NULL,
   -- Giáo viên đã tạo thẻ này (NULL nếu do nhóm kỹ thuật phát hành). Phục vụ kiểm tra trách nhiệm.
   issued_by_teacher_id BIGINT  NULL,
+  -- Cấp lại thẻ cho học sinh đã kích hoạt (làm mất thẻ): đổi mã, giữ nguyên tiến độ (gắn theo id, không theo mã).
+  card_reissues        INT     NOT NULL DEFAULT 0,
+  card_reissued_at     DATETIME NULL,
+  reissued_by_teacher_id BIGINT NULL,
   PRIMARY KEY (id),
   UNIQUE KEY uq_participants_code (code),
   UNIQUE KEY uq_participants_token (token_hash),
   KEY idx_participants_class (class_code),
   CONSTRAINT fk_participants_class FOREIGN KEY (class_code) REFERENCES classes (code),
-  CONSTRAINT fk_participants_issuer FOREIGN KEY (issued_by_teacher_id) REFERENCES teachers (id) ON DELETE SET NULL
+  CONSTRAINT fk_participants_issuer FOREIGN KEY (issued_by_teacher_id) REFERENCES teachers (id) ON DELETE SET NULL,
+  CONSTRAINT fk_participants_reissuer FOREIGN KEY (reissued_by_teacher_id) REFERENCES teachers (id) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Mọi lần trả lời tình huống đều được ghi lại (kể cả lần thử lại).

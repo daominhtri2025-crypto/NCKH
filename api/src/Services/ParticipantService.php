@@ -61,6 +61,27 @@ final class ParticipantService
     }
 
     /**
+     * Cấp lại thẻ cho học sinh đã kích hoạt (làm mất thẻ). Trả về mã mới; tiến độ được giữ nguyên.
+     * Nếu $classCode khác null, chỉ đổi khi mã cũ thuộc lớp đó (giáo viên chỉ đổi được học sinh của lớp mình).
+     */
+    public function reissueCard(string $oldCode, ?string $classCode, ?int $teacherId): string
+    {
+        $oldCode = $this->normalizeCode($oldCode);
+        if (!preg_match(self::CODE_PATTERN, $oldCode)) {
+            throw new HttpException(422, 'Mã cũ không đúng định dạng XXXX-XXXX.');
+        }
+        $row = $this->participants->findByCode($oldCode);
+        if ($row === null || $row['status'] !== 'active' || ($classCode !== null && $row['class_code'] !== $classCode)) {
+            throw new HttpException(404, 'Không tìm thấy học sinh đã kích hoạt với mã này trong phạm vi của bạn.');
+        }
+        $newCode = $this->uniqueCode();
+        if (!$this->participants->replaceCode($oldCode, $newCode, $classCode, $teacherId)) {
+            throw new HttpException(409, 'Không cấp lại được thẻ. Thử lại sau.');
+        }
+        return $newCode;
+    }
+
+    /**
      * @param array<string,mixed> $input
      * @return array{participant:array<string,mixed>, token:string}
      */

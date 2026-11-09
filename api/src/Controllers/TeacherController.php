@@ -51,4 +51,15 @@ final class TeacherController
             'note' => 'Thẻ mới dùng cho học sinh tham gia mới hoặc học sinh quên mã. Tiến độ cũ không chuyển sang thẻ mới.',
         ], 201);
     }
+
+    /** POST /api/teacher/students/{code}/reissue — cấp lại thẻ cho học sinh của lớp mình (giữ tiến độ). */
+    public function reissue(Request $request, array $params): Response
+    {
+        $teacher = Container::teachers()->authenticate($request);
+        $newCode = Container::participants()->reissueCard($params['code'], (string) $teacher['class_code'], (int) $teacher['id']);
+        return Response::json([
+            'new_code' => $newCode,
+            'note' => 'Mã cũ đã mất hiệu lực. Tiến độ của học sinh được giữ nguyên. Học sinh đăng nhập lại bằng mã mới.',
+        ]);
+    }
 }

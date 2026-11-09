@@ -17,6 +17,7 @@ Nhóm kỹ thuật là vai trò duy nhất có quyền chạy lệnh trên máy 
 | In thẻ mã cho lớp | Nhóm kỹ thuật | `php api/bin/issue_cards.php` |
 | Tạo tài khoản giáo viên | Nhóm kỹ thuật | `php api/bin/create_teacher.php` |
 | Quản lý tài khoản giáo viên (thêm, sửa lớp, khóa, khôi phục, xóa, đặt lại mật khẩu) | Nhóm kỹ thuật | `php api/bin/manage_teacher.php` |
+| Cấp thẻ mới cho học sinh đã có tiến độ (làm mất thẻ) | Nhóm kỹ thuật (`reissue_card.php`) hoặc giáo viên trên ứng dụng | Giữ nguyên tiến độ |
 | Tạo thẻ mới cho lớp | Giáo viên (trên ứng dụng) hoặc nhóm kỹ thuật (`issue_cards.php`) | Giới hạn bởi `CLASS_CARD_LIMIT` |
 | Xuất dữ liệu nghiên cứu | Nhóm kỹ thuật | `php api/bin/export_assessments.php` hoặc HTTP với `ADMIN_TOKEN` |
 

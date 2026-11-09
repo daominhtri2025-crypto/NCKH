@@ -245,7 +245,7 @@ Quy trình gồm sáu bước. Giáo viên hướng dẫn trình tự và không
 5. **Hậu kiểm.** Sau khi hoàn thành ba hoạt động, học sinh làm lại 16 câu.
 6. **Theo dõi.** Sau 28 ngày, khảo sát theo dõi mở và học sinh làm lại 16 câu.
 
-Học sinh đăng nhập lại bằng mã trên thẻ; mã này là cách duy nhất để tiếp tục phiên làm việc. Thẻ bị mất không khôi phục được tiến độ cũ. Giáo viên xem được tiến độ lớp mình qua tài khoản được cấp, tự tạo thẻ mới cho lớp (có giới hạn số thẻ), nhưng không xem được câu trả lời. Nhóm kỹ thuật quản lý toàn bộ tài khoản giáo viên (thêm, sửa, khóa, khôi phục, xóa, đặt lại mật khẩu).
+Học sinh đăng nhập lại bằng mã trên thẻ; mã này là cách duy nhất để tiếp tục phiên làm việc. Học sinh làm mất thẻ đã kích hoạt được cấp thẻ mới với tiến độ được giữ nguyên, do giáo viên thực hiện đối chiếu sổ phát thẻ; việc này được ghi nhận trong dữ liệu (số lần cấp lại). Giáo viên xem được tiến độ lớp mình qua tài khoản được cấp, tự tạo thẻ mới cho lớp (có giới hạn số thẻ), nhưng không xem được câu trả lời. Nhóm kỹ thuật quản lý toàn bộ tài khoản giáo viên (thêm, sửa, khóa, khôi phục, xóa, đặt lại mật khẩu).
 
 ![Hình 3. Luồng dữ liệu và ranh giới quyền riêng tư](hinh/hinh3_quyen_rieng_tu.png){width=85%}
 

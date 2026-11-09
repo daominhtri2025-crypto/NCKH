@@ -41,6 +41,25 @@ final class ParticipantRepository
         $stmt->execute([$code, $classCode, date('Y-m-d H:i:s'), $issuedByTeacherId]);
     }
 
+    /**
+     * Đổi mã của học sinh đã kích hoạt (làm mất thẻ). Tiến độ không đổi vì được gắn theo id.
+     * Mã cũ mất hiệu lực ngay; phiên đăng nhập cũ bị thu hồi. Chỉ đổi khi mã cũ thuộc đúng lớp (nếu có ràng buộc).
+     */
+    public function replaceCode(string $oldCode, string $newCode, ?string $classCode, ?int $teacherId): bool
+    {
+        $sql = "UPDATE participants SET code = ?, token_hash = NULL, card_reissues = card_reissues + 1,
+                    card_reissued_at = ?, reissued_by_teacher_id = ?
+                WHERE code = ? AND status = 'active'";
+        $params = [$newCode, date('Y-m-d H:i:s'), $teacherId, $oldCode];
+        if ($classCode !== null) {
+            $sql .= ' AND class_code = ?';
+            $params[] = $classCode;
+        }
+        $stmt = $this->db()->prepare($sql);
+        $stmt->execute($params);
+        return $stmt->rowCount() === 1;
+    }
+
     /** Tổng số thẻ đã phát của lớp (kể cả chưa kích hoạt), dùng để giới hạn số thẻ mỗi lớp. */
     public function countInClass(string $classCode): int
     {

@@ -682,5 +682,40 @@ check('Quản trị: danh sách có tài khoản giáo viên thử nghiệm và 
     return count(array_filter($list, fn ($t) => $t['username'] === 'gv_thu_nghiem')) === 1 && !array_key_exists('password_hash', $list[0]);
 })());
 
+echo "Cấp lại thẻ khi học sinh làm mất: giữ tiến độ\n";
+$rtLogin = call('POST', '/api/teacher/session', ['username' => 'gv_thu_nghiem', 'password' => $newPass]);
+$rtTok = (string) teacherTokenFrom($rtLogin);
+$oldCodeForReissue = $taCode;
+$liveLogin = call('POST', '/api/session', ['code' => $oldCodeForReissue]);
+$liveTok = (string) sessionTokenFrom($liveLogin);
+$beforeProg = call('GET', '/api/module2', null, ['ats_session' => $liveTok])->body['progress']['answered'] ?? -1;
+$re = call('POST', '/api/teacher/students/' . $oldCodeForReissue . '/reissue', [], ['ats_teacher' => $rtTok]);
+check('Giáo viên cấp lại thẻ cho học sinh lớp mình (200)', $re->status === 200 && isset($re->body['new_code']), (string) $re->status);
+$newCodeRe = (string) ($re->body['new_code'] ?? '');
+check('Mã mới khác mã cũ và đúng định dạng', $newCodeRe !== $oldCodeForReissue && (bool) preg_match('/^[23456789A-HJKMNP-Z]{4}-[23456789A-HJKMNP-Z]{4}$/', $newCodeRe));
+check('Mã cũ không còn đăng nhập được (401)', call('POST', '/api/session', ['code' => $oldCodeForReissue])->status === 401);
+check('Phiên cũ của học sinh bị thu hồi (401)', call('GET', '/api/me', null, ['ats_session' => $liveTok])->status === 401);
+$newLogin = call('POST', '/api/session', ['code' => $newCodeRe]);
+check('Mã mới đăng nhập được (200)', $newLogin->status === 200);
+$newTok = sessionTokenFrom($newLogin);
+$afterProg = call('GET', '/api/module2', null, ['ats_session' => (string) $newTok])->body['progress']['answered'] ?? -2;
+check('Tiến độ được giữ nguyên sau khi cấp lại thẻ', $beforeProg === $afterProg && $afterProg === 12, "trước {$beforeProg}, sau {$afterProg}");
+$preAfter = call('GET', '/api/assessments', null, ['ats_session' => (string) $newTok])->body['phases']['pre']['answered'] ?? -1;
+check('Khảo sát đầu vào vẫn đủ 16 câu sau khi cấp lại', $preAfter === 16);
+
+$otherClassStudent = issueCard('8B1');
+claimCard($otherClassStudent);
+check('Giáo viên lớp 8A1 không cấp lại được thẻ học sinh lớp 8B1 (404)', call('POST', '/api/teacher/students/' . $otherClassStudent . '/reissue', [], ['ats_teacher' => $rtTok])->status === 404);
+$unclaimedCard = issueCard('8A1');
+check('Không cấp lại cho thẻ chưa kích hoạt (404)', call('POST', '/api/teacher/students/' . $unclaimedCard . '/reissue', [], ['ats_teacher' => $rtTok])->status === 404);
+check('Mã không đúng định dạng bị từ chối (422)', call('POST', '/api/teacher/students/abc/reissue', [], ['ats_teacher' => $rtTok])->status === 422);
+check('Không có quyền khi chưa đăng nhập giáo viên (401)', call('POST', '/api/teacher/students/' . $newCodeRe . '/reissue', [])->status === 401);
+
+$techNew = (new AnToanSo\Services\ParticipantService(new AnToanSo\Repositories\ParticipantRepository(), new AnToanSo\Repositories\ClassRepository()))
+    ->reissueCard($newCodeRe, null, null);
+check('Nhóm kỹ thuật cấp lại thẻ (không ràng buộc lớp)', preg_match('/^[23456789A-HJKMNP-Z]{4}-[23456789A-HJKMNP-Z]{4}$/', $techNew) === 1 && $techNew !== $newCodeRe);
+check('Số lần cấp lại được ghi nhận', (int) $pdo->query("SELECT card_reissues FROM participants WHERE code = '{$techNew}'")->fetchColumn() === 2);
+check('Lần cấp lại của nhóm kỹ thuật không ghi giáo viên là người cấp', $pdo->query("SELECT reissued_by_teacher_id FROM participants WHERE code = '{$techNew}'")->fetchColumn() === null);
+
 echo "\nKết quả: {$passed} đạt, {$failed} lỗi.\n";
 exit($failed === 0 ? 0 : 1);

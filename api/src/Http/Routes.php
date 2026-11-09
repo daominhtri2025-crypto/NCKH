@@ -53,6 +53,7 @@ final class Routes
         $router->add('DELETE', '/teacher/session', [$teacher, 'logout']);
         $router->add('GET', '/teacher/roster', [$teacher, 'roster']);
         $router->add('POST', '/teacher/cards', [$teacher, 'issueCards']);
+        $router->add('POST', '/teacher/students/{code}/reissue', [$teacher, 'reissue']);
 
         $admin = new AdminController();
         $router->add('GET', '/admin/export/long.csv', [$admin, 'exportLong']);
