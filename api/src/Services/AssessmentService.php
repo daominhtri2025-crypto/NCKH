@@ -23,8 +23,11 @@ final class AssessmentService
 {
     public const DEFAULT_DELAYED_DAYS = 28;
 
+    /** Bộ câu hỏi của học sinh đang xử lý (được gắn ở đầu mỗi thao tác, theo phiên bản đã ghim). */
+    private AssessmentCatalog $catalog;
+
     public function __construct(
-        private readonly AssessmentCatalog $catalog,
+        private readonly SurveyStore $store,
         private readonly AssessmentRepository $repo,
         private readonly Module1Service $module1,
         private readonly Module2Service $module2,
@@ -41,6 +44,7 @@ final class AssessmentService
     /** @param array<string,mixed> $participant */
     public function status(array $participant): array
     {
+        $this->bind($participant);
         $pid = (int) $participant['id'];
         $modules = $this->modulesCompleted($participant);
         $pre = $this->phaseState($pid, 'pre', $modules, true);
@@ -61,6 +65,7 @@ final class AssessmentService
     /** @param array<string,mixed> $participant */
     public function assertPreDone(array $participant): void
     {
+        $this->bind($participant);
         $state = $this->phaseState((int) $participant['id'], 'pre', [], true);
         if ($state['status'] !== 'done') {
             throw new HttpException(403, 'Hãy hoàn thành khảo sát đầu vào trước khi vào các hoạt động học tập.');
@@ -74,6 +79,7 @@ final class AssessmentService
     public function phaseView(array $participant, string $phase): array
     {
         $this->requirePhase($phase);
+        $this->bind($participant);
         $pid = (int) $participant['id'];
         $modules = $this->modulesCompleted($participant);
         $state = $this->phaseStateFor($pid, $phase, $modules);
@@ -93,6 +99,7 @@ final class AssessmentService
     public function answer(array $participant, string $phase, string $itemId, mixed $answerIndex, mixed $answerValue, mixed $responseMs): array
     {
         $this->requirePhase($phase);
+        $this->bind($participant);
         $item = $this->catalog->find($itemId);
         if ($item === null) {
             throw new HttpException(404, 'Không tìm thấy câu hỏi này.');
@@ -223,6 +230,12 @@ final class AssessmentService
         }
         $at = $this->repo->lastAnsweredAt($pid, 'post');
         return $at === null ? null : new DateTimeImmutable($at);
+    }
+
+    /** @param array<string,mixed> $participant */
+    private function bind(array $participant): void
+    {
+        $this->catalog = $this->store->forParticipant((int) $participant['id']);
     }
 
     private function requirePhase(string $phase): void

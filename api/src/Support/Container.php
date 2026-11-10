@@ -8,7 +8,7 @@ use AnToanSo\Repositories\AssessmentRepository;
 use AnToanSo\Repositories\ClassRepository;
 use AnToanSo\Repositories\EventRepository;
 use AnToanSo\Repositories\ParticipantRepository;
-use AnToanSo\Services\AssessmentCatalog;
+use AnToanSo\Services\SurveyStore;
 use AnToanSo\Services\AssessmentExportService;
 use AnToanSo\Services\AssessmentService;
 use AnToanSo\Services\ChecklistCatalog;
@@ -64,7 +64,7 @@ final class Container
     public static function assessments(): AssessmentService
     {
         return self::$instances['assessments'] ??= new AssessmentService(
-            self::assessmentCatalog(),
+            self::surveyStore(),
             new AssessmentRepository(),
             self::module1(),
             self::module2(),
@@ -74,14 +74,12 @@ final class Container
 
     public static function exporter(): AssessmentExportService
     {
-        return self::$instances['exporter'] ??= new AssessmentExportService(self::assessmentCatalog());
+        return self::$instances['exporter'] ??= new AssessmentExportService(self::surveyStore());
     }
 
-    private static function assessmentCatalog(): AssessmentCatalog
+    public static function surveyStore(): SurveyStore
     {
-        return self::$instances['assessmentCatalog'] ??= new AssessmentCatalog(
-            dirname(__DIR__, 2) . '/content/assessment_items.json'
-        );
+        return self::$instances['surveyStore'] ??= new SurveyStore();
     }
 
     public static function teachers(): TeacherService

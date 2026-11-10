@@ -115,9 +115,36 @@ CREATE TABLE IF NOT EXISTS audit_log (
   participant_id BIGINT       NULL,
   -- Tài khoản giáo viên bị thao tác (quản trị tài khoản).
   target_teacher_id BIGINT    NULL,
+  -- Chi tiết thao tác (ví dụ: phiên bản và mã câu hỏi khi quản trị sửa khảo sát).
+  detail         VARCHAR(120) NULL,
   old_code       CHAR(9)      NULL,
   new_code       CHAR(9)      NULL,
   ledger_confirmed TINYINT(1) NULL,
   PRIMARY KEY (id),
   KEY idx_audit_action (action, created_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Bộ câu hỏi khảo sát theo phiên bản. Mỗi phiên bản bất biến sau khi tạo.
+-- Học sinh được ghim vào phiên bản đã dùng khi bắt đầu làm khảo sát (xem SurveyStore).
+CREATE TABLE IF NOT EXISTS survey_versions (
+  version              VARCHAR(20)  NOT NULL,
+  title                VARCHAR(200) NOT NULL,
+  intro                TEXT         NOT NULL,
+  behavior_scale       TEXT         NOT NULL,
+  is_active            TINYINT(1)   NOT NULL DEFAULT 0,
+  created_at           DATETIME     NOT NULL,
+  created_by_teacher_id BIGINT      NULL,
+  PRIMARY KEY (version),
+  KEY idx_survey_active (is_active),
+  CONSTRAINT fk_survey_creator FOREIGN KEY (created_by_teacher_id) REFERENCES teachers (id) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS survey_items (
+  version   VARCHAR(20) NOT NULL,
+  item_id   VARCHAR(60) NOT NULL,
+  position  SMALLINT    NOT NULL,
+  data      TEXT        NOT NULL,
+  PRIMARY KEY (version, item_id),
+  KEY idx_survey_items_order (version, position),
+  CONSTRAINT fk_survey_items_version FOREIGN KEY (version) REFERENCES survey_versions (version) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

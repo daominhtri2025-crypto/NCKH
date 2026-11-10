@@ -6,6 +6,7 @@ namespace AnToanSo\Controllers;
 
 use AnToanSo\Http\Request;
 use AnToanSo\Http\Response;
+use AnToanSo\Services\SurveyAdminService;
 use AnToanSo\Support\Container;
 use AnToanSo\Support\HttpException;
 
@@ -56,11 +57,32 @@ final class AdminDashboardController
         return Response::json(['username' => strtolower((string) $params['username']), 'disabled' => $disabled]);
     }
 
-    /** GET /api/admin/questions (chỉ đọc) */
+    /** GET /api/admin/questions */
     public function questions(Request $request): Response
     {
         $actor = $this->actor($request);
-        return Response::json(Container::teachers()->adminQuestions($actor));
+        return Response::json((new SurveyAdminService())->view($actor));
+    }
+
+    /** POST /api/admin/questions  body: {id, instrument, topic, question, options?, correct? | reverse?} */
+    public function addQuestion(Request $request): Response
+    {
+        $actor = $this->actor($request);
+        return Response::json((new SurveyAdminService())->addItem($actor, $request->json()), 201);
+    }
+
+    /** PUT /api/admin/questions/{id}  body: các trường cần sửa */
+    public function updateQuestion(Request $request, array $params): Response
+    {
+        $actor = $this->actor($request);
+        return Response::json((new SurveyAdminService())->updateItem($actor, (string) $params['id'], $request->json()));
+    }
+
+    /** DELETE /api/admin/questions/{id} */
+    public function deleteQuestion(Request $request, array $params): Response
+    {
+        $actor = $this->actor($request);
+        return Response::json((new SurveyAdminService())->deleteItem($actor, (string) $params['id']));
     }
 
     /** @return array<string,mixed> */

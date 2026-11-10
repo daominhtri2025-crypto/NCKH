@@ -140,6 +140,7 @@ final class TeacherService
     public function roster(array $teacher): array
     {
         $classCode = $this->requireClass($teacher);
+        $itemsPerPhase = (new SurveyStore())->active()->itemCount();
         $students = [];
         $active = 0;
         foreach ($this->teachers->rosterCounts($classCode) as $r) {
@@ -168,7 +169,7 @@ final class TeacherService
             'totals' => [
                 'students' => count($students),
                 'active' => $active,
-                'items_per_phase' => $this->totals['items'],
+                'items_per_phase' => $itemsPerPhase,
                 'm1' => $this->totals['scenarios'],
                 'm2' => $this->totals['domains'],
                 'm3_steps' => $this->totals['steps'],
@@ -298,27 +299,6 @@ final class TeacherService
             throw new HttpException(404, 'Không có tài khoản này.');
         }
         return $row;
-    }
-
-    /** Câu hỏi khảo sát hiện hành (chỉ đọc). Việc sửa câu hỏi cần cơ chế phiên bản, xem tài liệu thiết kế. */
-    public function adminQuestions(array $actor): array
-    {
-        $this->requireAdmin($actor);
-        $catalog = json_decode((string) file_get_contents(dirname(__DIR__, 2) . '/content/assessment_items.json'), true);
-        return [
-            'version' => $catalog['version'],
-            'title' => $catalog['title'],
-            'behavior_scale' => $catalog['behavior_scale'],
-            'items' => array_map(static fn (array $i): array => [
-                'id' => $i['id'],
-                'instrument' => $i['instrument'],
-                'topic' => $i['topic'],
-                'question' => $i['question'],
-                'options' => $i['options'] ?? null,
-                'correct' => $i['correct'] ?? null,
-            ], $catalog['items']),
-            'note' => 'Cùng một bộ câu hỏi dùng cho khảo sát đầu vào, đầu ra và theo dõi, để so sánh được.',
-        ];
     }
 
     /** Nhóm kỹ thuật: danh sách tài khoản giáo viên (không có mật khẩu). */

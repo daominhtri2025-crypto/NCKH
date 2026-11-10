@@ -19,7 +19,17 @@ final class AssessmentCatalog
     /** @var array<string,array<string,mixed>> */
     private array $byId = [];
 
-    public function __construct(string $file)
+    /** @param array<string,mixed> $data */
+    public function __construct(array $data)
+    {
+        $this->validate($data);
+        $this->data = $data;
+        foreach ($data['items'] as $item) {
+            $this->byId[$item['id']] = $item;
+        }
+    }
+
+    public static function fromFile(string $file): self
     {
         if (!is_file($file)) {
             throw new RuntimeException('Không tìm thấy tệp nội dung: ' . $file);
@@ -28,11 +38,24 @@ final class AssessmentCatalog
         if (!is_array($data)) {
             throw new RuntimeException('Tệp nội dung không phải JSON hợp lệ: ' . $file);
         }
-        $this->validate($data);
-        $this->data = $data;
-        foreach ($data['items'] as $item) {
-            $this->byId[$item['id']] = $item;
-        }
+        return new self($data);
+    }
+
+    /** @param array<string,mixed> $data */
+    public static function fromArray(array $data): self
+    {
+        return new self($data);
+    }
+
+    /** @return array<string,mixed> Dữ liệu đầy đủ, kể cả đáp án. Chỉ dùng phía máy chủ. */
+    public function toArray(): array
+    {
+        return $this->data;
+    }
+
+    public function itemCount(): int
+    {
+        return count($this->data['items']);
     }
 
     public function version(): string

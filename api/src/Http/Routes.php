@@ -66,6 +66,9 @@ final class Routes
         $router->add('PUT', '/admin/teachers/{username}/password', [$dash, 'resetPassword']);
         $router->add('PUT', '/admin/teachers/{username}/status', [$dash, 'setStatus']);
         $router->add('GET', '/admin/questions', [$dash, 'questions']);
+        $router->add('POST', '/admin/questions', [$dash, 'addQuestion']);
+        $router->add('PUT', '/admin/questions/{id}', [$dash, 'updateQuestion']);
+        $router->add('DELETE', '/admin/questions/{id}', [$dash, 'deleteQuestion']);
 
         return $router;
     }

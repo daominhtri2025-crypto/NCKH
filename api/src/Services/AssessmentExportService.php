@@ -12,7 +12,7 @@ use AnToanSo\Support\Database;
  */
 final class AssessmentExportService
 {
-    public function __construct(private readonly AssessmentCatalog $catalog)
+    public function __construct(private readonly SurveyStore $store)
     {
     }
 
@@ -43,14 +43,25 @@ final class AssessmentExportService
     /** Một dòng cho mỗi học sinh, các biến đã tổng hợp theo giai đoạn (dạng rộng, sẵn cho phân tích lặp đo). */
     public function wideCsv(): string
     {
-        $items = $this->catalog->items();
-        $knowledgeTotal = count(array_filter($items, static fn (array $i): bool => $i['instrument'] === 'knowledge'));
-        $reverse = [];
-        foreach ($items as $i) {
-            if ($i['instrument'] === 'behavior') {
-                $reverse[$i['id']] = (bool) $i['reverse'];
+        // Mỗi học sinh được chấm theo đúng phiên bản đã ghim (xem SurveyStore::forParticipant).
+        $profiles = [];
+        $profileFor = function (string $version) use (&$profiles): array {
+            if (!isset($profiles[$version])) {
+                $items = $this->store->get($version)->items();
+                $reverse = [];
+                foreach ($items as $i) {
+                    if ($i['instrument'] === 'behavior') {
+                        $reverse[$i['id']] = (bool) $i['reverse'];
+                    }
+                }
+                $profiles[$version] = [
+                    'knowledgeTotal' => count(array_filter($items, static fn (array $i): bool => $i['instrument'] === 'knowledge')),
+                    'reverse' => $reverse,
+                ];
             }
-        }
+            return $profiles[$version];
+        };
+        $versionOf = [];
 
         $participants = Database::pdo()->query(
             "SELECT id, code, class_code FROM participants WHERE status = 'active' ORDER BY id"
@@ -58,9 +69,10 @@ final class AssessmentExportService
 
         $answers = [];
         foreach (Database::pdo()->query(
-            'SELECT participant_id, phase, item_id, instrument, is_correct, answer_value, response_ms FROM assessments_self'
+            'SELECT participant_id, phase, item_id, instrument, is_correct, answer_value, response_ms, content_version FROM assessments_self'
         )->fetchAll() as $a) {
             $answers[(int) $a['participant_id']][$a['phase']][] = $a;
+            $versionOf[(int) $a['participant_id']] ??= $a['content_version'];
         }
 
         $moduleCounts = [];
@@ -86,6 +98,9 @@ final class AssessmentExportService
         foreach ($participants as $p) {
             $pid = (int) $p['id'];
             $row = [$p['code'], $p['class_code']];
+            $profile = $profileFor($versionOf[$pid] ?? $this->store->active()->version());
+            $knowledgeTotal = $profile['knowledgeTotal'];
+            $reverse = $profile['reverse'];
             foreach (['pre', 'post', 'delayed'] as $phase) {
                 $rows = $answers[$pid][$phase] ?? [];
                 $correct = 0;

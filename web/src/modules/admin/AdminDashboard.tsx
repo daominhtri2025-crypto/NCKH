@@ -21,8 +21,16 @@ interface Question {
   instrument: 'knowledge' | 'behavior';
   topic: string;
   question: string;
-  options: string[] | null;
-  correct: number | null;
+  options?: string[];
+  correct?: number;
+  reverse?: boolean;
+}
+
+interface VersionInfo {
+  version: string;
+  created_at: string;
+  active: boolean;
+  items: number;
 }
 
 interface QuestionSet {
@@ -30,13 +38,31 @@ interface QuestionSet {
   title: string;
   behavior_scale: string[];
   items: Question[];
+  versions: VersionInfo[];
   note: string;
 }
+
+interface QuestionForm {
+  id: string;
+  instrument: 'knowledge' | 'behavior';
+  topic: string;
+  question: string;
+  options: string[];
+  correct: number;
+  reverse: boolean;
+}
+
+const EMPTY_FORM: QuestionForm = {
+  id: '', instrument: 'knowledge', topic: 'm1', question: '', options: ['', '', '', ''], correct: 0, reverse: false,
+};
 
 type Tab = 'teachers' | 'questions';
 type Pending =
   | { kind: 'reset'; username: string }
-  | { kind: 'toggle'; username: string; disable: boolean };
+  | { kind: 'toggle'; username: string; disable: boolean }
+  | { kind: 'delete'; item: Question };
+
+type QuestionDialog = { mode: 'add' } | { mode: 'edit'; item: Question };
 
 /** Trang quản trị: chỉ tài khoản role = admin mới vào được. Máy chủ kiểm tra lại mọi thao tác. */
 export default function AdminDashboard({ onLogout }: Props) {
@@ -48,6 +74,9 @@ export default function AdminDashboard({ onLogout }: Props) {
   const [pending, setPending] = useState<Pending | null>(null);
   const [busy, setBusy] = useState(false);
   const [form, setForm] = useState({ username: '', class_code: '', role: 'teacher' as 'teacher' | 'admin' });
+  const [dialog, setDialog] = useState<QuestionDialog | null>(null);
+  const [qForm, setQForm] = useState<QuestionForm>(EMPTY_FORM);
+  const [qError, setQError] = useState<string | null>(null);
 
   const loadTeachers = useCallback(async () => {
     try {
@@ -63,12 +92,68 @@ export default function AdminDashboard({ onLogout }: Props) {
     loadTeachers();
   }, [loadTeachers]);
 
+  const loadQuestions = useCallback(async () => {
+    try {
+      setQuestions(await api.get<QuestionSet>('/admin/questions'));
+    } catch (err) {
+      setError(err instanceof ApiError ? err.message : 'Không tải được câu hỏi.');
+    }
+  }, []);
+
   useEffect(() => {
-    if (tab !== 'questions' || questions) return;
-    api.get<QuestionSet>('/admin/questions')
-      .then(setQuestions)
-      .catch((err) => setError(err instanceof ApiError ? err.message : 'Không tải được câu hỏi.'));
-  }, [tab, questions]);
+    if (tab === 'questions' && questions === null) loadQuestions();
+  }, [tab, questions, loadQuestions]);
+
+  function openAdd() {
+    setQError(null);
+    setQForm(EMPTY_FORM);
+    setDialog({ mode: 'add' });
+  }
+
+  function openEdit(item: Question) {
+    setQError(null);
+    setQForm({
+      id: item.id,
+      instrument: item.instrument,
+      topic: item.topic,
+      question: item.question,
+      options: item.options ?? ['', '', '', ''],
+      correct: item.correct ?? 0,
+      reverse: item.reverse ?? false,
+    });
+    setDialog({ mode: 'edit', item });
+  }
+
+  /** Gửi biểu mẫu. Mọi kiểm tra cuối cùng nằm ở máy chủ; giao diện chỉ gửi đúng trường của loại câu. */
+  async function saveQuestion() {
+    setQError(null);
+    const body: Record<string, unknown> = { topic: qForm.topic.trim(), question: qForm.question.trim() };
+    if (dialog?.mode === 'add') {
+      body.id = qForm.id.trim();
+      body.instrument = qForm.instrument;
+    }
+    if (qForm.instrument === 'knowledge') {
+      body.options = qForm.options.map((o) => o.trim()).filter((o) => o !== '');
+      body.correct = qForm.correct;
+    } else {
+      body.reverse = qForm.reverse;
+    }
+    setBusy(true);
+    try {
+      if (dialog?.mode === 'add') {
+        await api.post('/admin/questions', body);
+      } else if (dialog?.mode === 'edit') {
+        const { id: _ignored, instrument: _kind, ...patch } = body;
+        await api.put(`/admin/questions/${encodeURIComponent(dialog.item.id)}`, patch);
+      }
+      setDialog(null);
+      await loadQuestions();
+    } catch (err) {
+      setQError(err instanceof ApiError ? err.message : 'Không lưu được câu hỏi.');
+    } finally {
+      setBusy(false);
+    }
+  }
 
   async function createAccount(event: FormEvent) {
     event.preventDefault();
@@ -94,6 +179,12 @@ export default function AdminDashboard({ onLogout }: Props) {
     setBusy(true);
     setError(null);
     try {
+      if (pending.kind === 'delete') {
+        await api.delete(`/admin/questions/${encodeURIComponent(pending.item.id)}`);
+        setPending(null);
+        await loadQuestions();
+        return;
+      }
       if (pending.kind === 'reset') {
         const data = await api.put<{ username: string; password: string }>(
           `/admin/teachers/${encodeURIComponent(pending.username)}/password`, {}
@@ -214,31 +305,137 @@ export default function AdminDashboard({ onLogout }: Props) {
 
       {tab === 'questions' && (
         <section className="card">
-          <h3>{questions ? `${questions.title} (phiên bản ${questions.version})` : 'Câu hỏi khảo sát'}</h3>
+          <div className="admin-head">
+            <h3>{questions ? `${questions.title}` : 'Câu hỏi khảo sát'}</h3>
+            <button className="btn btn-primary small-btn" onClick={openAdd} disabled={!questions || busy}>Thêm câu hỏi</button>
+          </div>
           {questions && (
             <>
-              <p className="fineprint">{questions.note}</p>
-              <p className="fineprint">
-                Hiện chỉ xem. Thêm, sửa, xóa câu hỏi cần cơ chế phiên bản để không làm sai lệch dữ liệu đã thu thập.
-              </p>
-              {(['knowledge', 'behavior'] as const).map((kind) => (
-                <div key={kind}>
-                  <h4>{kind === 'knowledge' ? 'Kiến thức' : 'Hành vi'} ({questions.items.filter((i) => i.instrument === kind).length} câu)</h4>
-                  <ol className="question-list">
-                    {questions.items.filter((i) => i.instrument === kind).map((i) => (
-                      <li key={i.id}>
-                        <p><code>{i.id}</code> · {i.topic} — {i.question}</p>
-                        {i.options && (
-                          <ul>{i.options.map((o, idx) => <li key={idx}>{o}{i.correct === idx ? ' ✓' : ''}</li>)}</ul>
-                        )}
-                      </li>
-                    ))}
-                  </ol>
-                </div>
-              ))}
+              <p className="fineprint">Phiên bản hiện hành: <code>{questions.version}</code>. {questions.note}</p>
+              <p className="fineprint">Mỗi thay đổi tạo một phiên bản mới. Học sinh đã làm dở giữ phiên bản cũ, nên dữ liệu đã thu thập vẫn so sánh được.</p>
+              {(['knowledge', 'behavior'] as const).map((kind) => {
+                const rows = questions.items.filter((i) => i.instrument === kind);
+                return (
+                  <div key={kind} className="table-wrap">
+                    <h4>{kind === 'knowledge' ? 'Kiến thức' : 'Hành vi'} ({rows.length} câu)</h4>
+                    <table className="admin-table">
+                      <thead>
+                        <tr><th>Mã</th><th>Chủ đề</th><th>Nội dung</th><th>Thao tác</th></tr>
+                      </thead>
+                      <tbody>
+                        {rows.map((i) => (
+                          <tr key={i.id}>
+                            <td data-label="Mã"><code>{i.id}</code></td>
+                            <td data-label="Chủ đề">{i.topic}</td>
+                            <td data-label="Nội dung">
+                              {i.question}
+                              {i.options && (
+                                <ul className="question-options">
+                                  {i.options.map((o, idx) => <li key={idx}>{o}{i.correct === idx ? ' ✓' : ''}</li>)}
+                                </ul>
+                              )}
+                            </td>
+                            <td data-label="Thao tác" className="row-actions">
+                              <button className="btn btn-ghost small-btn" onClick={() => openEdit(i)} disabled={busy}>Sửa</button>
+                              <button className="btn btn-danger small-btn" onClick={() => setPending({ kind: 'delete', item: i })} disabled={busy}>Xóa</button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                );
+              })}
+              <details>
+                <summary>Lịch sử phiên bản ({questions.versions.length})</summary>
+                <ul>
+                  {questions.versions.map((v) => (
+                    <li key={v.version}>
+                      <code>{v.version}</code> · {v.items} câu · {v.created_at}{v.active ? ' · hiện hành' : ''}
+                    </li>
+                  ))}
+                </ul>
+              </details>
             </>
           )}
         </section>
+      )}
+
+      {dialog && (
+        <Modal
+          title={dialog.mode === 'add' ? 'Thêm câu hỏi' : `Sửa câu ${dialog.item.id}`}
+          confirmLabel={dialog.mode === 'add' ? 'Thêm' : 'Lưu thay đổi'}
+          busy={busy}
+          onConfirm={saveQuestion}
+          onCancel={() => setDialog(null)}
+        >
+          <form className="stack" onSubmit={(e) => { e.preventDefault(); saveQuestion(); }}>
+            {dialog.mode === 'add' ? (
+              <>
+                <label className="field">
+                  <span>Mã câu (chữ thường, số, gạch ngang)</span>
+                  <input value={qForm.id} onChange={(e) => setQForm({ ...qForm, id: e.target.value })} required maxLength={60} />
+                </label>
+                <label className="field">
+                  <span>Loại câu</span>
+                  <select value={qForm.instrument} onChange={(e) => setQForm({ ...qForm, instrument: e.target.value as 'knowledge' | 'behavior' })}>
+                    <option value="knowledge">Kiến thức (có đáp án đúng)</option>
+                    <option value="behavior">Hành vi (thang 1-4)</option>
+                  </select>
+                </label>
+              </>
+            ) : (
+              <p className="fineprint">Mã và loại câu không đổi được sau khi tạo.</p>
+            )}
+            <label className="field">
+              <span>Chủ đề (m1, m2, m3 hoặc chủ đề khác)</span>
+              <input value={qForm.topic} onChange={(e) => setQForm({ ...qForm, topic: e.target.value })} required maxLength={20} />
+            </label>
+            <label className="field">
+              <span>Nội dung câu hỏi</span>
+              <textarea value={qForm.question} onChange={(e) => setQForm({ ...qForm, question: e.target.value })} required maxLength={400} rows={3} />
+            </label>
+            {qForm.instrument === 'knowledge' ? (
+              <fieldset className="field">
+                <legend>Lựa chọn (2 đến 4, đánh dấu đáp án đúng)</legend>
+                {qForm.options.map((o, idx) => (
+                  <label key={idx} className="check-row">
+                    <input type="radio" name="correct" checked={qForm.correct === idx} onChange={() => setQForm({ ...qForm, correct: idx })} />
+                    <input
+                      aria-label={`Lựa chọn ${idx + 1}`}
+                      value={o}
+                      maxLength={200}
+                      onChange={(e) => {
+                        const next = [...qForm.options];
+                        next[idx] = e.target.value;
+                        setQForm({ ...qForm, options: next });
+                      }}
+                    />
+                  </label>
+                ))}
+              </fieldset>
+            ) : (
+              <label className="check-row">
+                <input type="checkbox" checked={qForm.reverse} onChange={(e) => setQForm({ ...qForm, reverse: e.target.checked })} />
+                <span>Câu đảo chiều (điểm được tính 5 trừ mức trả lời)</span>
+              </label>
+            )}
+            {qError && <p className="alert" role="alert">{qError}</p>}
+          </form>
+        </Modal>
+      )}
+
+      {pending?.kind === 'delete' && (
+        <Modal
+          title="Xóa câu hỏi?"
+          confirmLabel="Xóa"
+          danger
+          busy={busy}
+          onConfirm={confirmPending}
+          onCancel={() => setPending(null)}
+        >
+          <p>Câu <code>{pending.item.id}</code> sẽ bị bỏ khỏi phiên bản hiện hành. Các phiên bản cũ và dữ liệu đã thu thập vẫn được giữ.</p>
+        </Modal>
       )}
 
       {pending?.kind === 'reset' && (

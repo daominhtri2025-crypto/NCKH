@@ -1311,3 +1311,11 @@ h3 {
   .admin-table td.row-actions::before { display: none; }
   .admin-table td:last-child { min-width: 0; }
 }
+
+/* Điện thoại: nội dung câu hỏi và danh sách lựa chọn chiếm toàn bộ chiều rộng thẻ */
+@media (max-width: 640px) {
+  .admin-table td[data-label="Nội dung"] { display: block; }
+  .admin-table td[data-label="Nội dung"]::before { display: block; margin-bottom: 4px; }
+}
+.question-options { margin: 6px 0 0 18px; padding: 0; }
+.question-options li { margin-bottom: 2px; }

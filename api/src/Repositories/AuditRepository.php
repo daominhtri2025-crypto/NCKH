@@ -17,14 +17,15 @@ final class AuditRepository
         ?string $newCode,
         ?bool $ledgerConfirmed,
         ?int $targetTeacherId = null,
+        ?string $detail = null,
     ): void {
         $stmt = Database::pdo()->prepare(
-            'INSERT INTO audit_log (created_at, actor_type, actor_id, action, participant_id, old_code, new_code, ledger_confirmed, target_teacher_id)
-             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)'
+            'INSERT INTO audit_log (created_at, actor_type, actor_id, action, participant_id, old_code, new_code, ledger_confirmed, target_teacher_id, detail)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
         );
         $stmt->execute([
             date('Y-m-d H:i:s'), $actorType, $actorId, $action, $participantId, $oldCode, $newCode,
-            $ledgerConfirmed === null ? null : ($ledgerConfirmed ? 1 : 0), $targetTeacherId,
+            $ledgerConfirmed === null ? null : ($ledgerConfirmed ? 1 : 0), $targetTeacherId, $detail,
         ]);
     }
 

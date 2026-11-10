@@ -24,7 +24,7 @@ if (!str_ends_with($dbName, '_test')) {
 
 Env::set('APP_URL', 'http://localhost:5173');
 $pdo = Database::pdo();
-foreach (['audit_log', 'assessments_self', 'module_events', 'participants', 'teachers', 'classes'] as $table) {
+foreach (['survey_items', 'survey_versions', 'audit_log', 'assessments_self', 'module_events', 'participants', 'teachers', 'classes'] as $table) {
     $pdo->exec("DROP TABLE IF EXISTS {$table}");
 }
 Migrator::run($pdo, dirname(__DIR__) . '/database/schema.sql');
@@ -157,7 +157,7 @@ completePhase((string) $token, 'pre');
 function completePhase(string $token, string $phase): void
 {
     $cookie = ['ats_session' => $token];
-    $catalog = new AnToanSo\Services\AssessmentCatalog(dirname(__DIR__) . '/content/assessment_items.json');
+    $catalog = AnToanSo\Services\AssessmentCatalog::fromFile(dirname(__DIR__) . '/content/assessment_items.json');
     foreach ($catalog->items() as $item) {
         $body = $item['instrument'] === 'knowledge' ? ['answer_index' => $item['correct']] : ['answer_value' => 2];
         call('POST', "/api/assessments/{$phase}/items/{$item['id']}/answer", $body, $cookie);
@@ -790,7 +790,7 @@ $questions = call('GET', '/api/admin/questions', null, ['ats_teacher' => $qtTok]
 check('Quản trị xem câu hỏi khảo sát: 16 câu (10 kiến thức, 6 hành vi)', $questions->status === 200
     && count($questions->body['items'] ?? []) === 16
     && count(array_filter($questions->body['items'], fn ($i) => $i['instrument'] === 'knowledge')) === 10);
-check('Câu hỏi có ghi chú về việc dùng chung một bộ câu hỏi', str_contains((string) ($questions->body['note'] ?? ''), 'so sánh'));
+check('Câu hỏi có ghi chú về việc dùng chung một bộ câu hỏi và phiên bản', str_contains((string) ($questions->body['note'] ?? ''), 'phiên bản'));
 
 $audit = $pdo->query("SELECT action, actor_type, actor_id, target_teacher_id FROM audit_log WHERE action LIKE 'admin_%' ORDER BY id")->fetchAll();
 $actions = array_column($audit, 'action');
@@ -808,6 +808,89 @@ check('Nhật ký ghi đúng người thực hiện (quản trị viên) và đ�
 
 echo "Cấp thẻ và thẻ đã phát: không đổi khi quản trị thao tác\n";
 check('Tài khoản quản trị không xuất hiện trong danh sách lớp 8A1', (int) $pdo->query("SELECT COUNT(*) FROM teachers WHERE role = 'admin' AND class_code = '8A1'")->fetchColumn() === 0);
+
+
+echo "Quản trị câu hỏi khảo sát: phiên bản, kiểm tra đầu vào, ghim phiên bản\n";
+$gvTok = (string) teacherTokenFrom(call('POST', '/api/teacher/session', ['username' => 'gv_qt_test', 'password' => $gvPass2]));
+$sqV = (string) $questions->body['version'];
+check('Phiên bản hiện hành ban đầu là a-v1 (16 câu)', $sqV === 'a-v1' && count($questions->body['items']) === 16);
+check('Quản trị xem danh sách phiên bản', count($questions->body['versions'] ?? []) >= 1);
+check('Giáo viên không xem được câu hỏi kèm đáp án (403)', call('GET', '/api/admin/questions', null, ['ats_teacher' => $gvTok])->status === 403);
+check('Thêm câu hỏi khi chưa đăng nhập (401)', call('POST', '/api/admin/questions', ['id' => 'k90-test', 'instrument' => 'behavior', 'topic' => 'm1', 'question' => 'x', 'reverse' => false])->status === 401);
+check('Giáo viên thường không thêm được câu hỏi (403)', call('POST', '/api/admin/questions', ['id' => 'k91-test', 'instrument' => 'behavior', 'topic' => 'm1', 'question' => 'x', 'reverse' => false], ['ats_teacher' => $gvTok])->status === 403);
+
+$pinCode = issueCard('8A1');
+$pinStudent = claimCard($pinCode);
+$pinToken = (string) sessionTokenFrom($pinStudent);
+$firstPre = call('POST', '/api/assessments/pre/items/k01-khoa-tai-khoan/answer', ['answer_index' => 1], ['ats_session' => $pinToken]);
+check('Học sinh trả lời một câu trước khi có phiên bản mới (201)', $firstPre->status === 201, (string) $firstPre->status);
+
+$badCases = [
+    ['thiếu lựa chọn', ['id' => 'k92-bad', 'instrument' => 'knowledge', 'topic' => 'm1', 'question' => 'Q', 'correct' => 0]],
+    ['đáp án ngoài phạm vi', ['id' => 'k93-bad', 'instrument' => 'knowledge', 'topic' => 'm1', 'question' => 'Q', 'options' => ['a', 'b'], 'correct' => 5]],
+    ['mã có SQL injection', ['id' => "x' OR 1=1 --", 'instrument' => 'behavior', 'topic' => 'm1', 'question' => 'Q', 'reverse' => false]],
+    ['chủ đề có ký tự lạ', ['id' => 'b90-bad', 'instrument' => 'behavior', 'topic' => 'm1; DROP', 'question' => 'Q', 'reverse' => false]],
+    ['loại không hợp lệ', ['id' => 'b91-bad', 'instrument' => 'other', 'topic' => 'm1', 'question' => 'Q']],
+    ['hành vi có đáp án đúng', ['id' => 'b92-bad', 'instrument' => 'behavior', 'topic' => 'm1', 'question' => 'Q', 'reverse' => false, 'correct' => 0]],
+    ['nội dung quá dài', ['id' => 'b93-bad', 'instrument' => 'behavior', 'topic' => 'm1', 'question' => str_repeat('a', 401), 'reverse' => false]],
+    ['mã trùng câu có sẵn', ['id' => 'k01-khoa-tai-khoan', 'instrument' => 'behavior', 'topic' => 'm1', 'question' => 'Q', 'reverse' => false]],
+];
+foreach ($badCases as [$label, $body]) {
+    check("Thêm câu hỏi bị từ chối (422): {$label}", call('POST', '/api/admin/questions', $body, ['ats_teacher' => $qtTok])->status === 422);
+}
+check('Mã câu hỏi có SQL injection không làm thay đổi phiên bản', (string) call('GET', '/api/admin/questions', null, ['ats_teacher' => $qtTok])->body['version'] === $sqV);
+
+$addOk = call('POST', '/api/admin/questions', ['id' => 'b90-thu-nghiem', 'instrument' => 'behavior', 'topic' => 'm1', 'question' => 'Em có bật xác thực hai lớp không?', 'reverse' => false], ['ats_teacher' => $qtTok]);
+check('Quản trị thêm câu hành vi (201), tạo phiên bản mới', $addOk->status === 201 && $addOk->body['version'] !== $sqV, (string) $addOk->status);
+$v2 = (string) ($addOk->body['version'] ?? '');
+
+$afterAdd = call('GET', '/api/admin/questions', null, ['ats_teacher' => $qtTok]);
+check('Phiên bản hiện hành sau khi thêm có 17 câu', $afterAdd->status === 200 && count($afterAdd->body['items']) === 17 && $afterAdd->body['version'] === $v2);
+
+$upd = call('PUT', '/api/admin/questions/b90-thu-nghiem', ['question' => 'Em có bật xác thực hai lớp cho mọi tài khoản không?'], ['ats_teacher' => $qtTok]);
+check('Quản trị sửa nội dung câu hỏi (200), tạo phiên bản mới', $upd->status === 200 && $upd->body['version'] !== $v2);
+$v3 = (string) ($upd->body['version'] ?? '');
+check('Không đổi được mã câu hỏi khi sửa (422)', call('PUT', '/api/admin/questions/b90-thu-nghiem', ['id' => 'b90-khac'], ['ats_teacher' => $qtTok])->status === 422);
+check('Không đổi được loại câu hỏi khi sửa (422)', call('PUT', '/api/admin/questions/b90-thu-nghiem', ['instrument' => 'knowledge'], ['ats_teacher' => $qtTok])->status === 422);
+check('Sửa câu không tồn tại (404)', call('PUT', '/api/admin/questions/khong-co-cau', ['question' => 'x'], ['ats_teacher' => $qtTok])->status === 404);
+check('Mã câu sửa có SQL injection bị từ chối (422)', call('PUT', '/api/admin/questions/' . rawurlencode("x' OR '1'='1"), ['question' => 'x'], ['ats_teacher' => $qtTok])->status === 422);
+
+$del = call('DELETE', '/api/admin/questions/b90-thu-nghiem', null, ['ats_teacher' => $qtTok]);
+check('Quản trị xóa câu hỏi (200), tạo phiên bản mới', $del->status === 200 && $del->body['version'] !== $v3);
+check('Xóa câu không tồn tại (404)', call('DELETE', '/api/admin/questions/khong-co-cau', null, ['ats_teacher' => $qtTok])->status === 404);
+check('Giáo viên không xóa được câu hỏi (403)', call('DELETE', '/api/admin/questions/k01-khoa-tai-khoan', null, ['ats_teacher' => $gvTok])->status === 403);
+
+$afterDel = call('GET', '/api/admin/questions', null, ['ats_teacher' => $qtTok]);
+check('Sau khi xóa, phiên bản hiện hành lại có 16 câu', count($afterDel->body['items']) === 16);
+
+$addAgain = call('POST', '/api/admin/questions', ['id' => 'b91-thu-nghiem', 'instrument' => 'behavior', 'topic' => 'm1', 'question' => 'Q thêm', 'reverse' => false], ['ats_teacher' => $qtTok]);
+check('Quản trị thêm lại câu hành vi (201)', $addAgain->status === 201);
+$v4 = (string) $addAgain->body['version'];
+$pinnedStatus = call('GET', '/api/assessments', null, ['ats_session' => $pinToken]);
+$pinPre = $pinnedStatus->body['phases']['pre'] ?? [];
+check('Học sinh làm dở vẫn ghim phiên bản cũ: tổng 16 câu, không bị khóa sai', ($pinPre['total'] ?? -1) === 16 && ($pinPre['answered'] ?? -1) === 1);
+check('Trang khảo sát của học sinh làm dở báo đúng phiên bản đã ghim (a-v1)', $pinnedStatus->body['content_version'] === 'a-v1');
+$pinItems = call('GET', '/api/assessments/pre', null, ['ats_session' => $pinToken]);
+check('Học sinh làm dở chỉ thấy 16 câu của phiên bản cũ', count($pinItems->body['items'] ?? []) === 16);
+
+$freshStudent = newStudent();
+$freshToken = (string) sessionTokenFrom($freshStudent);
+$freshStatus = call('GET', '/api/assessments', null, ['ats_session' => $freshToken]);
+check('Học sinh mới nhận phiên bản hiện hành (17 câu sau khi thêm lại)', $freshStatus->body['content_version'] === $v4 && ($freshStatus->body['phases']['pre']['total'] ?? 0) === 17);
+
+$oldVersionCount = (int) $pdo->query("SELECT COUNT(*) FROM survey_items WHERE version = 'a-v1'")->fetchColumn();
+check('Phiên bản cũ a-v1 được giữ nguyên 16 câu', $oldVersionCount === 16);
+$ver = $pdo->query("SELECT COUNT(*) FROM survey_versions")->fetchColumn();
+check('Mỗi thay đổi tạo đúng một phiên bản mới (a-v1 đến a-v5 cộng các lần thêm, sửa, xóa)', (int) $ver === 5);
+$onlyOneActive = (int) $pdo->query("SELECT COUNT(*) FROM survey_versions WHERE is_active = 1")->fetchColumn();
+check('Chỉ có đúng một phiên bản hiện hành', $onlyOneActive === 1);
+
+$surveyAudit = $pdo->query("SELECT action, detail FROM audit_log WHERE action LIKE 'survey_%' ORDER BY id")->fetchAll();
+check('Nhật ký ghi thêm, sửa, xóa, thêm lại câu hỏi kèm phiên bản và mã câu', count($surveyAudit) === 4
+    && $surveyAudit[0]['action'] === 'survey_add_item' && str_contains((string) $surveyAudit[0]['detail'], 'b90-thu-nghiem'));
+
+$wide = AnToanSo\Support\Container::exporter()->wideCsv();
+check('Xuất dạng rộng vẫn hoạt động khi có nhiều phiên bản', str_starts_with($wide, 'pseudonym,class_code'));
 
 
 echo "\nKết quả: {$passed} đạt, {$failed} lỗi.\n";
