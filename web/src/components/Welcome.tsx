@@ -23,9 +23,15 @@ export default function Welcome({ onClaimCard, onHaveCode, onTeacher }: Props) {
         </button>
       </div>
 
+      <div className="role-box">
+        <p className="role-title">Dành cho giáo viên</p>
+        <p className="fineprint">Đăng nhập bằng tài khoản được nhóm kỹ thuật cấp để xem tiến độ lớp và tạo thẻ mới cho lớp.</p>
+        <button className="btn btn-ghost btn-xl" onClick={onTeacher}>Giáo viên đăng nhập</button>
+        <p className="fineprint">Nhóm kỹ thuật quản trị tài khoản và thẻ bằng dòng lệnh trên máy chủ, không đăng nhập tại trang này.</p>
+      </div>
+
       <p className="fineprint">
         Chương trình chỉ dành cho học sinh tham gia nghiên cứu có phụ huynh và nhà trường đồng ý.
-        Giáo viên đăng nhập để xem tiến độ lớp: <button className="link-btn inline" onClick={onTeacher}>Giáo viên đăng nhập</button>
       </p>
     </section>
   );
