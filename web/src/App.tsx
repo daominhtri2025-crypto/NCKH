@@ -13,6 +13,7 @@ import AssessmentPage from './modules/assessment/AssessmentPage';
 import AssessmentPanel from './modules/assessment/AssessmentPanel';
 import TeacherLogin from './modules/teacher/TeacherLogin';
 import TeacherDashboard from './modules/teacher/TeacherDashboard';
+import AdminDashboard from './modules/admin/AdminDashboard';
 
 type View =
   | { name: 'loading' }
@@ -21,6 +22,7 @@ type View =
   | { name: 'login' }
   | { name: 'teacherLogin' }
   | { name: 'teacher' }
+  | { name: 'admin' }
   | { name: 'hub' }
   | { name: 'module1' }
   | { name: 'module2' }
@@ -114,13 +116,17 @@ export default function App() {
 
       {view.name === 'teacherLogin' && (
         <TeacherLogin
-          onLoggedIn={() => setView({ name: 'teacher' })}
+          onLoggedIn={(role) => setView(role === 'admin' ? { name: 'admin' } : { name: 'teacher' })}
           onBack={() => setView({ name: 'welcome' })}
         />
       )}
 
       {view.name === 'teacher' && (
         <TeacherDashboard onLogout={() => setView({ name: 'welcome' })} />
+      )}
+
+      {view.name === 'admin' && (
+        <AdminDashboard onLogout={() => setView({ name: 'welcome' })} />
       )}
 
       {view.name === 'login' && (

@@ -12,7 +12,7 @@ export class ApiError extends Error {
   }
 }
 
-type Method = 'GET' | 'POST' | 'DELETE';
+type Method = 'GET' | 'POST' | 'PUT' | 'DELETE';
 
 async function request<T>(method: Method, path: string, body?: unknown): Promise<T> {
   const response = await fetch(`/api${path}`, {
@@ -43,6 +43,7 @@ async function request<T>(method: Method, path: string, body?: unknown): Promise
 export const api = {
   get: <T,>(path: string) => request<T>('GET', path),
   post: <T,>(path: string, body?: unknown) => request<T>('POST', path, body),
+  put: <T,>(path: string, body?: unknown) => request<T>('PUT', path, body),
   logout: () => request<{ ok: boolean }>('DELETE', '/session'),
   logoutTeacher: () => request<{ ok: boolean }>('DELETE', '/teacher/session'),
 };

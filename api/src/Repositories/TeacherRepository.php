@@ -32,18 +32,33 @@ final class TeacherRepository
         return $row === false ? null : $row;
     }
 
-    public function create(string $username, string $passwordHash, string $classCode): void
+    /** @return array<string,mixed>|null */
+    public function findById(int $id): ?array
+    {
+        $stmt = $this->db()->prepare('SELECT * FROM teachers WHERE id = ? LIMIT 1');
+        $stmt->execute([$id]);
+        $row = $stmt->fetch();
+        return $row === false ? null : $row;
+    }
+
+    public function create(string $username, string $passwordHash, ?string $classCode, string $role = 'teacher'): void
     {
         $stmt = $this->db()->prepare(
-            'INSERT INTO teachers (username, password_hash, class_code, created_at) VALUES (?, ?, ?, ?)'
+            'INSERT INTO teachers (username, password_hash, class_code, role, created_at) VALUES (?, ?, ?, ?, ?)'
         );
-        $stmt->execute([$username, $passwordHash, $classCode, date('Y-m-d H:i:s')]);
+        $stmt->execute([$username, $passwordHash, $classCode, $role, date('Y-m-d H:i:s')]);
     }
 
     /** @return list<array<string,mixed>> */
     public function listAll(): array
     {
-        return $this->db()->query('SELECT id, username, class_code, created_at, last_login_at, disabled_at FROM teachers ORDER BY username')->fetchAll();
+        return $this->db()->query('SELECT id, username, class_code, role, created_at, last_login_at, disabled_at FROM teachers ORDER BY role, username')->fetchAll();
+    }
+
+    /** Số quản trị viên còn hoạt động. Dùng để không khóa hết quản trị viên. */
+    public function countActiveAdmins(): int
+    {
+        return (int) $this->db()->query("SELECT COUNT(*) FROM teachers WHERE role = 'admin' AND disabled_at IS NULL")->fetchColumn();
     }
 
     /** Vô hiệu hóa (khóa mềm) hoặc khôi phục; khi vô hiệu hóa, thu hồi mọi phiên đang mở. */

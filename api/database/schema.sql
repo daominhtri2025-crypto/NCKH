@@ -18,7 +18,9 @@ CREATE TABLE IF NOT EXISTS teachers (
   id            BIGINT       NOT NULL AUTO_INCREMENT,
   username      VARCHAR(60)  NOT NULL,
   password_hash VARCHAR(255) NOT NULL,
-  class_code    VARCHAR(40)  NOT NULL,
+  -- Quản trị viên (role = 'admin') không gắn lớp: class_code = NULL.
+  class_code    VARCHAR(40)  NULL,
+  role          ENUM('teacher','admin') NOT NULL DEFAULT 'teacher',
   token_hash    CHAR(64)     NULL,
   created_at    DATETIME     NOT NULL,
   last_login_at DATETIME     NULL,
@@ -111,6 +113,8 @@ CREATE TABLE IF NOT EXISTS audit_log (
   actor_id       BIGINT       NULL,
   action         VARCHAR(40)  NOT NULL,
   participant_id BIGINT       NULL,
+  -- Tài khoản giáo viên bị thao tác (quản trị tài khoản).
+  target_teacher_id BIGINT    NULL,
   old_code       CHAR(9)      NULL,
   new_code       CHAR(9)      NULL,
   ledger_confirmed TINYINT(1) NULL,

@@ -1271,3 +1271,43 @@ h3 {
 .role-box { margin-top: 20px; padding: 14px; border-top: 1px solid var(--line); display: grid; gap: 8px; }
 .role-title { margin: 0; font-weight: 700; color: var(--ink); }
 .role-box .fineprint { margin: 0; }
+
+/* Trang quản trị */
+.admin-dashboard { display: grid; gap: 16px; }
+.admin-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.admin-head h2 { margin: 0; }
+.tabs { display: flex; gap: 8px; border-bottom: 1px solid var(--line); }
+.tab { background: none; border: none; padding: 10px 14px; cursor: pointer; color: var(--ink-soft); font-weight: 600; border-bottom: 3px solid transparent; }
+.tab.active { color: var(--brand); border-bottom-color: var(--brand); }
+.table-wrap { overflow-x: auto; }
+.admin-table { width: 100%; border-collapse: collapse; }
+.admin-table th, .admin-table td { text-align: left; padding: 8px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+.btn-danger { background: var(--danger); color: #fff; border: none; }
+.modal-backdrop { position: fixed; inset: 0; background: rgba(15, 27, 43, 0.5); display: grid; place-items: center; padding: 16px; z-index: 50; }
+.modal { max-width: 420px; width: 100%; display: grid; gap: 12px; }
+.modal h3 { margin: 0; }
+.question-list li { margin-bottom: 10px; }
+.question-list ul { margin: 4px 0 0 18px; }
+
+/* Sửa bố cục trang quản trị trên điện thoại */
+.admin-dashboard > * { min-width: 0; max-width: 100%; }
+.admin-head { flex-wrap: wrap; }
+.admin-head h2 { font-size: 1.3rem; }
+.admin-table { min-width: 560px; }
+.admin-table .row-actions { flex-direction: column; align-items: stretch; gap: 6px; }
+.admin-table .small-btn { white-space: nowrap; margin: 0; width: 100%; }
+.admin-table td:last-child { min-width: 150px; }
+.admin-dashboard select, .admin-dashboard input { max-width: 100%; }
+
+/* Điện thoại: mỗi tài khoản là một thẻ dọc, không cần vuốt ngang */
+@media (max-width: 640px) {
+  .admin-table { min-width: 0; }
+  .admin-table thead { display: none; }
+  .admin-table, .admin-table tbody, .admin-table tr, .admin-table td { display: block; width: 100%; }
+  .admin-table tr { border: 1px solid var(--line); border-radius: 12px; padding: 10px; margin-bottom: 12px; background: var(--surface); }
+  .admin-table td { border: none; padding: 4px 0; display: flex; justify-content: space-between; gap: 12px; }
+  .admin-table td::before { content: attr(data-label); color: var(--ink-soft); font-weight: 600; }
+  .admin-table td.row-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px; }
+  .admin-table td.row-actions::before { display: none; }
+  .admin-table td:last-child { min-width: 0; }
+}

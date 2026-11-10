@@ -58,7 +58,7 @@ final class TeacherController
         $teacher = Container::teachers()->authenticate($request);
         $newCode = Container::participants()->reissueCard(
             $params['code'],
-            (string) $teacher['class_code'],
+            Container::teachers()->requireClass($teacher),
             'teacher',
             (int) $teacher['id'],
             $request->json()['ledger_confirmed'] ?? null,

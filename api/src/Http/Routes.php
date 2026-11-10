@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace AnToanSo\Http;
 
 use AnToanSo\Controllers\AdminController;
+use AnToanSo\Controllers\AdminDashboardController;
 use AnToanSo\Controllers\AssessmentController;
 use AnToanSo\Controllers\Module1Controller;
 use AnToanSo\Controllers\Module2Controller;
@@ -58,6 +59,13 @@ final class Routes
         $admin = new AdminController();
         $router->add('GET', '/admin/export/long.csv', [$admin, 'exportLong']);
         $router->add('GET', '/admin/export/wide.csv', [$admin, 'exportWide']);
+
+        $dash = new AdminDashboardController();
+        $router->add('GET', '/admin/teachers', [$dash, 'listTeachers']);
+        $router->add('POST', '/admin/teachers', [$dash, 'createTeacher']);
+        $router->add('PUT', '/admin/teachers/{username}/password', [$dash, 'resetPassword']);
+        $router->add('PUT', '/admin/teachers/{username}/status', [$dash, 'setStatus']);
+        $router->add('GET', '/admin/questions', [$dash, 'questions']);
 
         return $router;
     }

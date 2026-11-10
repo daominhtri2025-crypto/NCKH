@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace AnToanSo\Services;
 
 use AnToanSo\Http\Request;
+use AnToanSo\Repositories\AuditRepository;
 use AnToanSo\Repositories\ClassRepository;
 use AnToanSo\Repositories\ParticipantRepository;
 use AnToanSo\Repositories\TeacherRepository;
@@ -90,7 +91,10 @@ final class TeacherService
         }
         $token = bin2hex(random_bytes(32));
         $this->teachers->setToken((int) $row['id'], hash('sha256', $token));
-        return ['teacher' => ['username' => $row['username'], 'class_code' => $row['class_code']], 'token' => $token];
+        return [
+            'teacher' => ['username' => $row['username'], 'class_code' => $row['class_code'], 'role' => $row['role']],
+            'token' => $token,
+        ];
     }
 
     public function authenticate(Request $request): array
@@ -118,12 +122,27 @@ final class TeacherService
         }
     }
 
+    /**
+     * Lớp của giáo viên. Tài khoản quản trị không gắn lớp nên bị từ chối ở mọi chức năng lớp.
+     * Đây là chốt chặn để quản trị viên không cấp lại thẻ hay xem tiến độ của lớp bất kỳ.
+     *
+     * @param array<string,mixed> $teacher
+     */
+    public function requireClass(array $teacher): string
+    {
+        if (($teacher['role'] ?? 'teacher') !== 'teacher' || $teacher['class_code'] === null) {
+            throw new HttpException(403, 'Tài khoản này không gắn lớp học.');
+        }
+        return (string) $teacher['class_code'];
+    }
+
     /** @param array<string,mixed> $teacher */
     public function roster(array $teacher): array
     {
+        $classCode = $this->requireClass($teacher);
         $students = [];
         $active = 0;
-        foreach ($this->teachers->rosterCounts((string) $teacher['class_code']) as $r) {
+        foreach ($this->teachers->rosterCounts($classCode) as $r) {
             $isActive = $r['status'] === 'active';
             $active += $isActive ? 1 : 0;
             $students[] = [
@@ -145,7 +164,7 @@ final class TeacherService
             ];
         }
         return [
-            'class_code' => $teacher['class_code'],
+            'class_code' => $classCode,
             'totals' => [
                 'students' => count($students),
                 'active' => $active,
@@ -173,10 +192,133 @@ final class TeacherService
         $limit = (int) Env::get('CLASS_CARD_LIMIT', (string) self::CLASS_CARD_LIMIT_DEFAULT);
         try {
             return (new ParticipantService(new ParticipantRepository(), new ClassRepository()))
-                ->issueCards((string) $teacher['class_code'], $count, (int) $teacher['id'], $limit);
+                ->issueCards($this->requireClass($teacher), $count, (int) $teacher['id'], $limit);
         } catch (RuntimeException $e) {
             throw new HttpException(422, $e->getMessage());
         }
+    }
+
+    // ----- Quản trị (role = 'admin'): mọi thao tác đều ghi nhật ký audit_log -----
+
+    /** @param array<string,mixed> $actor */
+    public function requireAdmin(array $actor): void
+    {
+        if (($actor['role'] ?? '') !== 'admin') {
+            throw new HttpException(403, 'Chỉ quản trị viên được thực hiện thao tác này.');
+        }
+    }
+
+    /** @return list<array<string,mixed>> */
+    public function adminListTeachers(array $actor): array
+    {
+        $this->requireAdmin($actor);
+        return array_map(static fn (array $r): array => [
+            'id' => (int) $r['id'],
+            'username' => $r['username'],
+            'role' => $r['role'],
+            'class_code' => $r['class_code'],
+            'active' => $r['disabled_at'] === null,
+            'created_at' => $r['created_at'],
+            'last_login_at' => $r['last_login_at'],
+        ], $this->teachers->listAll());
+    }
+
+    /**
+     * Tạo tài khoản giáo viên hoặc quản trị viên. Trả về mật khẩu ngẫu nhiên, chỉ hiện một lần.
+     * Tên đăng nhập và mã lớp được kiểm tra định dạng trước khi chạm CSDL (truy vấn đã dùng tham số hóa).
+     */
+    public function adminCreateTeacher(array $actor, mixed $username, mixed $classCode, mixed $role): string
+    {
+        $this->requireAdmin($actor);
+        $username = is_string($username) ? strtolower(trim($username)) : '';
+        if (!preg_match('/^[a-z0-9_]{3,40}$/', $username)) {
+            throw new HttpException(422, 'Tên đăng nhập chỉ gồm chữ thường, số và dấu gạch dưới (3 đến 40 ký tự).');
+        }
+        if (!in_array($role, ['teacher', 'admin'], true)) {
+            throw new HttpException(422, 'Vai trò phải là teacher hoặc admin.');
+        }
+        if ($this->teachers->findByUsername($username) !== null) {
+            throw new HttpException(422, "Tên đăng nhập {$username} đã tồn tại.");
+        }
+        $class = null;
+        if ($role === 'teacher') {
+            $class = is_string($classCode) ? strtoupper(trim($classCode)) : '';
+            if (!(new ClassRepository())->exists($class)) {
+                throw new HttpException(422, 'Mã lớp không tồn tại. Nhóm kỹ thuật cần tạo lớp trước.');
+            }
+        }
+        $password = $this->randomPassword();
+        $this->teachers->create($username, password_hash($password, PASSWORD_DEFAULT), $class, $role);
+        $newId = (int) $this->teachers->findByUsername($username)['id'];
+        (new AuditRepository())->log('teacher', (int) $actor['id'], 'admin_create_teacher', null, null, null, null, $newId);
+        return $password;
+    }
+
+    /** Đặt lại mật khẩu, thu hồi mọi phiên đang mở của tài khoản đó. Trả về mật khẩu mới một lần. */
+    public function adminResetPassword(array $actor, string $username): string
+    {
+        $this->requireAdmin($actor);
+        $target = $this->requireTeacherForAdmin($username);
+        $password = $this->randomPassword();
+        $this->teachers->resetPassword((int) $target['id'], password_hash($password, PASSWORD_DEFAULT));
+        (new AuditRepository())->log('teacher', (int) $actor['id'], 'admin_reset_password', null, null, null, null, (int) $target['id']);
+        return $password;
+    }
+
+    /**
+     * Khóa hoặc mở khóa tài khoản. Quản trị viên không tự khóa chính mình,
+     * và không khóa quản trị viên cuối cùng còn hoạt động (để hệ thống không mất quyền quản trị).
+     */
+    public function adminSetDisabled(array $actor, string $username, bool $disabled): void
+    {
+        $this->requireAdmin($actor);
+        $target = $this->requireTeacherForAdmin($username);
+        if ($disabled) {
+            if ((int) $target['id'] === (int) $actor['id']) {
+                throw new HttpException(422, 'Không thể tự khóa tài khoản đang đăng nhập.');
+            }
+            if (($target['role'] === 'admin') && $target['disabled_at'] === null && $this->teachers->countActiveAdmins() <= 1) {
+                throw new HttpException(422, 'Không thể khóa quản trị viên cuối cùng còn hoạt động.');
+            }
+        }
+        $this->teachers->setDisabled((int) $target['id'], $disabled);
+        $action = $disabled ? 'admin_disable_teacher' : 'admin_enable_teacher';
+        (new AuditRepository())->log('teacher', (int) $actor['id'], $action, null, null, null, null, (int) $target['id']);
+    }
+
+    /** @return array<string,mixed> */
+    private function requireTeacherForAdmin(string $username): array
+    {
+        $username = strtolower(trim($username));
+        if (!preg_match('/^[a-z0-9_]{3,40}$/', $username)) {
+            throw new HttpException(422, 'Tên đăng nhập không hợp lệ.');
+        }
+        $row = $this->teachers->findByUsername($username);
+        if ($row === null) {
+            throw new HttpException(404, 'Không có tài khoản này.');
+        }
+        return $row;
+    }
+
+    /** Câu hỏi khảo sát hiện hành (chỉ đọc). Việc sửa câu hỏi cần cơ chế phiên bản, xem tài liệu thiết kế. */
+    public function adminQuestions(array $actor): array
+    {
+        $this->requireAdmin($actor);
+        $catalog = json_decode((string) file_get_contents(dirname(__DIR__, 2) . '/content/assessment_items.json'), true);
+        return [
+            'version' => $catalog['version'],
+            'title' => $catalog['title'],
+            'behavior_scale' => $catalog['behavior_scale'],
+            'items' => array_map(static fn (array $i): array => [
+                'id' => $i['id'],
+                'instrument' => $i['instrument'],
+                'topic' => $i['topic'],
+                'question' => $i['question'],
+                'options' => $i['options'] ?? null,
+                'correct' => $i['correct'] ?? null,
+            ], $catalog['items']),
+            'note' => 'Cùng một bộ câu hỏi dùng cho khảo sát đầu vào, đầu ra và theo dõi, để so sánh được.',
+        ];
     }
 
     /** Nhóm kỹ thuật: danh sách tài khoản giáo viên (không có mật khẩu). */

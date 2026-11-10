@@ -737,5 +737,78 @@ check('Lần cấp lại của nhóm kỹ thuật không ghi giáo viên là ng�
 $auditTech = $pdo->query("SELECT actor_type, actor_id, ledger_confirmed FROM audit_log WHERE action = 'reissue_card' AND new_code = '{$techNew}'")->fetch();
 check('Nhật ký ghi lần cấp lại của nhóm kỹ thuật (actor_type technical, đã xác nhận)', is_array($auditTech) && $auditTech['actor_type'] === 'technical' && $auditTech['actor_id'] === null && (int) $auditTech['ledger_confirmed'] === 1);
 
+echo "Quản trị: phân quyền, quản lý giáo viên, chống SQL injection\n";
+(new AnToanSo\Repositories\TeacherRepository())->create('qt_admin', password_hash('AdminPass123', PASSWORD_DEFAULT), null, 'admin');
+$qtLogin = call('POST', '/api/teacher/session', ['username' => 'qt_admin', 'password' => 'AdminPass123']);
+$qtTok = (string) teacherTokenFrom($qtLogin);
+check('Quản trị viên đăng nhập bằng cổng giáo viên, phản hồi có role admin', $qtLogin->status === 200 && ($qtLogin->body['teacher']['role'] ?? '') === 'admin');
+$qtId = (int) $pdo->query("SELECT id FROM teachers WHERE username = 'qt_admin'")->fetchColumn();
+check('Quản trị viên không có lớp: xem danh sách lớp bị từ chối (403)', call('GET', '/api/teacher/roster', null, ['ats_teacher' => $qtTok])->status === 403);
+check('Quản trị viên không cấp lại được thẻ của bất kỳ lớp nào (403)', call('POST', '/api/teacher/students/' . $newCodeRe . '/reissue', ['ledger_confirmed' => true], ['ats_teacher' => $qtTok])->status === 403);
+$qtList = call('GET', '/api/admin/teachers', null, ['ats_teacher' => $qtTok]);
+check('Quản trị: danh sách giáo viên (200) và không lộ hash mật khẩu', $qtList->status === 200 && !str_contains(json_encode($qtList->body), 'password_hash'));
+
+$gvCreate = call('POST', '/api/admin/teachers', ['username' => 'gv_qt_test', 'class_code' => '8A1', 'role' => 'teacher'], ['ats_teacher' => $qtTok]);
+check('Quản trị tạo giáo viên mới gắn lớp (201), trả mật khẩu một lần', $gvCreate->status === 201 && strlen((string) ($gvCreate->body['password'] ?? '')) >= 12, (string) $gvCreate->status);
+$gvPass = (string) ($gvCreate->body['password'] ?? '');
+$gvLogin = call('POST', '/api/teacher/session', ['username' => 'gv_qt_test', 'password' => $gvPass]);
+$gvTok = (string) teacherTokenFrom($gvLogin);
+check('Giáo viên mới đăng nhập được với role teacher', $gvLogin->status === 200 && ($gvLogin->body['teacher']['role'] ?? '') === 'teacher');
+check('Giáo viên thường gọi API quản trị bị từ chối (403)', call('GET', '/api/admin/teachers', null, ['ats_teacher' => $gvTok])->status === 403);
+check('Giáo viên thường không tạo được giáo viên khác (403)', call('POST', '/api/admin/teachers', ['username' => 'gv_xam_nhap', 'class_code' => '8A1'], ['ats_teacher' => $gvTok])->status === 403);
+check('Giáo viên thường không xem được câu hỏi quản trị (403)', call('GET', '/api/admin/questions', null, ['ats_teacher' => $gvTok])->status === 403);
+check('Gọi API quản trị khi chưa đăng nhập (401)', call('GET', '/api/admin/teachers')->status === 401);
+check('Gọi API quản trị với phiên hết hạn hoặc sai (401)', call('GET', '/api/admin/teachers', null, ['ats_teacher' => 'khongdung'])->status === 401);
+
+check('SQL injection ở tên đăng nhập khi tạo bị từ chối (422)', call('POST', '/api/admin/teachers', ['username' => "x' OR '1'='1", 'class_code' => '8A1'], ['ats_teacher' => $qtTok])->status === 422);
+check('SQL injection ở tên đăng nhập khi đặt lại mật khẩu bị từ chối (422)', call('PUT', '/api/admin/teachers/' . rawurlencode("x' OR '1'='1") . '/password', [], ['ats_teacher' => $qtTok])->status === 422);
+check('SQL injection ở mã lớp bị từ chối (422)', call('POST', '/api/admin/teachers', ['username' => 'gv_sqli_test', 'class_code' => "8A1' OR '1'='1"], ['ats_teacher' => $qtTok])->status === 422);
+check('Vai trò không hợp lệ bị từ chối (422)', call('POST', '/api/admin/teachers', ['username' => 'gv_vaitro_sai', 'class_code' => '8A1', 'role' => 'superuser'], ['ats_teacher' => $qtTok])->status === 422);
+check('Lớp không tồn tại bị từ chối (422)', call('POST', '/api/admin/teachers', ['username' => 'gv_lop_sai', 'class_code' => 'KHONGCO'], ['ats_teacher' => $qtTok])->status === 422);
+check('Tên đăng nhập trùng bị từ chối (422)', call('POST', '/api/admin/teachers', ['username' => 'gv_qt_test', 'class_code' => '8A1'], ['ats_teacher' => $qtTok])->status === 422);
+check('Giá trị khóa không phải true/false bị từ chối (422)', call('PUT', '/api/admin/teachers/gv_qt_test/status', ['disabled' => 'yes'], ['ats_teacher' => $qtTok])->status === 422);
+
+$gvReset = call('PUT', '/api/admin/teachers/gv_qt_test/password', [], ['ats_teacher' => $qtTok]);
+check('Quản trị đặt lại mật khẩu giáo viên (200)', $gvReset->status === 200 && strlen((string) ($gvReset->body['password'] ?? '')) >= 12);
+check('Sau đặt lại, mật khẩu cũ không còn đăng nhập được (401)', call('POST', '/api/teacher/session', ['username' => 'gv_qt_test', 'password' => $gvPass])->status === 401);
+check('Sau đặt lại, phiên đang mở của giáo viên bị thu hồi (401)', call('GET', '/api/teacher/roster', null, ['ats_teacher' => $gvTok])->status === 401);
+$gvPass2 = (string) ($gvReset->body['password'] ?? '');
+check('Mật khẩu mới đăng nhập được (200)', call('POST', '/api/teacher/session', ['username' => 'gv_qt_test', 'password' => $gvPass2])->status === 200);
+
+check('Quản trị khóa tài khoản giáo viên (200)', call('PUT', '/api/admin/teachers/gv_qt_test/status', ['disabled' => true], ['ats_teacher' => $qtTok])->status === 200);
+check('Tài khoản bị khóa không đăng nhập được (401)', call('POST', '/api/teacher/session', ['username' => 'gv_qt_test', 'password' => $gvPass2])->status === 401);
+check('Quản trị mở khóa lại (200), đăng nhập được', call('PUT', '/api/admin/teachers/gv_qt_test/status', ['disabled' => false], ['ats_teacher' => $qtTok])->status === 200
+    && call('POST', '/api/teacher/session', ['username' => 'gv_qt_test', 'password' => $gvPass2])->status === 200);
+check('Không thể tự khóa tài khoản đang đăng nhập (422)', call('PUT', '/api/admin/teachers/qt_admin/status', ['disabled' => true], ['ats_teacher' => $qtTok])->status === 422);
+check('Quản trị đặt lại mật khẩu tài khoản không tồn tại (404)', call('PUT', '/api/admin/teachers/khong_co_ai/password', [], ['ats_teacher' => $qtTok])->status === 404);
+
+$qtAdm2 = call('POST', '/api/admin/teachers', ['username' => 'qt_admin_hai', 'role' => 'admin'], ['ats_teacher' => $qtTok]);
+check('Quản trị tạo thêm quản trị viên không gắn lớp (201)', $qtAdm2->status === 201);
+check('Quản trị khóa một quản trị viên khác (200)', call('PUT', '/api/admin/teachers/qt_admin_hai/status', ['disabled' => true], ['ats_teacher' => $qtTok])->status === 200);
+
+$questions = call('GET', '/api/admin/questions', null, ['ats_teacher' => $qtTok]);
+check('Quản trị xem câu hỏi khảo sát: 16 câu (10 kiến thức, 6 hành vi)', $questions->status === 200
+    && count($questions->body['items'] ?? []) === 16
+    && count(array_filter($questions->body['items'], fn ($i) => $i['instrument'] === 'knowledge')) === 10);
+check('Câu hỏi có ghi chú về việc dùng chung một bộ câu hỏi', str_contains((string) ($questions->body['note'] ?? ''), 'so sánh'));
+
+$audit = $pdo->query("SELECT action, actor_type, actor_id, target_teacher_id FROM audit_log WHERE action LIKE 'admin_%' ORDER BY id")->fetchAll();
+$actions = array_column($audit, 'action');
+check('Nhật ký ghi tạo, đặt lại, khóa và mở khóa tài khoản của quản trị', in_array('admin_create_teacher', $actions, true)
+    && in_array('admin_reset_password', $actions, true) && in_array('admin_disable_teacher', $actions, true) && in_array('admin_enable_teacher', $actions, true));
+check('Nhật ký ghi đúng người thực hiện (quản trị viên) và đúng tài khoản bị tác động', (function () use ($audit, $qtId, $pdo) {
+    $gvId = (int) $pdo->query("SELECT id FROM teachers WHERE username = 'gv_qt_test'")->fetchColumn();
+    foreach ($audit as $r) {
+        if ($r['action'] === 'admin_reset_password') {
+            return (int) $r['actor_id'] === $qtId && (int) $r['target_teacher_id'] === $gvId && $r['actor_type'] === 'teacher';
+        }
+    }
+    return false;
+})());
+
+echo "Cấp thẻ và thẻ đã phát: không đổi khi quản trị thao tác\n";
+check('Tài khoản quản trị không xuất hiện trong danh sách lớp 8A1', (int) $pdo->query("SELECT COUNT(*) FROM teachers WHERE role = 'admin' AND class_code = '8A1'")->fetchColumn() === 0);
+
+
 echo "\nKết quả: {$passed} đạt, {$failed} lỗi.\n";
 exit($failed === 0 ? 0 : 1);
