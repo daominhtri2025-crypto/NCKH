@@ -50,8 +50,10 @@ public_html/
 2. Tải nội dung `web/dist/` lên `public_html/`.
 3. Tải thư mục `api/` lên `public_html/api/`. Không tải `api/tests/`, `api/router.php` và `api/.env`.
 4. Tạo CSDL và user MySQL trong bảng điều khiển iNET. Ghi lại tên CSDL, tên user, mật khẩu và host.
+   **Không chạy `api/bin/seed_local.php` trên hosting.** Tài khoản mặc định có mật khẩu công khai, chỉ dành cho máy cá nhân.
 5. Tạo `public_html/api/.env` từ `api/.env.example`:
    ```ini
+   APP_ENV=production
    APP_URL=https://<tên-miền-của-bạn>
    DB_HOST=<host CSDL do iNET cấp>
    DB_PORT=3306

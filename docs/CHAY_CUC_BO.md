@@ -308,6 +308,23 @@ Kết quả phải có: `classes`, `teachers`, `participants`, `module_events`, 
 
 > Nếu CSDL đã tồn tại từ trước, chạy lại `php api/bin/migrate.php` sẽ thêm các bảng còn thiếu (lược đồ dùng `CREATE TABLE IF NOT EXISTS`). Lệnh này không thay đổi các bảng đã có. Nếu cần đổi cột của một bảng đã có, phải tạo lại CSDL dev.
 
+### 5.1. Tài khoản mặc định để thử nghiệm
+
+Lệnh sau tạo sẵn hai tài khoản cho thử nghiệm cục bộ. Chạy sau `migrate.php`, và chỉ chạy khi `api/.env` có `APP_ENV=local` và `APP_URL` trỏ về `localhost`:
+
+```bash
+php api/bin/seed_local.php
+```
+
+| Vai trò | Tên đăng nhập | Mật khẩu mặc định | Ghi chú |
+|---|---|---|---|
+| Quản trị viên | `admin` | `Admin@12345` | Vào được trang quản trị (tab câu hỏi, tab giáo viên) |
+| Giáo viên mẫu | `giaovien1` | `Giaovien@12345` | Gắn lớp `8A1` |
+
+Khi đăng nhập bằng mật khẩu mặc định, giao diện hiện khối nhắc "Đổi mật khẩu" ở đầu trang. Có thể đổi ngay hoặc bỏ qua. Mật khẩu mới phải có từ 10 ký tự, gồm cả chữ và số, và không được là mật khẩu mặc định.
+
+> **Không chạy `seed_local.php` trên hosting.** Lệnh sẽ từ chối nếu `APP_ENV` không phải `local`, nhưng vẫn không được chạy trên hosting. Mật khẩu mặc định là công khai trong tài liệu này.
+
 ## 6. Cài gói phụ thuộc phía giao diện
 
 ```bash

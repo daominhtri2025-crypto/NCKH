@@ -1,9 +1,12 @@
 import { FormEvent, useCallback, useEffect, useState } from 'react';
 import { api, ApiError } from '../../lib/api';
 import Modal from '../../components/Modal';
+import PasswordReminder from '../../components/PasswordReminder';
 
 interface Props {
   onLogout: () => void;
+  mustChange: boolean;
+  onPasswordChanged: () => void;
 }
 
 interface AdminTeacher {
@@ -65,7 +68,7 @@ type Pending =
 type QuestionDialog = { mode: 'add' } | { mode: 'edit'; item: Question };
 
 /** Trang quản trị: chỉ tài khoản role = admin mới vào được. Máy chủ kiểm tra lại mọi thao tác. */
-export default function AdminDashboard({ onLogout }: Props) {
+export default function AdminDashboard({ onLogout, mustChange, onPasswordChanged }: Props) {
   const [tab, setTab] = useState<Tab>('teachers');
   const [teachers, setTeachers] = useState<AdminTeacher[] | null>(null);
   const [questions, setQuestions] = useState<QuestionSet | null>(null);
@@ -217,6 +220,8 @@ export default function AdminDashboard({ onLogout }: Props) {
         <h2>Quản trị hệ thống</h2>
         <button className="btn btn-ghost small-btn" onClick={logout}>Đăng xuất</button>
       </header>
+
+      {mustChange && <PasswordReminder onChanged={onPasswordChanged} />}
 
       <nav className="tabs" role="tablist" aria-label="Chức năng quản trị">
         <button role="tab" aria-selected={tab === 'teachers'} className={`tab ${tab === 'teachers' ? 'active' : ''}`} onClick={() => setTab('teachers')}>

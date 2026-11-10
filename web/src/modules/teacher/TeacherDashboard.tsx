@@ -1,5 +1,6 @@
 import { FormEvent, useEffect, useState } from 'react';
 import { api, ApiError } from '../../lib/api';
+import PasswordReminder from '../../components/PasswordReminder';
 
 interface Student {
   code: string;
@@ -18,6 +19,8 @@ interface Roster {
 
 interface Props {
   onLogout: () => void;
+  mustChange?: boolean;
+  onPasswordChanged?: () => void;
 }
 
 function bar(n: number, total: number) {
@@ -30,7 +33,7 @@ function bar(n: number, total: number) {
 }
 
 /** Tiến độ lớp. Chỉ hiển thị số lượng và trạng thái; không có câu trả lời của học sinh. */
-export default function TeacherDashboard({ onLogout }: Props) {
+export default function TeacherDashboard({ onLogout, mustChange = false, onPasswordChanged = () => {} }: Props) {
   const [roster, setRoster] = useState<Roster | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [cardCount, setCardCount] = useState(1);
@@ -117,6 +120,7 @@ export default function TeacherDashboard({ onLogout }: Props) {
   const t = roster.totals;
   return (
     <section>
+      {mustChange && <PasswordReminder onChanged={onPasswordChanged} />}
       <div className="round-head">
         <h2>Lớp {roster.class_code}</h2>
         <button className="link-btn" onClick={logout}>Đăng xuất</button>

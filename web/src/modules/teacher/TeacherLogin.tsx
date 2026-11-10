@@ -2,7 +2,7 @@ import { FormEvent, useState } from 'react';
 import { api, ApiError } from '../../lib/api';
 
 interface Props {
-  onLoggedIn: (role: 'teacher' | 'admin') => void;
+  onLoggedIn: (role: 'teacher' | 'admin', mustChange: boolean) => void;
   onBack: () => void;
 }
 
@@ -18,8 +18,10 @@ export default function TeacherLogin({ onLoggedIn, onBack }: Props) {
     setError(null);
     setSubmitting(true);
     try {
-      const data = await api.post<{ teacher: { role: 'teacher' | 'admin' } }>('/teacher/session', { username: username.trim(), password });
-      onLoggedIn(data.teacher.role === 'admin' ? 'admin' : 'teacher');
+      const data = await api.post<{ teacher: { role: 'teacher' | 'admin'; must_change_password: boolean } }>(
+        '/teacher/session', { username: username.trim(), password }
+      );
+      onLoggedIn(data.teacher.role === 'admin' ? 'admin' : 'teacher', data.teacher.must_change_password);
     } catch (err) {
       setError(err instanceof ApiError ? err.message : 'Không kết nối được máy chủ.');
     } finally {

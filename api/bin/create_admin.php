@@ -23,7 +23,7 @@ try {
         throw new RuntimeException("Tên đăng nhập {$username} đã tồn tại.");
     }
     $password = bin2hex(random_bytes(9));
-    $repo->create($username, password_hash($password, PASSWORD_DEFAULT), null, 'admin');
+    $repo->create($username, password_hash($password, PASSWORD_DEFAULT), null, 'admin', true);
 } catch (RuntimeException $e) {
     fwrite(STDERR, 'Lỗi: ' . $e->getMessage() . "\n");
     exit(1);

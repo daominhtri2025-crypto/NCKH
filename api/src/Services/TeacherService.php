@@ -56,7 +56,7 @@ final class TeacherService
             throw new RuntimeException("Tên đăng nhập {$username} đã tồn tại.");
         }
         $password = $this->randomPassword();
-        $this->teachers->create($username, password_hash($password, PASSWORD_DEFAULT), $classCode);
+        $this->teachers->create($username, password_hash($password, PASSWORD_DEFAULT), $classCode, 'teacher', true);
         return $password;
     }
 
@@ -71,7 +71,7 @@ final class TeacherService
             throw new RuntimeException("Không có tài khoản giáo viên '{$username}'.");
         }
         $password = $this->randomPassword();
-        $this->teachers->resetPassword((int) $row['id'], password_hash($password, PASSWORD_DEFAULT));
+        $this->teachers->resetPassword((int) $row['id'], password_hash($password, PASSWORD_DEFAULT), true);
         return $password;
     }
 
@@ -92,11 +92,17 @@ final class TeacherService
         $token = bin2hex(random_bytes(32));
         $this->teachers->setToken((int) $row['id'], hash('sha256', $token));
         return [
-            'teacher' => ['username' => $row['username'], 'class_code' => $row['class_code'], 'role' => $row['role']],
+            'teacher' => [
+                'username' => $row['username'],
+                'class_code' => $row['class_code'],
+                'role' => $row['role'],
+                'must_change_password' => (bool) $row['must_change_password'],
+            ],
             'token' => $token,
         ];
     }
 
+    /** Xác thực phiên cho mọi API giáo viên và quản trị. Cờ must_change_password chỉ để nhắc đổi mật khẩu. */
     public function authenticate(Request $request): array
     {
         $token = $request->cookie(self::COOKIE);
@@ -108,6 +114,38 @@ final class TeacherService
             throw new HttpException(401, 'Phiên đăng nhập đã hết hạn.');
         }
         return $row;
+    }
+
+    /**
+     * Đổi mật khẩu của chính mình. Yêu cầu đúng mật khẩu hiện tại, mật khẩu mới đủ mạnh và khác mật khẩu mặc định.
+     *
+     * @param array<string,mixed> $teacher
+     */
+    public function changeOwnPassword(array $teacher, string $current, string $new): void
+    {
+        if (!password_verify($current, (string) $teacher['password_hash'])) {
+            throw new HttpException(422, 'Mật khẩu hiện tại không đúng.');
+        }
+        $this->assertPasswordPolicy($new, $current);
+        $this->teachers->setOwnPassword((int) $teacher['id'], password_hash($new, PASSWORD_DEFAULT));
+        (new AuditRepository())->log('teacher', (int) $teacher['id'], 'change_password', null, null, null, null, (int) $teacher['id']);
+    }
+
+    /** Quy tắc mật khẩu: 10 đến 128 ký tự, có cả chữ và số, khác mật khẩu cũ và không phải mật khẩu mặc định công khai. */
+    public function assertPasswordPolicy(string $new, string $current = ''): void
+    {
+        if (strlen($new) < 10 || strlen($new) > 128) {
+            throw new HttpException(422, 'Mật khẩu mới phải có từ 10 đến 128 ký tự.');
+        }
+        if (!preg_match('/[A-Za-z]/', $new) || !preg_match('/\d/', $new)) {
+            throw new HttpException(422, 'Mật khẩu mới phải có cả chữ và số.');
+        }
+        if ($new === $current) {
+            throw new HttpException(422, 'Mật khẩu mới phải khác mật khẩu hiện tại.');
+        }
+        if (in_array($new, LocalSeeder::PUBLIC_DEFAULT_PASSWORDS, true)) {
+            throw new HttpException(422, 'Không được dùng mật khẩu mặc định đã công bố.');
+        }
     }
 
     public function logout(Request $request): void
@@ -249,7 +287,7 @@ final class TeacherService
             }
         }
         $password = $this->randomPassword();
-        $this->teachers->create($username, password_hash($password, PASSWORD_DEFAULT), $class, $role);
+        $this->teachers->create($username, password_hash($password, PASSWORD_DEFAULT), $class, $role, true);
         $newId = (int) $this->teachers->findByUsername($username)['id'];
         (new AuditRepository())->log('teacher', (int) $actor['id'], 'admin_create_teacher', null, null, null, null, $newId);
         return $password;
@@ -261,7 +299,7 @@ final class TeacherService
         $this->requireAdmin($actor);
         $target = $this->requireTeacherForAdmin($username);
         $password = $this->randomPassword();
-        $this->teachers->resetPassword((int) $target['id'], password_hash($password, PASSWORD_DEFAULT));
+        $this->teachers->resetPassword((int) $target['id'], password_hash($password, PASSWORD_DEFAULT), true);
         (new AuditRepository())->log('teacher', (int) $actor['id'], 'admin_reset_password', null, null, null, null, (int) $target['id']);
         return $password;
     }

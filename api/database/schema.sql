@@ -21,6 +21,8 @@ CREATE TABLE IF NOT EXISTS teachers (
   -- Quản trị viên (role = 'admin') không gắn lớp: class_code = NULL.
   class_code    VARCHAR(40)  NULL,
   role          ENUM('teacher','admin') NOT NULL DEFAULT 'teacher',
+  -- Mật khẩu tạm (mặc định local, hoặc vừa được cấp lại): bắt buộc đổi trước khi dùng các chức năng khác.
+  must_change_password TINYINT(1) NOT NULL DEFAULT 0,
   token_hash    CHAR(64)     NULL,
   created_at    DATETIME     NOT NULL,
   last_login_at DATETIME     NULL,

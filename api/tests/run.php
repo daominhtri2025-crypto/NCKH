@@ -893,5 +893,41 @@ $wide = AnToanSo\Support\Container::exporter()->wideCsv();
 check('Xuất dạng rộng vẫn hoạt động khi có nhiều phiên bản', str_starts_with($wide, 'pseudonym,class_code'));
 
 
+echo "Tài khoản mặc định (local) và đổi mật khẩu\n";
+AnToanSo\Support\Env::set('APP_ENV', 'production');
+$seedRefused = (function () {
+    try { (new AnToanSo\Services\LocalSeeder())->run(); return false; } catch (RuntimeException $e) { return str_contains($e->getMessage(), 'APP_ENV=local'); }
+})();
+check('Lệnh tạo tài khoản mặc định bị từ chối khi không phải local', $seedRefused);
+AnToanSo\Support\Env::set('APP_ENV', 'local');
+AnToanSo\Support\Env::set('APP_URL', 'https://antoanso.example.vn');
+$seedHostRefused = (function () {
+    try { (new AnToanSo\Services\LocalSeeder())->run(); return false; } catch (RuntimeException $e) { return str_contains($e->getMessage(), 'localhost'); }
+})();
+check('Lệnh tạo tài khoản mặc định bị từ chối khi APP_URL không phải localhost', $seedHostRefused);
+AnToanSo\Support\Env::set('APP_URL', 'http://localhost:5173');
+
+$created = (new AnToanSo\Services\LocalSeeder())->run();
+check('Tạo mới tài khoản admin và giaovien1', $created === ['admin', 'giaovien1'], implode(',', $created));
+check('Chạy lại không tạo trùng', (new AnToanSo\Services\LocalSeeder())->run() === []);
+$adminDefault = call('POST', '/api/teacher/session', ['username' => 'admin', 'password' => 'Admin@12345']);
+check('Đăng nhập admin mặc định (200), vai trò admin, báo cần đổi mật khẩu', $adminDefault->status === 200
+    && ($adminDefault->body['teacher']['role'] ?? '') === 'admin' && ($adminDefault->body['teacher']['must_change_password'] ?? false) === true);
+$gvDefault = call('POST', '/api/teacher/session', ['username' => 'giaovien1', 'password' => 'Giaovien@12345']);
+check('Đăng nhập giaovien1 mặc định, gắn lớp 8A1, báo cần đổi mật khẩu', $gvDefault->status === 200
+    && ($gvDefault->body['teacher']['class_code'] ?? '') === '8A1' && ($gvDefault->body['teacher']['must_change_password'] ?? false) === true);
+$defTok = (string) teacherTokenFrom($gvDefault);
+check('Phiên mặc định vẫn dùng được (nhắc chứ không chặn)', call('GET', '/api/teacher/roster', null, ['ats_teacher' => $defTok])->status === 200);
+check('Đổi mật khẩu sai mật khẩu hiện tại bị từ chối (422)', call('POST', '/api/teacher/password', ['current' => 'sai', 'new' => 'MatKhauMoi123'], ['ats_teacher' => $defTok])->status === 422);
+check('Mật khẩu mới quá ngắn bị từ chối (422)', call('POST', '/api/teacher/password', ['current' => 'Giaovien@12345', 'new' => 'abc1'], ['ats_teacher' => $defTok])->status === 422);
+check('Mật khẩu mới thiếu chữ hoặc số bị từ chối (422)', call('POST', '/api/teacher/password', ['current' => 'Giaovien@12345', 'new' => 'chiletters'], ['ats_teacher' => $defTok])->status === 422);
+check('Không được đặt lại mật khẩu mặc định công khai (422)', call('POST', '/api/teacher/password', ['current' => 'Giaovien@12345', 'new' => 'Admin@12345'], ['ats_teacher' => $defTok])->status === 422);
+check('Đổi mật khẩu thành công (200)', call('POST', '/api/teacher/password', ['current' => 'Giaovien@12345', 'new' => 'GiaoVien2026new'], ['ats_teacher' => $defTok])->status === 200);
+check('Mật khẩu cũ không còn đăng nhập được (401)', call('POST', '/api/teacher/session', ['username' => 'giaovien1', 'password' => 'Giaovien@12345'])->status === 401);
+$gvNew = call('POST', '/api/teacher/session', ['username' => 'giaovien1', 'password' => 'GiaoVien2026new']);
+check('Mật khẩu mới đăng nhập được và không còn cờ nhắc', $gvNew->status === 200 && ($gvNew->body['teacher']['must_change_password'] ?? true) === false);
+check('Đổi mật khẩu không có phiên đăng nhập bị từ chối (401)', call('POST', '/api/teacher/password', ['current' => 'x', 'new' => 'MatKhauMoi123'])->status === 401);
+
+
 echo "\nKết quả: {$passed} đạt, {$failed} lỗi.\n";
 exit($failed === 0 ? 0 : 1);

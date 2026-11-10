@@ -31,6 +31,7 @@ type View =
 
 export default function App() {
   const [view, setView] = useState<View>({ name: 'loading' });
+  const [mustChange, setMustChange] = useState(false);
   const [participant, setParticipant] = useState<Participant | null>(null);
   const [assessment, setAssessment] = useState<AssessmentStatus | null>(null);
 
@@ -116,17 +117,28 @@ export default function App() {
 
       {view.name === 'teacherLogin' && (
         <TeacherLogin
-          onLoggedIn={(role) => setView(role === 'admin' ? { name: 'admin' } : { name: 'teacher' })}
+          onLoggedIn={(role, mustChange) => {
+            setMustChange(mustChange);
+            setView(role === 'admin' ? { name: 'admin' } : { name: 'teacher' });
+          }}
           onBack={() => setView({ name: 'welcome' })}
         />
       )}
 
       {view.name === 'teacher' && (
-        <TeacherDashboard onLogout={() => setView({ name: 'welcome' })} />
+        <TeacherDashboard
+          onLogout={() => setView({ name: 'welcome' })}
+          mustChange={mustChange}
+          onPasswordChanged={() => setMustChange(false)}
+        />
       )}
 
       {view.name === 'admin' && (
-        <AdminDashboard onLogout={() => setView({ name: 'welcome' })} />
+        <AdminDashboard
+          onLogout={() => setView({ name: 'welcome' })}
+          mustChange={mustChange}
+          onPasswordChanged={() => setMustChange(false)}
+        />
       )}
 
       {view.name === 'login' && (

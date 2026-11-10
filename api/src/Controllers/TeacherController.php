@@ -20,6 +20,15 @@ final class TeacherController
         return Response::json(['teacher' => $result['teacher']])->withHeader('Set-Cookie: ' . $cookie);
     }
 
+    /** POST /api/teacher/password  body: {current, new} — đổi mật khẩu của chính mình (cũng là bước bắt buộc sau mật khẩu tạm). */
+    public function changePassword(Request $request): Response
+    {
+        $teacher = Container::teachers()->authenticate($request);
+        $body = $request->json();
+        Container::teachers()->changeOwnPassword($teacher, (string) ($body['current'] ?? ''), (string) ($body['new'] ?? ''));
+        return Response::json(['ok' => true, 'must_change_password' => false]);
+    }
+
     /** DELETE /api/teacher/session */
     public function logout(Request $request): Response
     {

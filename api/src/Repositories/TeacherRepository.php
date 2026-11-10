@@ -41,12 +41,12 @@ final class TeacherRepository
         return $row === false ? null : $row;
     }
 
-    public function create(string $username, string $passwordHash, ?string $classCode, string $role = 'teacher'): void
+    public function create(string $username, string $passwordHash, ?string $classCode, string $role = 'teacher', bool $mustChange = false): void
     {
         $stmt = $this->db()->prepare(
-            'INSERT INTO teachers (username, password_hash, class_code, role, created_at) VALUES (?, ?, ?, ?, ?)'
+            'INSERT INTO teachers (username, password_hash, class_code, role, must_change_password, created_at) VALUES (?, ?, ?, ?, ?, ?)'
         );
-        $stmt->execute([$username, $passwordHash, $classCode, $role, date('Y-m-d H:i:s')]);
+        $stmt->execute([$username, $passwordHash, $classCode, $role, $mustChange ? 1 : 0, date('Y-m-d H:i:s')]);
     }
 
     /** @return list<array<string,mixed>> */
@@ -81,10 +81,20 @@ final class TeacherRepository
         $stmt->execute([$id]);
     }
 
-    /** Đặt mật khẩu mới và thu hồi mọi phiên đăng nhập hiện có của giáo viên. */
-    public function resetPassword(int $id, string $passwordHash): void
+    /**
+     * Đặt mật khẩu mới và thu hồi mọi phiên đăng nhập hiện có của giáo viên.
+     * $mustChange = true khi mật khẩu là mật khẩu tạm do nhóm kỹ thuật hoặc quản trị cấp.
+     */
+    public function resetPassword(int $id, string $passwordHash, bool $mustChange = true): void
     {
-        $stmt = $this->db()->prepare('UPDATE teachers SET password_hash = ?, token_hash = NULL WHERE id = ?');
+        $stmt = $this->db()->prepare('UPDATE teachers SET password_hash = ?, must_change_password = ?, token_hash = NULL WHERE id = ?');
+        $stmt->execute([$passwordHash, $mustChange ? 1 : 0, $id]);
+    }
+
+    /** Người dùng tự đổi mật khẩu: giữ phiên hiện tại, xóa cờ bắt buộc đổi. */
+    public function setOwnPassword(int $id, string $passwordHash): void
+    {
+        $stmt = $this->db()->prepare('UPDATE teachers SET password_hash = ?, must_change_password = 0 WHERE id = ?');
         $stmt->execute([$passwordHash, $id]);
     }
 
