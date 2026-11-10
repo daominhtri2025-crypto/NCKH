@@ -9,6 +9,37 @@ Cấu hình cổng mặc định:
 | API PHP (Built-in Server) | `http://127.0.0.1:8000` | Dùng `127.0.0.1`, không dùng `localhost`, để khớp với proxy của Vite |
 | Giao diện (Vite dev server) | `http://localhost:5173` | Trình duyệt mở địa chỉ này. Vite chuyển tiếp `/api` về cổng 8000 |
 
+## Chuẩn bị: phần mềm cần cài và ứng dụng để chạy từng lệnh
+
+### Phần mềm cần cài
+
+| Phần mềm | Phiên bản | Dùng để | Cài ở đâu | Kiểm tra |
+|---|---|---|---|---|
+| Git for Windows | Mới nhất | Lấy mã nguồn. Cài kèm **Git Bash** | git-scm.com | `git --version` |
+| Node.js | 22 LTS (không dùng bản cũ hơn 20.19) | Cài gói giao diện bằng `npm`, chạy Vite | nodejs.org | `node -v` và `npm -v` |
+| XAMPP | 8.2 (PHP 8.2, MariaDB 10.4) | PHP và MySQL trên Windows | apachefriends.org | `C:\xampp\php\php.exe -v` |
+| PHP | 8.1 trở lên | Chạy API | XAMPP (Windows). macOS: `brew install php`. Linux: `sudo apt install php` | `php -v` |
+| MySQL hoặc MariaDB | MySQL 8.0 hoặc MariaDB 10.6 trở lên | Cơ sở dữ liệu | XAMPP (Windows). macOS: `brew install mariadb`. Linux: `sudo apt install mariadb-server` | `mysql --version` |
+| Trình duyệt | Chrome hoặc Edge mới | Mở giao diện | Có sẵn | — |
+| VS Code (tùy chọn) | Mới nhất | Sửa tệp `.env` | code.visualstudio.com | — |
+
+### Ứng dụng dùng cho từng khối lệnh
+
+Mỗi khối lệnh trong tài liệu có một dòng "Chạy trong" ngay trên khối. Chạy đúng ứng dụng để tránh lỗi cú pháp.
+
+| Ứng dụng | Hệ điều hành | Dùng cho | Đường dẫn dự án |
+|---|---|---|---|
+| **Command Prompt (cmd)** hoặc PowerShell | Windows | Khối có nhãn cmd: `set`, `cd /d`, lệnh `.bat`, đường dẫn có `"C:\xampp\..."` | `D:\UNG_DUNG_VIBE\NCKH` |
+| **Git Bash** | Windows | Khối có nhãn Git Bash: `git`, `php`, `npm`, `mysql` với đường dẫn kiểu Unix | `/d/UNG_DUNG_VIBE/NCKH` |
+| **Terminal** | macOS, Linux | Như Git Bash | `~/NCKH` |
+| **MySQL client** (`mysql.exe` của XAMPP) hoặc **phpMyAdmin** (tab SQL) | Mọi hệ điều hành | Tạo cơ sở dữ liệu, nạp schema (khối SQL) | — |
+| **Trình duyệt** | Mọi hệ điều hành | Mở `http://localhost:5173`, đăng nhập thử | — |
+
+Lưu ý khi làm việc trên Windows:
+- Trong **Git Bash**, `cd /d D:\...` không chạy được. Dùng `cd /d/UNG_DUNG_VIBE/NCKH`, hoặc `cd /d/...` theo đường dẫn thực tế của bạn.
+- Trong **cmd**, dùng `\` trong đường dẫn và `cd /d` khi chuyển ổ đĩa.
+- Chạy chương trình chờ (API, Vite) ở hai cửa sổ riêng và giữ cả hai mở trong khi dùng giao diện.
+
 ## 0. Windows với XAMPP (quy trình đã chạy thành công)
 
 Phần này dành cho máy Windows dùng XAMPP (MariaDB 10.4.32, PHP 8.2.12). Các đường dẫn giả định XAMPP cài ở `C:\xampp`.
@@ -17,6 +48,9 @@ Phần này dành cho máy Windows dùng XAMPP (MariaDB 10.4.32, PHP 8.2.12). C�
 
 1. Mở **XAMPP Control Panel**, bấm **Start** ở dòng **MySQL**.
 2. Kiểm tra PHP có `pdo_mysql` và `mysqli`:
+
+*Chạy trong: **Command Prompt (cmd)** trên Windows (hoặc PowerShell).*
+
    ```bat
    "C:\xampp\php\php.exe" -m | findstr /i "mysqli pdo_mysql"
    ```
@@ -26,6 +60,8 @@ Phần này dành cho máy Windows dùng XAMPP (MariaDB 10.4.32, PHP 8.2.12). C�
 ### 0.2. Tạo CSDL, user và nạp schema (tự động)
 
 Từ thư mục gốc dự án, chạy:
+
+*Chạy trong: **Command Prompt (cmd)** trên Windows (hoặc PowerShell).*
 
 ```bat
 cd /d D:\UNG_DUNG_VIBE\NCKH
@@ -40,12 +76,16 @@ Nếu muốn làm từng bước thủ công, xem phụ lục A cuối tài li�
 
 **Cửa sổ 1: API PHP** (từ thư mục gốc):
 
+*Chạy trong: **Command Prompt (cmd)** trên Windows (hoặc PowerShell).*
+
 ```bat
 cd /d D:\UNG_DUNG_VIBE\NCKH
 "C:\xampp\php\php.exe" -S 127.0.0.1:8000 -t api api\router.php
 ```
 
 **Cửa sổ 2: giao diện Vite** (lệnh `npm` phải chạy trong thư mục `web`):
+
+*Chạy trong: **Command Prompt (cmd)** trên Windows (hoặc PowerShell).*
 
 ```bat
 cd /d D:\UNG_DUNG_VIBE\NCKH\web
@@ -60,6 +100,8 @@ Mở trình duyệt tại `http://localhost:5173`.
 
 Ở cửa sổ thứ ba, trong thư mục gốc:
 
+*Chạy trong: **Command Prompt (cmd)** trên Windows (hoặc PowerShell).*
+
 ```bat
 curl http://127.0.0.1:8000/api/health
 ```
@@ -67,6 +109,8 @@ curl http://127.0.0.1:8000/api/health
 Kết quả phải là `{"ok":true}`.
 
 Muốn chạy smoke test luồng học sinh (cần Node.js và một thẻ mã chưa kích hoạt):
+
+*Chạy trong: **Command Prompt (cmd)** trên Windows (hoặc PowerShell).*
 
 ```bat
 cd /d D:\UNG_DUNG_VIBE\NCKH
@@ -90,6 +134,8 @@ node scripts\smoke-test.mjs
 
 Cần cài Git for Windows nếu máy chưa có lệnh `git`. Dừng API và Vite trước (mục 0.3, Ctrl + C ở hai cửa sổ), rồi chạy trong cmd:
 
+*Chạy trong: **Command Prompt (cmd)** trên Windows (hoặc PowerShell).*
+
 ```bat
 cd /d D:\UNG_DUNG_VIBE\NCKH
 git status
@@ -112,9 +158,13 @@ Sau đó chạy lại hai cửa sổ như mục 0.3.
 
 Dùng khi không chạy được script ở mục 0.2.
 
+*Chạy trong: **Command Prompt (cmd)** trên Windows (hoặc PowerShell).*
+
 ```bat
 "C:\xampp\mysql\bin\mysql.exe" -u root
 ```
+
+*Chạy trong: **MySQL client** (`mysql.exe` của XAMPP) hoặc **phpMyAdmin**, tab SQL.*
 
 ```sql
 REPAIR TABLE mysql.db;
@@ -134,9 +184,13 @@ EXIT;
 
 Sau đó đăng nhập tương tác và nạp schema:
 
+*Chạy trong: **Command Prompt (cmd)** trên Windows (hoặc PowerShell).*
+
 ```bat
 "C:\xampp\mysql\bin\mysql.exe" -u antoanso -p antoanso_dev
 ```
+
+*Chạy trong: **MySQL client** (`mysql.exe` của XAMPP) hoặc **phpMyAdmin**, tab SQL.*
 
 ```sql
 SOURCE D:/UNG_DUNG_VIBE/NCKH/api/database/schema.sql;
@@ -145,6 +199,8 @@ EXIT;
 ```
 
 Tạo `api\.env` từ `api\.env.example`, đặt `DB_PASS=Antoanso2026`, rồi tạo lớp:
+
+*Chạy trong: **Command Prompt (cmd)** trên Windows (hoặc PowerShell).*
 
 ```bat
 "C:\xampp\php\php.exe" api\bin\add_class.php 8A1 "Lop 8A1" "THCS Thu nghiem"
@@ -161,6 +217,8 @@ Tạo `api\.env` từ `api\.env.example`, đặt `DB_PASS=Antoanso2026`, rồi t
 
 ## 2. Lấy mã nguồn đúng nhánh
 
+*Chạy trong: **Git Bash** trên Windows, hoặc **Terminal** trên macOS và Linux.*
+
 ```bash
 git clone https://github.com/daominhtri2025-crypto/NCKH.git
 cd NCKH
@@ -173,6 +231,8 @@ Làm mục này khi có commit mới trên nhánh. Dừng API và giao diện tr
 
 **Bước 1. Kiểm tra không có thay đổi cục bộ chưa commit:**
 
+*Chạy trong: **Git Bash** trên Windows, hoặc **Terminal** trên macOS và Linux.*
+
 ```bash
 cd NCKH
 git status
@@ -182,12 +242,16 @@ Nếu có tệp đã sửa, không ghi đè. Hoặc commit, hoặc cất tạm b
 
 **Bước 2. Lấy mã mới:**
 
+*Chạy trong: **Git Bash** trên Windows, hoặc **Terminal** trên macOS và Linux.*
+
 ```bash
 git fetch origin
 git pull origin claude/gifted-brown-mfv1i8
 ```
 
 **Bước 3. Xem tệp nào đã thay đổi để biết cần làm thêm gì:**
+
+*Chạy trong: **Git Bash** trên Windows, hoặc **Terminal** trên macOS và Linux.*
 
 ```bash
 git diff --name-only ORIG_HEAD HEAD
@@ -202,6 +266,8 @@ git diff --name-only ORIG_HEAD HEAD
 
 **Bước 4. Kiểm thử để xác nhận mã mới chạy đúng** (cần CSDL `antoanso_test` đã tạo ở mục 3):
 
+*Chạy trong: **Git Bash** trên Windows, hoặc **Terminal** trên macOS và Linux.*
+
 ```bash
 DB_NAME=antoanso_test php api/tests/run.php
 ```
@@ -211,6 +277,8 @@ Dòng cuối phải là `Kết quả: ... đạt, 0 lỗi.`
 ### 2.2. Đổi cột của bảng đã có (CSDL dev)
 
 Lược đồ không có lệnh `ALTER`. Nếu một bảng đã có thay đổi cột, lệnh `migrate.php` không sửa được bảng cũ. Khi đó cần tạo lại CSDL dev. **Thao tác này xóa dữ liệu thử nghiệm.** Nếu cần giữ dữ liệu, sao lưu trước:
+
+*Chạy trong: **Git Bash** trên Windows, hoặc **Terminal** trên macOS và Linux.*
 
 ```bash
 mysqldump -u antoanso -p antoanso_dev > backup_dev.sql
@@ -225,11 +293,15 @@ Sau đó tạo lại tài khoản giáo viên thử và thẻ mã nếu cần (m
 
 Đăng nhập MySQL với quyền quản trị (trên Windows dùng cùng lệnh trong PowerShell hoặc Command Prompt):
 
+*Chạy trong: **Git Bash** trên Windows, hoặc **Terminal** trên macOS và Linux.*
+
 ```bash
 mysql -u root -p
 ```
 
 Trong dấu nhắc `mysql>`, chạy lần lượt các lệnh sau (đổi `doi_mat_khau_nay` thành mật khẩu của em):
+
+*Chạy trong: **MySQL client** (`mysql.exe` của XAMPP) hoặc **phpMyAdmin**, tab SQL.*
 
 ```sql
 CREATE DATABASE antoanso_dev CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -247,6 +319,8 @@ EXIT;
 ## 4. Cấu hình API (`api/.env`)
 
 Sao chép tệp mẫu:
+
+*Chạy trong: **Git Bash** trên Windows, hoặc **Terminal** trên macOS và Linux.*
 
 ```bash
 cp api/.env.example api/.env
@@ -280,17 +354,23 @@ Có hai cách, chọn một.
 
 **Cách A: dùng lệnh import SQL trực tiếp** (chạy từ thư mục gốc của dự án):
 
+*Chạy trong: **Git Bash** trên Windows, hoặc **Terminal** trên macOS và Linux.*
+
 ```bash
 mysql -u antoanso -p antoanso_dev < api/database/schema.sql
 ```
 
 **Cách B: dùng script PHP** (đọc cấu hình từ `api/.env`):
 
+*Chạy trong: **Git Bash** trên Windows, hoặc **Terminal** trên macOS và Linux.*
+
 ```bash
 php api/bin/migrate.php
 ```
 
 Sau đó tạo một lớp thử, rồi in thẻ mã cho lớp đó (học sinh kích hoạt thẻ, không tự đăng ký):
+
+*Chạy trong: **Git Bash** trên Windows, hoặc **Terminal** trên macOS và Linux.*
 
 ```bash
 php api/bin/add_class.php 8A1 "Lớp 8A1" "THCS Thử nghiệm"
@@ -299,6 +379,8 @@ php api/bin/add_class.php 8A1 "Lớp 8A1" "THCS Thử nghiệm"
 > **Cảnh báo:** các lệnh `php api/bin/*.php` đọc CSDL từ `api/.env`. Nếu `DB_NAME` trong `api/.env` đang là `antoanso_test`, lớp và dữ liệu sẽ bị ghi vào CSDL test, và bộ kiểm thử sẽ xóa chúng. Trước khi chạy, kiểm tra bằng `grep DB_NAME api/.env`. Muốn ghi vào CSDL khác, đặt biến môi trường trước lệnh, ví dụ `DB_NAME=antoanso_dev php api/bin/add_class.php ...`.
 
 Kiểm tra bảng đã được tạo:
+
+*Chạy trong: **Git Bash** trên Windows, hoặc **Terminal** trên macOS và Linux.*
 
 ```bash
 mysql -u antoanso -p antoanso_dev -e "SHOW TABLES;"
@@ -311,6 +393,8 @@ Kết quả phải có: `classes`, `teachers`, `participants`, `module_events`, 
 ### 5.1. Tài khoản mặc định để thử nghiệm
 
 Lệnh sau tạo sẵn hai tài khoản cho thử nghiệm cục bộ. Chạy sau `migrate.php`, và chỉ chạy khi `api/.env` có `APP_ENV=local` và `APP_URL` trỏ về `localhost`:
+
+*Chạy trong: **Git Bash** trên Windows, hoặc **Terminal** trên macOS và Linux.*
 
 ```bash
 php api/bin/seed_local.php
@@ -326,6 +410,8 @@ Khi đăng nhập bằng mật khẩu mặc định, giao diện hiện khối n
 > **Không chạy `seed_local.php` trên hosting.** Lệnh sẽ từ chối nếu `APP_ENV` không phải `local`, nhưng vẫn không được chạy trên hosting. Mật khẩu mặc định là công khai trong tài liệu này.
 
 ## 6. Cài gói phụ thuộc phía giao diện
+
+*Chạy trong: **Git Bash** trên Windows, hoặc **Terminal** trên macOS và Linux.*
 
 ```bash
 cd web
@@ -343,6 +429,8 @@ Cần **hai cửa sổ Terminal**, mở từ thư mục gốc của dự án.
 
 **Terminal 1: API PHP**
 
+*Chạy trong: **Git Bash** trên Windows, hoặc **Terminal** trên macOS và Linux.*
+
 ```bash
 php -S 127.0.0.1:8000 -t api api/router.php
 ```
@@ -350,6 +438,8 @@ php -S 127.0.0.1:8000 -t api api/router.php
 Giữ cửa sổ này mở. Khi chạy đúng, sẽ thấy dòng `Development Server ... started`.
 
 Nếu muốn chọn CSDL cho máy chủ mà không sửa `api/.env`, đặt biến môi trường trước lệnh, ví dụ (macOS/Linux):
+
+*Chạy trong: **Git Bash** trên Windows, hoặc **Terminal** trên macOS và Linux.*
 
 ```bash
 DB_NAME=antoanso_dev php -S 127.0.0.1:8000 -t api api/router.php
@@ -363,6 +453,8 @@ $env:DB_NAME="antoanso_dev"; php -S 127.0.0.1:8000 -t api api/router.php
 
 **Terminal 2: giao diện Vite**
 
+*Chạy trong: **Git Bash** trên Windows, hoặc **Terminal** trên macOS và Linux.*
+
 ```bash
 cd web
 npm run dev
@@ -371,6 +463,8 @@ npm run dev
 Mở trình duyệt tại `http://localhost:5173`.
 
 Kiểm tra nhanh cả hai dịch vụ (ở Terminal thứ ba):
+
+*Chạy trong: **Git Bash** trên Windows, hoặc **Terminal** trên macOS và Linux.*
 
 ```bash
 curl http://127.0.0.1:8000/api/health
@@ -385,6 +479,8 @@ Cả hai phải trả về `{"ok":true}`.
 
 Dùng CSDL riêng có tên kết thúc bằng `_test`. Lệnh này **xóa sạch** dữ liệu trong `antoanso_test`.
 
+*Chạy trong: **Git Bash** trên Windows, hoặc **Terminal** trên macOS và Linux.*
+
 ```bash
 DB_NAME=antoanso_test php api/tests/run.php
 ```
@@ -395,6 +491,8 @@ Kết quả mong đợi: dòng cuối là `Kết quả: 205 đạt, 0 lỗi.` (s
 
 ### 8.2. Kiểm thử đơn vị bộ đánh giá mật khẩu (Node)
 
+*Chạy trong: **Git Bash** trên Windows, hoặc **Terminal** trên macOS và Linux.*
+
 ```bash
 cd web
 npm run test:unit
@@ -404,6 +502,8 @@ cd ..
 Kết quả mong đợi: `# pass 14` và `# fail 0`.
 
 ### 8.3. Kiểm tra kiểu và build giao diện
+
+*Chạy trong: **Git Bash** trên Windows, hoặc **Terminal** trên macOS và Linux.*
 
 ```bash
 cd web
@@ -418,11 +518,15 @@ Lệnh này chạy `tsc --noEmit` rồi `vite build`. Không được có lỗi.
 Chạy khi **API và Vite đang chạy** (mục 7). Kịch bản đi qua đường `localhost:5173` như trình duyệt, và thực hiện:
 kích hoạt thẻ mã → pre-test → đăng nhập lại bằng mã → Module 1, 2, 3 → post-test → kiểm tra khóa delayed.
 
+*Chạy trong: **Git Bash** trên Windows, hoặc **Terminal** trên macOS và Linux.*
+
 ```bash
 node scripts/smoke-test.mjs
 ```
 
 Tùy chọn qua biến môi trường:
+
+*Chạy trong: **Git Bash** trên Windows, hoặc **Terminal** trên macOS và Linux.*
 
 ```bash
 SMOKE_CARD=XXXX-XXXX SMOKE_ADMIN_TOKEN=token_cua_em node scripts/smoke-test.mjs
@@ -439,6 +543,8 @@ Kết quả mong đợi: `Kết quả: N đạt, 0 lỗi.` và mã thoát 0.
 Nếu smoke test báo "Thẻ phải chưa được kích hoạt", hãy in thẻ mới bằng `issue_cards.php`, vì mỗi thẻ chỉ kích hoạt một lần.
 
 ### 8.5. Thẻ mã và tài khoản giáo viên (thử nghiệm)
+
+*Chạy trong: **Git Bash** trên Windows, hoặc **Terminal** trên macOS và Linux.*
 
 ```bash
 php api/bin/issue_cards.php 8A1 5 the_thu.csv
@@ -473,6 +579,12 @@ Lưu ý: CSDL dev tạo trước khi có thẻ mã cần tạo lại (xóa và n
 | Xuất CSV trả về 401 | Token gửi lên không khớp | Kiểm tra header `X-Admin-Token` |
 | Cấp lại thẻ trả về 422 "Cần xác nhận đã đối chiếu" | Yêu cầu thiếu `ledger_confirmed: true` | Trên giao diện: tích ô xác nhận trước khi bấm nút. Trên dòng lệnh: thêm cờ `--da-doi-chieu-so` |
 | `reissue_card.php` in ra "Cách dùng" và thoát | Thiếu cờ `--da-doi-chieu-so` | Đây là chủ ý. Chỉ thêm cờ sau khi đã đối chiếu sổ phát thẻ |
+| `mysql: command not found` trong Git Bash | `mysql.exe` không nằm trong PATH | Dùng đường dẫn đầy đủ, ví dụ `/c/xampp/mysql/bin/mysql.exe -u antoanso -p` |
+| `cd /d D:\...` báo lỗi trong Git Bash | Git Bash dùng đường dẫn kiểu Unix | Dùng `cd /d/UNG_DUNG_VIBE/NCKH` (xem mục Chuẩn bị) |
+| `'php' is not recognized` trong cmd | PHP của XAMPP chưa có trong PATH | Gọi đầy đủ `"C:\xampp\php\php.exe"`, hoặc thêm `C:\xampp\php` vào PATH |
+| `npm` báo lỗi phiên bản Node hoặc Vite không chạy | Node.js quá cũ | Cài Node.js 22 LTS rồi mở lại cửa sổ dòng lệnh |
+| Đăng nhập giáo viên bị "Hãy đổi mật khẩu tạm" | Không còn dùng sau bản cập nhật | Khối nhắc chỉ hiện ở đầu trang, không chặn thao tác. Bấm **Đổi mật khẩu** |
+| `seed_local.php` báo "Chỉ chạy khi APP_ENV=local" | `api/.env` không phải môi trường local, hoặc `APP_URL` không phải localhost | Đặt `APP_ENV=local` và `APP_URL=http://localhost:5173` trong `api/.env` |
 | `git pull` báo "local changes would be overwritten" | Có tệp đã sửa chưa commit | `git stash`, pull lại, rồi `git stash pop` (hoặc commit trước) |
 | `git pull` báo "Need to specify how to reconcile divergent branches" | Cấu hình git mặc định chưa chọn cách merge | Chạy một lần `git config pull.rebase false`, rồi pull lại |
 | Sau pull, lỗi `Cannot find module` hoặc lỗi npm | `package.json` đổi nhưng chưa cài | `cd web` rồi `npm install` |

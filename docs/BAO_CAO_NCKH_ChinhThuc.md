@@ -14,7 +14,7 @@ Hồ sơ dự thi Khoa học kỹ thuật cấp học dành cho học sinh trung
 
 Nghiên cứu này thiết kế, xây dựng và kiểm chứng kỹ thuật một hệ thống web tương tác về an toàn thông tin dành cho học sinh trung học cơ sở, cùng mô hình đo lường nhận thức và hành vi theo ba giai đoạn: tiền kiểm, hậu kiểm và theo dõi sau 28 ngày. Hệ thống gồm ba hoạt động: sân chơi tình huống lừa đảo, nhận diện tên miền giả mạo bằng quy tắc đọc từ phải sang trái, và phòng thí nghiệm tài khoản gồm đánh giá mật khẩu cục bộ và checklist quyền riêng tư. Thiết kế bảo đảm ẩn danh bằng mã giả danh, không thu họ tên, email hay số điện thoại; mật khẩu thử nghiệm không rời trình duyệt.
 
-Hệ thống đã hoàn thành các thành phần chức năng và đạt toàn bộ các kiểm thử tích hợp (205 kiểm tra), kiểm thử đơn vị (14 kiểm thử) và kiểm thử luồng người dùng (23 bước). Nghiên cứu chưa thu thập dữ liệu thực nghiệm; vì vậy báo cáo trình bày thiết kế, phương pháp và khung phân tích, không trình bày kết quả. Ba giả thuyết về sự gia tăng điểm nhận thức và hành vi sau can thiệp, cùng khả năng duy trì kết quả sau 28 ngày, sẽ được kiểm định khi có dữ liệu.
+Hệ thống đã hoàn thành các thành phần chức năng và đạt toàn bộ các kiểm thử tích hợp (290 kiểm tra), kiểm thử đơn vị (14 kiểm thử) và kiểm thử luồng người dùng (23 bước). Nghiên cứu chưa thu thập dữ liệu thực nghiệm; vì vậy báo cáo trình bày thiết kế, phương pháp và khung phân tích, không trình bày kết quả. Ba giả thuyết về sự gia tăng điểm nhận thức và hành vi sau can thiệp, cùng khả năng duy trì kết quả sau 28 ngày, sẽ được kiểm định khi có dữ liệu.
 
 **Từ khóa:** an toàn thông tin; giáo dục an toàn số; học sinh trung học cơ sở; hệ thống web tương tác; đo lường tiền–hậu–theo dõi; quyền riêng tư theo thiết kế.
 
@@ -291,13 +291,15 @@ Hệ thống đã hoàn thành các thành phần chức năng: kích hoạt th�
 
 | Loại kiểm thử | Phạm vi | Kết quả |
 |---|---|---|
-| Tích hợp API | Kích hoạt thẻ, cấp lại thẻ (có xác nhận đối chiếu sổ và nhật ký), xác thực, tài khoản giáo viên, ba hoạt động, khảo sát, khóa trình tự, xuất dữ liệu, bảo mật | 205 kiểm tra, đạt toàn bộ |
+| Tích hợp API | Kích hoạt thẻ, cấp lại thẻ (có xác nhận đối chiếu sổ và nhật ký), xác thực, tài khoản giáo viên và quản trị, đổi mật khẩu, quản lý câu hỏi theo phiên bản, ba hoạt động, khảo sát, khóa trình tự, xuất dữ liệu, bảo mật | 290 kiểm tra, đạt toàn bộ |
 | Đơn vị | Bộ đánh giá mật khẩu | 14 kiểm thử, đạt toàn bộ |
 | Biên dịch và đóng gói giao diện | Kiểm tra kiểu nghiêm ngặt, đóng gói | Đạt |
 | Luồng người dùng qua máy chủ trung gian | Từ kích hoạt thẻ đến khảo sát theo dõi | 23 bước, đạt toàn bộ |
 | Trình duyệt | Luồng học sinh, khóa hoạt động, bố cục điện thoại và máy tính | Đạt |
 
 Kiểm thử bảo mật xác nhận các hành vi sau: yêu cầu ghi từ nguồn không được phép bị từ chối; yêu cầu không đúng định dạng JSON bị từ chối; truy cập khi chưa đăng nhập bị từ chối; đáp án đúng không xuất hiện trong phản hồi khảo sát; và mật khẩu thử nghiệm không xuất hiện trong bất kỳ yêu cầu gửi đi nào. Các kiểm thử được chạy trong quá trình phát triển và cần chạy lại trước khi nộp.
+
+Trang quản trị (tài khoản có vai trò quản trị) quản lý tài khoản giáo viên và bộ câu hỏi khảo sát. Mọi API quản trị kiểm tra vai trò ở máy chủ; giao diện không phải chốt chặn duy nhất. Sửa câu hỏi tạo phiên bản mới, và học sinh đã bắt đầu làm khảo sát giữ phiên bản đã ghim, nên dữ liệu thu được vẫn so sánh được giữa các giai đoạn. Tài khoản mặc định cho thử nghiệm cục bộ được tạo bằng lệnh riêng, chỉ chạy khi môi trường là cục bộ, và có cờ nhắc đổi mật khẩu ở lần đăng nhập đầu tiên.
 
 ## 3.2. Cấu trúc dữ liệu, codebook và định dạng xuất
 
@@ -311,10 +313,12 @@ Các bảng dữ liệu chính được mô tả trong Bảng 6.
 |---|---|---|
 | classes | Mã lớp, tên lớp, tên cơ sở, thời điểm tạo | Danh sách lớp tham gia |
 | participants | Mã học sinh, mã lớp, trạng thái thẻ (đã phát hoặc đã kích hoạt), băm token phiên, phiên bản phiếu, thời điểm kích hoạt, số lần cấp lại thẻ | Định danh giả và kiểm soát phiên |
-| teachers | Tên đăng nhập, băm mật khẩu, lớp được gán, băm token phiên | Tài khoản giáo viên, chỉ xem tiến độ lớp được gán |
+| teachers | Tên đăng nhập, băm mật khẩu, vai trò (giáo viên hoặc quản trị), lớp được gán (trống với quản trị), cờ đổi mật khẩu tạm, băm token phiên | Tài khoản giáo viên và quản trị viên. Giáo viên chỉ xem tiến độ lớp được gán; quản trị viên quản lý tài khoản và câu hỏi nhưng không xem tiến độ lớp |
 | module_events | Mã học sinh, hoạt động, mã mục, số lần thử, lựa chọn, đúng hoặc sai, thời gian phản hồi, cờ gợi ý, phiên bản nội dung | Nhật ký ba hoạt động |
 | assessments_self | Mã học sinh, giai đoạn, mã câu, đáp án hoặc mức, đúng hoặc sai, thời gian phản hồi, phiên bản | Kết quả khảo sát ba giai đoạn |
-| audit_log | Thời điểm, loại người thực hiện (giáo viên hoặc nhóm kỹ thuật), mã người thực hiện, thao tác, mã học sinh, mã cũ, mã mới, việc đã xác nhận đối chiếu sổ | Nhật ký trách nhiệm cho thao tác cấp lại thẻ; không đưa vào tệp xuất nghiên cứu |
+| audit_log | Thời điểm, loại người thực hiện (giáo viên hoặc nhóm kỹ thuật), mã người thực hiện, thao tác, mã học sinh, mã cũ, mã mới, việc đã xác nhận đối chiếu sổ | Nhật ký trách nhiệm cho thao tác cấp lại thẻ; không đưa vào tệp xuất nghiên cứu, chi tiết thao tác (phiên bản và mã câu) |
+| survey_versions | Mã phiên bản, tiêu đề, lời dẫn, thang đo hành vi, cờ hiện hành, thời điểm tạo, người tạo | Lịch sử phiên bản bộ câu hỏi; mỗi phiên bản bất biến sau khi tạo |
+| survey_items | Mã phiên bản, mã câu, thứ tự, nội dung câu hỏi (dạng JSON) | Nội dung từng câu của mỗi phiên bản; học sinh chấm theo phiên bản đã ghim |
 
 Bảng `audit_log` không chứa câu trả lời và không được xuất cùng dữ liệu nghiên cứu; mục đích duy nhất là truy vết trách nhiệm khi cấp lại thẻ. Ràng buộc duy nhất trên `assessments_self` theo bộ ba (học sinh, giai đoạn, mã câu) bảo đảm mỗi câu chỉ được trả lời một lần trong một giai đoạn. Cột `is_safe` trong `module_events` mang nghĩa phân loại đúng (hoặc đạt yêu cầu) đối với các hoạt động.
 
@@ -399,10 +403,11 @@ Bảng dưới đây là khung để ghi kết quả khi có dữ liệu. Các �
 | G8 | Đăng nhập bằng mã chưa giới hạn tần suất | Mã có thể bị thử nhiều lần | Bổ sung giới hạn theo địa chỉ mạng trước khi triển khai rộng |
 | G9 | Tên mục menu ứng dụng mạng xã hội thay đổi theo phiên bản | Hướng dẫn có thể lỗi thời | Đối chiếu với ứng dụng thực tế trước khi dùng |
 | G10 | Chưa kiểm thử trên máy chủ lưu trữ thực tế | Chưa xác nhận hiệu năng triển khai | Kiểm thử trên máy chủ thực tế trước khi thu dữ liệu |
-| G11 | Chưa có giao diện quản trị cho giáo viên | Phụ thuộc nhóm nghiên cứu để quản lý lớp | Phát triển giao diện quản trị đơn giản ở giai đoạn sau |
+| G11 | Thao tác in thẻ, tạo lớp và xem nhật ký vẫn dùng dòng lệnh hoặc truy vấn trực tiếp | Nhóm kỹ thuật cần kỹ năng dòng lệnh; nhật ký chưa có màn hình xem | Trang quản trị đã quản lý tài khoản giáo viên và câu hỏi; bổ sung màn hình nhật ký trong giai đoạn sau |
 | G12 | Quy mô mẫu nhỏ | Độ mạnh thống kê hạn chế | Báo cáo kích thước hiệu ứng và khoảng tin cậy; không khái quát hóa |
 | G13 | Giáo viên phát thẻ nên biết danh tính gắn với mã | Ẩn danh không đầy đủ đối với giáo viên | Quản lý sổ phát thẻ riêng; nêu trong phiếu đồng ý; hội đồng đạo đức phê duyệt |
 | G14 | Cấp lại thẻ phụ thuộc sổ phát thẻ | Không có sổ thì không tìm lại được học sinh có mã cũ | Bảo quản sổ phát thẻ; bắt buộc xác nhận đối chiếu sổ trước khi cấp lại; ghi nhật ký cấp lại |
+| G15 | Sửa câu hỏi khảo sát giữa chừng có thể làm sai lệch so sánh pre và post | Dữ liệu các giai đoạn đo hai công cụ khác nhau | Mỗi thay đổi tạo phiên bản mới, phiên bản cũ bất biến; học sinh ghim phiên bản lúc bắt đầu; nhật ký ghi thao tác |
 
 Tổng quan tài liệu còn hạn chế về các chương trình giáo dục an toàn thông tin đã triển khai tại Việt Nam, và chưa có đánh giá về mức độ phổ biến của từng hình thức lừa đảo đối với học sinh. Hai điểm này cần được bổ sung khi có điều kiện tra cứu đầy đủ.
 

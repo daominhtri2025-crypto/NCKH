@@ -85,6 +85,8 @@ Giáo viên có tài khoản do nhóm kỹ thuật cấp, gồm **tên đăng nh
 3. Nhập tên đăng nhập và mật khẩu, rồi bấm **Đăng nhập**.
 4. Danh sách lớp hiện ra. Khi xong, bấm **Đăng xuất** ở góc trên bên phải.
 
+**Lần đầu đăng nhập bằng mật khẩu tạm:** ở đầu trang hiện khối **"Tài khoản đang dùng mật khẩu mặc định hoặc mật khẩu tạm"**. Bấm **Đổi mật khẩu**, nhập mật khẩu hiện tại và mật khẩu mới (10 ký tự trở lên, có cả chữ và số, khác mật khẩu cũ), rồi bấm **Lưu mật khẩu mới**. Có thể bỏ qua và đổi sau, nhưng nên đổi ngay.
+
 Lưu ý:
 - Phiên đăng nhập giữ **8 giờ**. Hết hạn thì đăng nhập lại.
 - Nếu quên mật khẩu, liên hệ nhóm kỹ thuật để được đặt lại. Không chia sẻ tài khoản cho người khác.
@@ -159,9 +161,12 @@ Danh sách chỉ hiển thị số lượng và trạng thái. Giáo viên khôn
 
 ### 3.1. Cách làm việc và đăng nhập
 
-Nhóm kỹ thuật **không đăng nhập vào ứng dụng**. Nhóm làm việc trên máy chủ, theo hai cách:
+Nhóm kỹ thuật có hai cách làm việc:
 
-- **Dòng lệnh trên máy chủ (cách chính).** Cần Terminal của hosting, hoặc chạy trên máy cá nhân khi phát triển cục bộ. Các lệnh chạy từ thư mục gốc của dự án (hoặc `public_html` trên hosting), ví dụ `php api/bin/add_class.php`.
+- **Trang quản trị trên ứng dụng.** Quản trị viên đăng nhập bằng cổng **Giáo viên đăng nhập** bằng tài khoản có vai trò quản trị. Sau khi đăng nhập, trang quản trị hiện ra với hai tab (mục 3.8). Quản trị viên không gắn lớp và không xem được tiến độ của lớp nào.
+- **Dòng lệnh trên máy chủ.** Dùng cho các việc hệ thống: tạo lớp, in thẻ, nạp schema, xuất dữ liệu.
+
+Dòng lệnh là cách chính cho: Cần Terminal của hosting, hoặc chạy trên máy cá nhân khi phát triển cục bộ. Các lệnh chạy từ thư mục gốc của dự án (hoặc `public_html` trên hosting), ví dụ `php api/bin/add_class.php`.
 - **Đường HTTP có token quản trị (chỉ để xuất dữ liệu).** Gửi yêu cầu có header `X-Admin-Token` đúng với `ADMIN_TOKEN` trong `api/.env`. Nếu `ADMIN_TOKEN` để trống, chức năng này bị tắt.
 
 Quản lý tài khoản hosting và CSDL do nhóm giữ trong bảng điều khiển iNET và phpMyAdmin. Không chia sẻ các thông tin này qua kênh công khai.
@@ -249,6 +254,29 @@ curl -H "X-Admin-Token: <token>" -o antoanso_wide.csv https://<tên-miền>/api/
 ### 3.7. Giới hạn đã biết
 
 - Đăng nhập học sinh và giáo viên chưa có giới hạn số lần thử sai.
-- Chưa có giao diện quản trị cho nhóm kỹ thuật; mọi thao tác dùng dòng lệnh trên máy chủ.
+- Trang quản trị chưa có màn hình xem nhật ký `audit_log`; cần truy vấn trực tiếp. Việc in thẻ và tạo lớp vẫn dùng dòng lệnh.
 - Chưa có cơ chế nhắc khảo sát theo dõi.
-- Nhật ký `audit_log` ghi lại việc cấp lại thẻ nhưng chưa có màn hình xem; cần truy vấn trực tiếp.
+- Mật khẩu tạm chỉ được nhắc đổi, chưa bị chặn. Đây là chủ ý cho bản chạy cục bộ; trên hosting, cần bổ sung chặn trước khi triển khai rộng.
+
+### 3.8. Trang quản trị (tài khoản quản trị viên)
+
+Tài khoản quản trị do dòng lệnh tạo (`php api/bin/create_admin.php <tên>`), hoặc được đánh dấu vai trò quản trị khi nhóm kỹ thuật tạo tài khoản. Trang quản trị gồm hai tab.
+
+**Tab "Giáo viên"**
+
+| Thao tác | Cách làm | Kết quả |
+|---|---|---|
+| Thêm tài khoản | Nhập tên đăng nhập, chọn vai trò, nhập mã lớp (nếu là giáo viên), bấm **Tạo tài khoản** | Mật khẩu tạm hiện **một lần**. Trao cho người dùng qua kênh trực tiếp |
+| Cấp mật khẩu mới | Bấm **Cấp mật khẩu mới** ở dòng của tài khoản, xác nhận trong hộp thoại | Mật khẩu mới hiện một lần. Mọi phiên đang mở của tài khoản đó bị đăng xuất |
+| Khóa / Mở khóa | Bấm **Khóa** hoặc **Mở khóa**, xác nhận | Tài khoản bị khóa không đăng nhập được. Dữ liệu được giữ nguyên |
+
+Quy tắc an toàn: không tự khóa chính tài khoản đang đăng nhập, và không khóa quản trị viên cuối cùng còn hoạt động.
+
+**Tab "Câu hỏi khảo sát"**
+
+- Hiển thị bộ câu hỏi hiện hành, tách theo kiến thức và hành vi, có đáp án đúng đánh dấu ✓ (chỉ quản trị thấy).
+- **Thêm câu hỏi**, **Sửa**, **Xóa** trên từng câu. Mã câu và loại câu không đổi được sau khi tạo.
+- Mỗi thay đổi tạo một **phiên bản mới**. Phiên bản cũ được giữ lại và xem trong mục "Lịch sử phiên bản".
+- Học sinh đã bắt đầu làm khảo sát giữ phiên bản cũ. Học sinh chưa làm dùng phiên bản hiện hành. Nhờ đó dữ liệu trước và sau khi sửa vẫn so sánh được.
+
+Mỗi thao tác trên trang quản trị được ghi vào nhật ký `audit_log`.
