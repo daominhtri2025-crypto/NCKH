@@ -86,6 +86,28 @@ node scripts\smoke-test.mjs
 | Nạp schema báo `Access denied` dù mật khẩu đúng | Khi dùng `<` để nạp tệp, `mysql.exe` đọc mật khẩu từ tệp thay vì bàn phím | Đăng nhập tương tác rồi dùng `SOURCE D:/UNG_DUNG_VIBE/NCKH/api/database/schema.sql;` |
 | `Module "mysqli" is already loaded` | Một extension khai báo hai lần trong `php.ini` | Xóa dòng trùng, giữ một dòng `extension=mysqli` |
 
+### 0.6. Cập nhật mã nguồn khi có thay đổi trên git (Windows)
+
+Cần cài Git for Windows nếu máy chưa có lệnh `git`. Dừng API và Vite trước (mục 0.3, Ctrl + C ở hai cửa sổ), rồi chạy trong cmd:
+
+```bat
+cd /d D:\UNG_DUNG_VIBE\NCKH
+git status
+git fetch origin
+git pull origin claude/gifted-brown-mfv1i8
+git diff --name-only ORIG_HEAD HEAD
+```
+
+Nếu `git status` có tệp đã sửa, cất tạm bằng `git stash` trước khi pull, rồi `git stash pop` sau đó.
+
+Theo danh sách tệp ở lệnh cuối:
+
+- Có `web/package.json`: `cd /d D:\UNG_DUNG_VIBE\NCKH\web` rồi `npm install`.
+- Có `api/database/schema.sql`: `cd /d D:\UNG_DUNG_VIBE\NCKH` rồi `"C:\xampp\php\php.exe" api\bin\migrate.php`. Nếu đổi cột của bảng đã có, làm như mục 2.2 bằng `C:\xampp\mysql\bin\mysql.exe`.
+- Kiểm thử: `set DB_NAME=antoanso_test` rồi `"C:\xampp\php\php.exe" api\tests\run.php`. Dòng cuối phải là `0 lỗi`.
+
+Sau đó chạy lại hai cửa sổ như mục 0.3.
+
 ## Phụ lục A: Làm từng bước thủ công trên Windows
 
 Dùng khi không chạy được script ở mục 0.2.
@@ -144,6 +166,60 @@ git clone https://github.com/daominhtri2025-crypto/NCKH.git
 cd NCKH
 git checkout claude/gifted-brown-mfv1i8
 ```
+
+### 2.1. Cập nhật khi có thay đổi trên git
+
+Làm mục này khi có commit mới trên nhánh. Dừng API và giao diện trước (mục 10) để tránh chạy mã cũ, rồi thực hiện theo các bước sau.
+
+**Bước 1. Kiểm tra không có thay đổi cục bộ chưa commit:**
+
+```bash
+cd NCKH
+git status
+```
+
+Nếu có tệp đã sửa, không ghi đè. Hoặc commit, hoặc cất tạm bằng `git stash` (lấy lại bằng `git stash pop`). Các tệp `api/.env` và `web/.env` nằm trong `.gitignore` nên `git pull` không ảnh hưởng đến chúng.
+
+**Bước 2. Lấy mã mới:**
+
+```bash
+git fetch origin
+git pull origin claude/gifted-brown-mfv1i8
+```
+
+**Bước 3. Xem tệp nào đã thay đổi để biết cần làm thêm gì:**
+
+```bash
+git diff --name-only ORIG_HEAD HEAD
+```
+
+| Tệp thay đổi | Việc cần làm thêm |
+|---|---|
+| `web/package.json` | `cd web` rồi `npm install` |
+| `api/database/schema.sql` | `php api/bin/migrate.php` (thêm bảng mới). Nếu đổi cột của bảng đã có, xem mục 2.2 |
+| `api/src/...`, `api/bin/...`, `web/src/...` | Không cần thêm. Chạy lại hai dịch vụ (mục 7) |
+| Chỉ `docs/...` | Không cần làm gì |
+
+**Bước 4. Kiểm thử để xác nhận mã mới chạy đúng** (cần CSDL `antoanso_test` đã tạo ở mục 3):
+
+```bash
+DB_NAME=antoanso_test php api/tests/run.php
+```
+
+Dòng cuối phải là `Kết quả: ... đạt, 0 lỗi.`
+
+### 2.2. Đổi cột của bảng đã có (CSDL dev)
+
+Lược đồ không có lệnh `ALTER`. Nếu một bảng đã có thay đổi cột, lệnh `migrate.php` không sửa được bảng cũ. Khi đó cần tạo lại CSDL dev. **Thao tác này xóa dữ liệu thử nghiệm.** Nếu cần giữ dữ liệu, sao lưu trước:
+
+```bash
+mysqldump -u antoanso -p antoanso_dev > backup_dev.sql
+mysql -u antoanso -p -e "DROP DATABASE antoanso_dev; CREATE DATABASE antoanso_dev CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+mysql -u antoanso -p antoanso_dev < api/database/schema.sql
+php api/bin/add_class.php 8A1 "Lớp 8A1" "THCS Thử nghiệm"
+```
+
+Sau đó tạo lại tài khoản giáo viên thử và thẻ mã nếu cần (mục 8.5).
 
 ## 3. Tạo cơ sở dữ liệu MySQL cục bộ
 
@@ -380,6 +456,11 @@ Lưu ý: CSDL dev tạo trước khi có thẻ mã cần tạo lại (xóa và n
 | Xuất CSV trả về 401 | Token gửi lên không khớp | Kiểm tra header `X-Admin-Token` |
 | Cấp lại thẻ trả về 422 "Cần xác nhận đã đối chiếu" | Yêu cầu thiếu `ledger_confirmed: true` | Trên giao diện: tích ô xác nhận trước khi bấm nút. Trên dòng lệnh: thêm cờ `--da-doi-chieu-so` |
 | `reissue_card.php` in ra "Cách dùng" và thoát | Thiếu cờ `--da-doi-chieu-so` | Đây là chủ ý. Chỉ thêm cờ sau khi đã đối chiếu sổ phát thẻ |
+| `git pull` báo "local changes would be overwritten" | Có tệp đã sửa chưa commit | `git stash`, pull lại, rồi `git stash pop` (hoặc commit trước) |
+| `git pull` báo "Need to specify how to reconcile divergent branches" | Cấu hình git mặc định chưa chọn cách merge | Chạy một lần `git config pull.rebase false`, rồi pull lại |
+| Sau pull, lỗi `Cannot find module` hoặc lỗi npm | `package.json` đổi nhưng chưa cài | `cd web` rồi `npm install` |
+| Sau pull, `Table ... doesn't exist` | Schema có bảng mới | `php api/bin/migrate.php` (mục 2.1) |
+| Sau pull, hành vi vẫn như bản cũ | Dịch vụ đang chạy từ mã cũ | Dừng cả hai (mục 10), chạy lại (mục 7) |
 
 ## 10. Dừng các dịch vụ
 
