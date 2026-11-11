@@ -88,13 +88,13 @@
 | 5. Theo dõi | Làm lại 16 câu sau 28 ngày | ……………… | Mở tự động sau 28 ngày |
 | 6. Phân tích và báo cáo | Xuất dữ liệu ẩn danh; phân tích theo kế hoạch | ……………… | Không công bố số liệu lớp dưới 5 học sinh |
 
-*Số liệu khảo sát bổ sung.* Chưa thu thập. Các ô dưới đây sẽ được điền khi có số liệu.
+*Số liệu khảo sát bổ sung.* Chưa thu thập số liệu nghiên cứu. Ngày 11/11/2026, nhóm đã kiểm thử ba biểu mẫu bằng mỗi biểu mẫu một phản hồi thử. Các phản hồi thử này không được tính là số liệu nghiên cứu.
 
-| Phiếu | Đối tượng | Số phiếu hợp lệ | Ghi chú |
+| Phiếu | Đối tượng | Số phản hồi thử (11/11/2026) | Số phiếu hợp lệ của nghiên cứu |
 |---|---|---|---|
-| A. Phiếu nền | Học sinh | …………… | Trước can thiệp |
-| B. Phiếu phản hồi | Học sinh | …………… | Sau can thiệp |
-| C. Phiếu giáo viên | Giáo viên | …………… | Một lần |
+| A. Phiếu nền | Học sinh | 1 | …………… |
+| B. Phiếu phản hồi | Học sinh | 1 | …………… |
+| C. Phiếu giáo viên | Giáo viên | 1 | …………… |
 
 *Lưu trữ và bảo mật.* Dữ liệu được lưu trên máy chủ của nhà trường hoặc hosting, cấu hình theo hướng dẫn triển khai của dự án. Mật khẩu chỉ lưu dạng băm. Sổ phát thẻ (học sinh nào nhận thẻ nào) được bảo quản riêng, không lưu trên hệ thống và không đưa vào kho mã. Người có quyền truy cập: ……………………………
 
