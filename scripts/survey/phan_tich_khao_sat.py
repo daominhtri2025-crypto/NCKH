@@ -73,6 +73,7 @@ def tom_tat(phieu, duong_dan, demo):
     if demo:
         out.append('> **DỮ LIỆU MINH HỌA, KHÔNG DÙNG CHO HỒ SƠ DỰ THI.** Các số dưới đây chỉ để kiểm tra cách tạo báo cáo.\n')
     out.append(f'## Phiếu {phieu}\n')
+    out.append('† Lựa chọn quan sát được trong dữ liệu nhưng không có trong biểu mẫu hiện tại (biểu mẫu đã được sửa trong lúc thu thập).\n')
     out.append(f'- Tổng số dòng phản hồi: {n_tong}')
     out.append(f'- Phiếu hợp lệ (đã đồng ý tham gia): {n}\n')
 
@@ -90,17 +91,24 @@ def tom_tat(phieu, duong_dan, demo):
             else:
                 out.append('*Chưa có trả lời.*\n')
         elif kieu == 'hk':
+            tokens = [t.strip() for v in gia_tri for t in v.split(';') if t.strip()]
+            dem = Counter(tokens)
+            # Lựa chọn quan sát được nhưng không có trong biểu mẫu hiện tại được giữ và đánh dấu.
+            extra = sorted(set(dem) - set(lua_chon))
             out.append('| Lựa chọn | Số em chọn | Tỉ lệ (%) |\n|---|---|---|')
-            for opt in lua_chon:
-                k = sum(1 for v in gia_tri if opt in v)
-                out.append(f'| {opt} | {k} | {100 * k / max(n, 1):.1f} |')
+            for opt in list(lua_chon) + extra:
+                k = dem.get(opt, 0)
+                ghi = '' if opt in lua_chon else ' †'
+                out.append(f'| {opt}{ghi} | {k} | {100 * k / max(n, 1):.1f} |')
             out.append('')
         elif kieu == 'tn':
             dem = Counter(gia_tri)
+            extra = sorted(set(dem) - set(lua_chon))
             out.append('| Lựa chọn | Số em chọn | Tỉ lệ (%) |\n|---|---|---|')
-            for opt in lua_chon:
+            for opt in list(lua_chon) + extra:
                 k = dem.get(opt, 0)
-                out.append(f'| {opt} | {k} | {100 * k / max(n, 1):.1f} |')
+                ghi = '' if opt in lua_chon else ' †'
+                out.append(f'| {opt}{ghi} | {k} | {100 * k / max(n, 1):.1f} |')
             out.append('')
     return '\n'.join(out)
 

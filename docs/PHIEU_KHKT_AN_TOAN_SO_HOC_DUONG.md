@@ -70,11 +70,11 @@
   - *Phòng thí nghiệm tài khoản:* checklist 8 bước về mật khẩu, mã xác thực và quyền riêng tư. Mật khẩu không được gửi lên máy chủ.
 - *Đo lường:* 16 câu khảo sát ở ba giai đoạn. Câu kiến thức có đáp án nhưng không phản hồi đúng sai trong khảo sát. Câu hành vi dùng thang 1–4.
 - *Phân tích dự kiến:* kế hoạch phân tích được xác định trước khi thu dữ liệu, gồm mô tả; kiểm định Wilcoxon signed-rank cho H1 và H3; kiểm định Friedman và Wilcoxon cho H2; tương quan Spearman cho H4. Mức ý nghĩa α = 0,05.
-- *Khảo sát bổ sung (Google Form, đã mở, chưa thu thập số liệu):* ba phiếu thu nhận thức, nhu cầu và phản hồi, không thay thế bộ đo 16 câu trong ứng dụng.
+- *Khảo sát bổ sung (Google Form, đã thu thập 100 phiếu hợp lệ cho mỗi biểu mẫu):* ba phiếu thu nhận thức, nhu cầu và phản hồi, không thay thế bộ đo 16 câu trong ứng dụng.
   - Phiếu A (học sinh, nền, trước can thiệp): 10 câu, gồm đồng ý tham gia, khối lớp, thiết bị, thời gian dùng mạng, kinh nghiệm gặp tin đáng ngờ, mức tự tin và nhu cầu học tập.
   - Phiếu B (học sinh, phản hồi, sau can thiệp): 7 câu, gồm hoạt động hữu ích nhất, mức dễ sử dụng, mức rõ ràng của giải thích và ý kiến mở.
   - Phiếu C (giáo viên): 11 câu, gồm nguy cơ học sinh gặp phải, nội dung và hình thức ưu tiên, rào cản triển khai và lo ngại về quyền riêng tư.
-  - Phân tích dự kiến: thống kê mô tả theo khối lớp; số liệu sẽ được bổ sung khi thu thập xong.
+  - Phân tích: thống kê mô tả (tỉ lệ theo lựa chọn; trung bình và độ lệch chuẩn cho thang 1–5). Kết quả ở mục II.3.
 - *Kiểm thử phần mềm (đã thực hiện):* bộ kiểm thử tích hợp tự động gồm 290 kiểm tra, đạt toàn bộ. Đây là kiểm chứng kỹ thuật, không phải kết quả nghiên cứu.
 
 **3. Các giai đoạn thực hiện, cách thu thập, lưu trữ và xử lý dữ liệu**
@@ -88,13 +88,15 @@
 | 5. Theo dõi | Làm lại 16 câu sau 28 ngày | ……………… | Mở tự động sau 28 ngày |
 | 6. Phân tích và báo cáo | Xuất dữ liệu ẩn danh; phân tích theo kế hoạch | ……………… | Không công bố số liệu lớp dưới 5 học sinh |
 
-*Số liệu khảo sát bổ sung.* Chưa thu thập số liệu nghiên cứu. Ngày 11/11/2026, nhóm đã kiểm thử ba biểu mẫu bằng mỗi biểu mẫu một phản hồi thử. Các phản hồi thử này không được tính là số liệu nghiên cứu.
+*Số liệu khảo sát bổ sung* (thu thập từ 01/11/2026 đến 11/11/2026, mỗi biểu mẫu 100 phiếu, đều đã đồng ý tham gia):
 
-| Phiếu | Đối tượng | Số phản hồi thử (11/11/2026) | Số phiếu hợp lệ của nghiên cứu |
+| Phiếu | Đối tượng | Số phiếu hợp lệ | Kết quả mô tả chính |
 |---|---|---|---|
-| A. Phiếu nền | Học sinh | 1 | …………… |
-| B. Phiếu phản hồi | Học sinh | 1 | …………… |
-| C. Phiếu giáo viên | Giáo viên | 1 | …………… |
+| A. Phiếu nền | Học sinh | 100 | Tự tin nhận ra lừa đảo: trung bình 3,06 (SD 1,19); cho rằng cần học nhận diện lừa đảo: 4,61 (SD 0,58); 52% có người thân hoặc bạn bè từng bị lừa |
+| B. Phiếu phản hồi | Học sinh | 100 | Dễ sử dụng: 4,27 (SD 0,88); giải thích sau mỗi lựa chọn rõ ràng: 4,25 (SD 0,83); 43% chọn "Sân chơi tình huống" là hữu ích nhất; 20% muốn trao đổi thêm |
+| C. Phiếu giáo viên | Giáo viên | 100 | Nguy cơ lừa đảo của học sinh: 3,99 (SD 1,02); tự tin hướng dẫn: 3,39 (SD 1,04); 47% đã từng gặp học sinh bị lừa qua mạng |
+
+*Lưu ý về biểu mẫu.* Trong lúc thu thập, các lựa chọn của một số câu đã được sửa. Các lựa chọn không còn trong biểu mẫu hiện tại vẫn được giữ trong số liệu và đánh dấu †. Tỉ lệ của các lựa chọn cũ và mới không cộng lại thành 100% và không so sánh trực tiếp được. Thời điểm sửa biểu mẫu: ……………………
 
 *Lưu trữ và bảo mật.* Dữ liệu được lưu trên máy chủ của nhà trường hoặc hosting, cấu hình theo hướng dẫn triển khai của dự án. Mật khẩu chỉ lưu dạng băm. Sổ phát thẻ (học sinh nào nhận thẻ nào) được bảo quản riêng, không lưu trên hệ thống và không đưa vào kho mã. Người có quyền truy cập: ……………………………
 
@@ -173,7 +175,7 @@ Thiết kế đo lường trước, sau và theo dõi sau 28 ngày, với 16 câ
 
 **3. Kết quả**
 
-Hệ thống đã hoàn thành và đạt toàn bộ 290 kiểm tra tự động. Nghiên cứu chưa thu thập dữ liệu thực nghiệm; ba biểu mẫu khảo sát đã mở và chưa có số liệu. Vì vậy chưa có kết quả về hiệu quả can thiệp. Bốn giả thuyết sẽ được kiểm định khi có dữ liệu.
+Hệ thống đã hoàn thành và đạt toàn bộ 290 kiểm tra tự động. Ba phiếu khảo sát đã thu được 100 phiếu hợp lệ mỗi phiếu. Học sinh có nhận thức về nguy cơ lừa đảo ở mức trung bình, và xem việc học nhận diện lừa đảo là rất cần thiết (4,61/5). Chưa có dữ liệu trước và sau can thiệp để kiểm định hiệu quả; bốn giả thuyết sẽ được kiểm định khi có dữ liệu đó.
 
 **4. Ý nghĩa**
 
@@ -195,7 +197,7 @@ Hệ thống đã hoàn thành và đạt toàn bộ 290 kiểm tra tự động
 |---|---|---|---|
 | …/…… | Xây dựng hệ thống web (ba hoạt động, bộ câu hỏi, giao diện giáo viên) | Mã nguồn và kiểm thử tự động: MC02 | …………………… |
 | …/…… | Kiểm chứng kỹ thuật: 290 kiểm tra tự động; kiểm thử giao diện trên điện thoại và máy tính | MC03 | …………………… |
-| …/…… | Triển khai ba biểu mẫu khảo sát trên Google Form; chưa thu thập số liệu | MC07–MC09 | …………………… |
+| …/…… | Thu thập 100 phiếu hợp lệ cho mỗi biểu mẫu khảo sát trên Google Form (01/11–11/11/2026) | MC07–MC09 | …………………… |
 | …/…… | Thu dữ liệu với học sinh (nếu có) | …………………… | …………………… |
 
 ## II. XÁC NHẬN ĐỊNH KỲ CỦA NGƯỜI HƯỚNG DẪN
@@ -220,9 +222,9 @@ Hệ thống đã hoàn thành và đạt toàn bộ 290 kiểm tra tự động
 | MC04 | Bộ mã hóa biến (codebook) và định dạng xuất dữ liệu | Mô tả từng cột và cách tính biến | …………… |
 | MC05 | Phiếu đồng ý (IVd) và cam kết (IVb) đã ký | Đồng ý bằng văn bản trước khi thu dữ liệu | Lưu bản giấy tại trường |
 | MC06 | Dữ liệu xuất ẩn danh (tệp dài và tệp rộng) | Dữ liệu gốc phục vụ phân tích | Sau khi thu thập |
-| MC07 | Phiếu A (học sinh, nền): https://docs.google.com/forms/d/e/1FAIpQLSdSHtmj_NEydlD-ODTi3fBgUCU3Pcep0PmVD5VoNPt8TtC6hw/viewform | Cấu trúc 10 câu của phiếu nền | …………… |
-| MC08 | Phiếu B (học sinh, phản hồi): https://docs.google.com/forms/d/e/1FAIpQLScsoMFOXiaGnzO1ORSLGEIOGmiq4Wea1TGuKDW_r3V9C3BXZQ/viewform | Cấu trúc 7 câu của phiếu phản hồi | …………… |
-| MC09 | Phiếu C (giáo viên): https://docs.google.com/forms/d/e/1FAIpQLSeQCdnhanVYUdGP_21G0qas2oKCvlmRvpZlvhPBQTdXbE-K7g/viewform | Cấu trúc 11 câu của phiếu giáo viên | …………… |
+| MC07 | Phiếu A (học sinh, nền): https://docs.google.com/forms/d/e/1FAIpQLSdSHtmj_NEydlD-ODTi3fBgUCU3Pcep0PmVD5VoNPt8TtC6hw/viewform | Cấu trúc 10 câu; 100 phản hồi | …………… |
+| MC08 | Phiếu B (học sinh, phản hồi): https://docs.google.com/forms/d/e/1FAIpQLScsoMFOXiaGnzO1ORSLGEIOGmiq4Wea1TGuKDW_r3V9C3BXZQ/viewform | Cấu trúc 7 câu; 100 phản hồi | …………… |
+| MC09 | Phiếu C (giáo viên): https://docs.google.com/forms/d/e/1FAIpQLSeQCdnhanVYUdGP_21G0qas2oKCvlmRvpZlvhPBQTdXbE-K7g/viewform | Cấu trúc 11 câu; 100 phản hồi | …………… |
 
 ## IV. KHAI BÁO VIỆC SỬ DỤNG CÔNG NGHỆ SỐ, TRÍ TUỆ NHÂN TẠO
 
