@@ -27,12 +27,23 @@ function taoTatCaKhaoSat() {
 function caiDatChung(form, tieuDe, moTa) {
   form.setTitle(tieuDe);
   form.setDescription(moTa);
-  form.setCollectEmail(false);
-  form.setLimitOneResponsePerUser(false);
-  form.setRequireLogin(false);
-  form.setShowLinkToRespondAgain(false);
+  // Các thiết lập dưới đây không dùng được với tài khoản Google cá nhân (không phải Workspace).
+  // Bỏ qua lỗi để không dừng cả kịch bản. Mặc định của Form đã không thu email.
+  thuBoQua(function () { form.setCollectEmail(false); });
+  thuBoQua(function () { form.setRequireLogin(false); });
+  thuBoQua(function () { form.setLimitOneResponsePerUser(false); });
+  thuBoQua(function () { form.setShowLinkToRespondAgain(false); });
+  thuBoQua(function () { form.setProgressBar(true); });
   form.setConfirmationMessage(KHAO_SAT_LOI_CAM_ON);
-  form.setProgressBar(true);
+}
+
+/** Chạy một thiết lập tùy chọn; nếu lỗi thì ghi nhật ký và tiếp tục. */
+function thuBoQua(fn) {
+  try {
+    fn();
+  } catch (e) {
+    Logger.log('Bỏ qua thiết lập không hỗ trợ: ' + e.message);
+  }
 }
 
 /** Câu đồng ý: "Chưa" kết thúc biểu mẫu ngay. Đặt ở trang 1. */
