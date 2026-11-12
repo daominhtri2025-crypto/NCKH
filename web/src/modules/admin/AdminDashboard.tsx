@@ -2,6 +2,7 @@ import { FormEvent, useCallback, useEffect, useState } from 'react';
 import { api, ApiError } from '../../lib/api';
 import Modal from '../../components/Modal';
 import PasswordReminder from '../../components/PasswordReminder';
+import AnalyticsPanel from './AnalyticsPanel';
 
 interface Props {
   onLogout: () => void;
@@ -59,7 +60,7 @@ const EMPTY_FORM: QuestionForm = {
   id: '', instrument: 'knowledge', topic: 'm1', question: '', options: ['', '', '', ''], correct: 0, reverse: false,
 };
 
-type Tab = 'teachers' | 'questions';
+type Tab = 'teachers' | 'questions' | 'data';
 type Pending =
   | { kind: 'reset'; username: string }
   | { kind: 'toggle'; username: string; disable: boolean }
@@ -230,6 +231,9 @@ export default function AdminDashboard({ onLogout, mustChange, onPasswordChanged
         <button role="tab" aria-selected={tab === 'questions'} className={`tab ${tab === 'questions' ? 'active' : ''}`} onClick={() => setTab('questions')}>
           Câu hỏi khảo sát
         </button>
+        <button role="tab" aria-selected={tab === 'data'} className={`tab ${tab === 'data' ? 'active' : ''}`} onClick={() => setTab('data')}>
+          Dữ liệu đo lường
+        </button>
       </nav>
 
       {error && <p className="alert" role="alert">{error}</p>}
@@ -307,6 +311,8 @@ export default function AdminDashboard({ onLogout, mustChange, onPasswordChanged
           </section>
         </>
       )}
+
+      {tab === 'data' && <AnalyticsPanel />}
 
       {tab === 'questions' && (
         <section className="card">

@@ -6,6 +6,7 @@ namespace AnToanSo\Controllers;
 
 use AnToanSo\Http\Request;
 use AnToanSo\Http\Response;
+use AnToanSo\Services\AdminAnalyticsService;
 use AnToanSo\Services\SurveyAdminService;
 use AnToanSo\Support\Container;
 use AnToanSo\Support\HttpException;
@@ -83,6 +84,26 @@ final class AdminDashboardController
     {
         $actor = $this->actor($request);
         return Response::json((new SurveyAdminService())->deleteItem($actor, (string) $params['id']));
+    }
+
+    /** GET /api/admin/analytics — số liệu đo lường tổng hợp (quản trị viên). */
+    public function analytics(Request $request): Response
+    {
+        $this->actor($request);
+        return Response::json((new AdminAnalyticsService())->overview());
+    }
+
+    /** GET /api/admin/data/export/{format} — tải CSV long|wide ngay trên trình duyệt (phiên quản trị viên). */
+    public function exportData(Request $request, array $params): Response
+    {
+        $this->actor($request);
+        $format = (string) ($params['format'] ?? '');
+        if (!in_array($format, ['long', 'wide'], true)) {
+            throw new HttpException(422, 'Định dạng phải là long hoặc wide.');
+        }
+        $exporter = Container::exporter();
+        $csv = $format === 'long' ? $exporter->longCsv() : $exporter->wideCsv();
+        return Response::csv($csv, 'antoanso_' . $format . '_' . date('Ymd_His') . '.csv');
     }
 
     /** @return array<string,mixed> */

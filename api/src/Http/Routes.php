@@ -70,6 +70,8 @@ final class Routes
         $router->add('POST', '/admin/questions', [$dash, 'addQuestion']);
         $router->add('PUT', '/admin/questions/{id}', [$dash, 'updateQuestion']);
         $router->add('DELETE', '/admin/questions/{id}', [$dash, 'deleteQuestion']);
+        $router->add('GET', '/admin/analytics', [$dash, 'analytics']);
+        $router->add('GET', '/admin/data/export/{format}', [$dash, 'exportData']);
 
         return $router;
     }

@@ -1323,3 +1323,13 @@ h3 {
 /* Nhắc đổi mật khẩu */
 .reminder { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; background: var(--warn-bg); color: var(--warn); border: 1px solid var(--warn); border-radius: 12px; padding: 12px; }
 .reminder p { margin: 0; flex: 1 1 220px; }
+
+/* Bảng điều khiển số liệu */
+.analytics { display: grid; gap: 16px; min-width: 0; }
+.bar-chart { list-style: none; padding: 0; margin: 8px 0 0; display: grid; gap: 10px; }
+.bar-row { min-width: 0; }
+.bar-head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 12px; font-size: 0.95rem; }
+.bar-label { color: var(--ink); font-weight: 600; }
+.bar-value { color: var(--ink-soft); }
+.bar-track { height: 14px; border-radius: 8px; background: var(--line); overflow: hidden; margin-top: 4px; }
+.bar-fill { height: 100%; background: var(--brand); border-radius: 8px; }

@@ -929,5 +929,27 @@ check('Mật khẩu mới đăng nhập được và không còn cờ nhắc', $
 check('Đổi mật khẩu không có phiên đăng nhập bị từ chối (401)', call('POST', '/api/teacher/password', ['current' => 'x', 'new' => 'MatKhauMoi123'])->status === 401);
 
 
+echo "Trang quản trị: số liệu đo lường và xuất CSV ngay trên giao diện\n";
+$an = call('GET', '/api/admin/analytics', null, ['ats_teacher' => $qtTok]);
+check('Số liệu tổng hợp cho quản trị viên (200) có đủ các khối', $an->status === 200
+    && isset($an->body['classes'], $an->body['phases']['pre'], $an->body['paired']['pre_post'], $an->body['topics'], $an->body['min_cell']));
+check('Ngưỡng ẩn ô nhỏ là 5 học sinh', ($an->body['min_cell'] ?? 0) === 5);
+$preCell = $an->body['phases']['pre'] ?? [];
+check('Ô có ít hơn 5 học sinh bị ẩn giá trị (suppressed = true, không có trung bình)', ($preCell['n'] ?? 0) >= 0
+    && (($preCell['knowledge_pct_mean']['n'] ?? 0) >= 5 || (($preCell['knowledge_pct_mean']['suppressed'] ?? false) === true && !isset($preCell['knowledge_pct_mean']['mean']))));
+check('Không lộ mã thẻ học sinh trong số liệu tổng hợp', !preg_match('/[23456789A-HJKMNP-Z]{4}-[23456789A-HJKMNP-Z]{4}/', (string) json_encode($an->body)));
+check('Giáo viên thường không xem được số liệu tổng hợp (403)', call('GET', '/api/admin/analytics', null, ['ats_teacher' => $gvTok])->status === 403);
+check('Số liệu tổng hợp khi chưa đăng nhập (401)', call('GET', '/api/admin/analytics')->status === 401);
+
+$csvLong = call('GET', '/api/admin/data/export/long', null, ['ats_teacher' => $qtTok]);
+check('Quản trị viên tải CSV dạng long ngay từ giao diện (200)', $csvLong->status === 200
+    && str_starts_with((string) $csvLong->rawBody(), "\xEF\xBB\xBF" . 'pseudonym'));
+$csvWide = call('GET', '/api/admin/data/export/wide', null, ['ats_teacher' => $qtTok]);
+check('Quản trị viên tải CSV dạng wide (200)', $csvWide->status === 200 && str_contains((string) $csvWide->rawBody(), 'pseudonym'));
+check('Định dạng xuất không hợp lệ bị từ chối (422)', call('GET', '/api/admin/data/export/exe', null, ['ats_teacher' => $qtTok])->status === 422);
+check('Giáo viên thường không tải được CSV (403)', call('GET', '/api/admin/data/export/long', null, ['ats_teacher' => $gvTok])->status === 403);
+check('Tải CSV khi chưa đăng nhập (401)', call('GET', '/api/admin/data/export/long')->status === 401);
+
+
 echo "\nKết quả: {$passed} đạt, {$failed} lỗi.\n";
 exit($failed === 0 ? 0 : 1);
