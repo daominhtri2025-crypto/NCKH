@@ -16,61 +16,77 @@ Nguyên tắc chung: học sinh không tự tạo mã. Nhóm kỹ thuật in th�
 
 ## 1. Học sinh
 
-### 1.1. Cách đăng nhập lần đầu: kích hoạt thẻ mã
+Phần này mô tả trải nghiệm của học sinh theo đúng giao diện của ứng dụng. Mọi nhãn nút và tiêu đề trong phần này là chữ hiển thị trên màn hình.
 
-1. Nhận thẻ mã từ giáo viên. Thẻ ghi mã dạng `XXXX-XXXX`.
-2. Mở ứng dụng trên điện thoại hoặc máy tính. Trang đầu có hai nút chính, và một liên kết nhỏ dành cho giáo viên ở cuối trang.
-3. Chọn **"Em có thẻ mã từ giáo viên"**.
-4. Nhập mã trên thẻ. Đọc phiếu đồng ý và tích **"Em đã đọc và đồng ý tham gia nghiên cứu"**.
-5. Bấm **"Kích hoạt và bắt đầu"**. Ứng dụng đưa em vào màn hình chính.
+### 1.1. Kích hoạt thẻ mã (lần đầu)
 
-Lưu ý:
-- Mỗi thẻ chỉ kích hoạt được **một lần**. Nếu thẻ báo đã kích hoạt, hãy báo giáo viên.
-- Không cần nhập họ tên, email hay số điện thoại.
+1. Nhận thẻ mã từ giáo viên. Mã có dạng `XXXX-XXXX`.
+2. Mở ứng dụng. Trang đầu có hai nút: **Em có thẻ mã từ giáo viên** và **Em đã kích hoạt, đăng nhập**.
+3. Bấm **Em có thẻ mã từ giáo viên**. Màn hình **Kích hoạt thẻ mã** hiện ra, kèm khối thông tin về dữ liệu được thu thập và không thu thập.
+4. Nhập mã trên thẻ vào ô **Mã trên thẻ**.
+5. Tích ô **Em đã đọc và đồng ý tham gia nghiên cứu.** Nút **Kích hoạt và bắt đầu** chỉ bật khi đã nhập mã và tích ô này.
+6. Bấm **Kích hoạt và bắt đầu**. Ứng dụng đưa học sinh đến trang chọn hoạt động.
 
-### 1.2. Cách đăng nhập lại
+Mỗi thẻ chỉ kích hoạt được một lần. Nếu thẻ không dùng được, học sinh báo giáo viên.
 
-1. Mở ứng dụng và chọn **"Em đã kích hoạt, đăng nhập"**.
-2. Nhập mã trên thẻ. Không cần phân biệt chữ hoa, chữ thường; có hoặc không có dấu gạch đều được.
+### 1.2. Đăng nhập lại
+
+1. Trên trang đầu, bấm **Em đã kích hoạt, đăng nhập**.
+2. Nhập mã trên thẻ vào ô **Mã trên thẻ**. Ứng dụng không phân biệt chữ hoa, chữ thường, và bỏ qua dấu gạch nối.
 3. Bấm **Đăng nhập**.
 
-Nếu nhập mã của thẻ chưa kích hoạt, ứng dụng sẽ báo cần kích hoạt thẻ trước. Phiên đăng nhập được giữ 24 giờ; hết hạn thì đăng nhập lại.
+Phiên đăng nhập có hiệu lực 24 giờ. Khi hết hạn, ứng dụng yêu cầu nhập lại mã. Góc trên bên phải luôn hiển thị **Mã** của học sinh và nút **Đăng xuất**.
 
-Khi đăng nhập trên thiết bị khác, phiên trên thiết bị cũ sẽ bị đăng xuất. Nên dùng một thiết bị cho cả quá trình.
+### 1.3. Trang chọn hoạt động
 
-Đăng xuất: bấm **Đăng xuất** ở góc trên bên phải.
+Trang chọn hoạt động có ba thẻ bước ở trên cùng. Mỗi thẻ hiển thị số thứ tự, tên khảo sát, trạng thái và điều kiện mở.
 
-### 1.3. Trình tự làm việc
-
-| Bước | Hoạt động | Mở khi | Thời lượng gợi ý |
+| Thẻ | Tên | Trạng thái ban đầu | Điều kiện mở |
 |---|---|---|---|
-| 1 | Khảo sát đầu vào (16 câu) | Ngay sau khi kích hoạt | 10–15 phút |
-| 2 | Sân chơi tình huống (5 tình huống) | Sau khảo sát đầu vào | 10 phút |
-| 3 | Thám tử không gian mạng (12 địa chỉ web) | Sau khảo sát đầu vào | 10 phút |
-| 4 | Phòng thí nghiệm tài khoản | Sau khảo sát đầu vào | 20–25 phút |
-| 5 | Khảo sát sau can thiệp (16 câu) | Khi đã xong cả ba hoạt động | 10–15 phút |
-| 6 | Khảo sát theo dõi (16 câu) | Sau 28 ngày kể từ khảo sát sau can thiệp | 10–15 phút |
+| 1 | Khảo sát đầu vào | Sẵn sàng | Mở ngay sau khi đăng nhập |
+| 2 | Khảo sát sau can thiệp | Chưa mở | Hoàn thành khảo sát đầu vào và cả ba hoạt động |
+| 3 | Khảo sát theo dõi | Chưa mở | Hoàn thành khảo sát sau can thiệp và đã qua 28 ngày |
 
-Màn hình chính hiển thị tiến trình và lý do khi một bước còn khóa.
+Dòng **Hoạt động đã xong** cho biết số hoạt động đã hoàn thành trên tổng số ba. Phía dưới là phần **Chọn một hoạt động**, gồm ba thẻ: *Sân chơi tình huống*, *Thám tử không gian mạng* và *Phòng thí nghiệm tài khoản*. Khi chưa đủ điều kiện, mỗi thẻ hiển thị khóa và dòng ghi lý do, ví dụ "Sau khảo sát đầu vào". Khi chưa làm khảo sát đầu vào, khối cảnh báo **Em cần làm khảo sát đầu vào trước khi bắt đầu các hoạt động** xuất hiện, kèm nút dẫn đến khảo sát.
 
-### 1.4. Làm từng hoạt động
+### 1.4. Khảo sát (đầu vào, sau can thiệp, theo dõi)
 
-**Khảo sát.** Mỗi lần một câu. Khảo sát không cho biết đúng hay sai. Có thể dừng giữa chừng và làm tiếp bằng nút **Tiếp tục**.
+Màn hình khảo sát ghi số câu của phiên bản hiện hành. Bản chuẩn của đề tài có 16 câu. Học sinh làm từng câu một, tiêu đề mỗi câu ghi *Câu x/n*. Bấm **Bắt đầu** để vào câu đầu tiên, hoặc **Tiếp tục** nếu đã làm dở.
 
-**Sân chơi tình huống.** Chọn cách xử lý. Ứng dụng cho biết đúng hay sai, kèm giải thích. Nếu chọn sai, bấm **Chọn lại**.
+Khảo sát không cho biết đúng hay sai. Học sinh chọn đáp án của mình và chuyển sang câu tiếp theo. Câu kiến thức có từ hai đến bốn lựa chọn, tùy câu. Câu hành vi có thang bốn mức.
 
-**Thám tử không gian mạng.** Mỗi địa chỉ, chọn **Chính thống** hoặc **Giả mạo**, và chỉ phân loại một lần. Bấm **Đọc từ phải sang trái** để xem cách tách tên miền. Vị trí hai nút có thể khác với bạn; hãy đọc nhãn trước khi bấm.
+### 1.5. Sân chơi tình huống
 
-**Phòng thí nghiệm tài khoản.**
-- Tab *Kiểm tra mật khẩu*: nhập **mật khẩu mẫu**, không dùng mật khẩu thật. Thử ít nhất 3 mật khẩu rồi bấm **Hoàn thành phòng thí nghiệm**. Mật khẩu chỉ được kiểm tra trên chính máy này.
-- Tab *Cài đặt quyền riêng tư*: đọc từng bước cho Zalo và Facebook, trả lời câu kiểm tra, tích ô đã thực hành trên điện thoại rồi bấm **Xác nhận**. Tên mục menu có thể khác theo phiên bản ứng dụng.
+Hoạt động gồm năm tình huống: cuộc gọi tự xưng công an, nhân viên ngân hàng cần mã OTP, tin nhắn trúng thưởng có đường link, tài khoản Zalo "người thân" nhờ chuyển tiền gấp, và đường link thanh toán dịch vụ công giả. Màn hình đầu hiển thị **Đã trả lời x/5 tình huống** và **Đúng ngay lần đầu**, kèm thanh tiến trình. Mỗi tình huống có trạng thái **Chưa làm**, **Đúng ✓** hoặc **Đã làm**.
 
-### 1.5. Điều học sinh cần nhớ
+Học sinh đọc tình huống trong khung hội thoại, chọn cách xử lý và bấm xác nhận. Ứng dụng cho biết đúng hay chưa đúng, kèm giải thích. Nếu chưa đúng, học sinh bấm **Chọn lại** để thử lại. Bấm **Bắt đầu chơi** lần đầu, hoặc **Tiếp tục chơi** khi đã có tiến trình.
+
+### 1.6. Thám tử không gian mạng
+
+Hoạt động gồm 12 địa chỉ web. Mỗi lượt, học sinh chọn **✅ Chính thống** hoặc **⚠️ Giả mạo** cho địa chỉ hiện ra. Mỗi địa chỉ chỉ phân loại một lần. Màn hình đầu nêu quy tắc và hai tên gốc chính thức cần nhớ.
+
+Khi chưa chắc, học sinh bấm **Đọc từ phải sang trái** để xem cách tách tên miền: nhìn phần cuối (đuôi miền), đọc ngược sang trái để tìm phần gốc, rồi so với danh sách tên gốc chính thức. Kết quả hiển thị **Chính xác!** hoặc **Chưa đúng, xem cách đọc nhé**.
+
+### 1.7. Phòng thí nghiệm tài khoản
+
+Hoạt động có thanh **Checklist** ghi số bước đã hoàn thành trên tổng số tám bước, và nhãn **Phòng thí nghiệm** cho biết tình trạng chung. Hoạt động có hai tab.
+
+**Tab Kiểm tra mật khẩu.** Học sinh nhập một **mật khẩu mẫu** vào ô có gợi ý dạng ví dụ, không nhập mật khẩu thật. Nút **Hiện** cho phép xem nội dung đang gõ. Màn hình hiển thị số mật khẩu mẫu đã thử và mức cao nhất đạt được. Cần thử ít nhất ba mật khẩu mẫu trước khi nút **Hoàn thành phòng thí nghiệm** được bật. Khung xanh ghi rõ mật khẩu chỉ được kiểm tra trên máy này, không được gửi lên máy chủ, và dòng cuối ghi **Mức gửi lên máy chủ: — (không kèm mật khẩu)**.
+
+**Tab Cài đặt quyền riêng tư.** Có hai thẻ theo nền tảng: **Zalo** và **Facebook**, mỗi nền tảng bốn bước. Mỗi bước gồm ba mục:
+
+- **Thực hành:** thao tác cần làm trên điện thoại của học sinh.
+- **Vì sao quan trọng:** lý do ngắn gọn.
+- **Kiểm tra hiểu bài:** câu hỏi nhiều lựa chọn.
+
+Để hoàn thành bước, học sinh chọn đáp án, tích ô **Em đã thực hành các thao tác này trên điện thoại của mình**, rồi bấm **Xác nhận**. Nếu sai, bấm **Chọn lại**. Thẻ nền tảng hiển thị số bước đã xong, ví dụ *Zalo 0/4*.
+
+### 1.8. Điều học sinh cần nhớ
 
 - Không nhập mật khẩu thật vào ứng dụng.
-- Không đọc mã OTP cho bất kỳ ai.
-- Giữ thẻ mã. Nếu làm mất thẻ, báo giáo viên để được cấp thẻ mới; tiến độ được giữ nguyên nếu giáo viên đối chiếu được sổ phát thẻ.
-- Tham gia là tự nguyện. Em có thể dừng bất cứ lúc nào; hãy báo giáo viên nếu muốn rút khỏi nghiên cứu.
+- Không đọc mã OTP hay mã xác thực cho bất kỳ ai.
+- Giữ thẻ mã. Nếu làm mất thẻ, báo giáo viên để được cấp thẻ mới; tiến độ được giữ nguyên khi giáo viên đối chiếu được sổ phát thẻ.
+- Tham gia là tự nguyện. Học sinh có thể dừng bất cứ lúc nào, và báo giáo viên nếu muốn rút khỏi nghiên cứu.
 
 ---
 
@@ -258,25 +274,24 @@ curl -H "X-Admin-Token: <token>" -o antoanso_wide.csv https://<tên-miền>/api/
 - Chưa có cơ chế nhắc khảo sát theo dõi.
 - Mật khẩu tạm chỉ được nhắc đổi, chưa bị chặn. Đây là chủ ý cho bản chạy cục bộ; trên hosting, cần bổ sung chặn trước khi triển khai rộng.
 
-### 3.8. Trang quản trị (tài khoản quản trị viên)
+### 3.8. Trang quản trị và tab Dữ liệu đo lường
 
-Tài khoản quản trị do dòng lệnh tạo (`php api/bin/create_admin.php <tên>`), hoặc được đánh dấu vai trò quản trị khi nhóm kỹ thuật tạo tài khoản. Trang quản trị gồm hai tab.
+Quản trị viên đăng nhập bằng cổng **Giáo viên đăng nhập** trên trang đầu, với tài khoản có vai trò quản trị. Trang quản trị có ba tab: **Giáo viên**, **Câu hỏi khảo sát** và **Dữ liệu đo lường**. Quản trị viên không gắn lớp, nên không xem được tiến độ chi tiết của lớp nào.
 
-**Tab "Giáo viên"**
+Nếu tài khoản còn dùng mật khẩu mặc định hoặc mật khẩu tạm, khối nhắc **Đổi mật khẩu** hiển thị ở đầu trang. Có thể đổi ngay hoặc đổi sau.
 
-| Thao tác | Cách làm | Kết quả |
-|---|---|---|
-| Thêm tài khoản | Nhập tên đăng nhập, chọn vai trò, nhập mã lớp (nếu là giáo viên), bấm **Tạo tài khoản** | Mật khẩu tạm hiện **một lần**. Trao cho người dùng qua kênh trực tiếp |
-| Cấp mật khẩu mới | Bấm **Cấp mật khẩu mới** ở dòng của tài khoản, xác nhận trong hộp thoại | Mật khẩu mới hiện một lần. Mọi phiên đang mở của tài khoản đó bị đăng xuất |
-| Khóa / Mở khóa | Bấm **Khóa** hoặc **Mở khóa**, xác nhận | Tài khoản bị khóa không đăng nhập được. Dữ liệu được giữ nguyên |
+**Tab Giáo viên.** Gồm biểu mẫu **Thêm tài khoản** (tên đăng nhập, vai trò, mã lớp) và bảng **Danh sách tài khoản**. Mỗi dòng có nút **Cấp mật khẩu mới** và **Khóa** (hoặc **Mở khóa**). Mọi thao tác đều có hộp thoại xác nhận. Mật khẩu mới chỉ hiện một lần.
 
-Quy tắc an toàn: không tự khóa chính tài khoản đang đăng nhập, và không khóa quản trị viên cuối cùng còn hoạt động.
+**Tab Câu hỏi khảo sát.** Hiển thị bộ câu hỏi hiện hành, tách theo kiến thức và hành vi. Mỗi câu có nút **Sửa** và **Xóa**, và có nút **Thêm câu hỏi**. Đáp án đúng chỉ quản trị viên thấy. Mỗi lần thay đổi tạo một phiên bản mới; học sinh đã làm dở giữ phiên bản cũ.
 
-**Tab "Câu hỏi khảo sát"**
+**Tab Dữ liệu đo lường.** Gồm các khối sau, sắp theo thứ tự trên màn hình:
 
-- Hiển thị bộ câu hỏi hiện hành, tách theo kiến thức và hành vi, có đáp án đúng đánh dấu ✓ (chỉ quản trị thấy).
-- **Thêm câu hỏi**, **Sửa**, **Xóa** trên từng câu. Mã câu và loại câu không đổi được sau khi tạo.
-- Mỗi thay đổi tạo một **phiên bản mới**. Phiên bản cũ được giữ lại và xem trong mục "Lịch sử phiên bản".
-- Học sinh đã bắt đầu làm khảo sát giữ phiên bản cũ. Học sinh chưa làm dùng phiên bản hiện hành. Nhờ đó dữ liệu trước và sau khi sửa vẫn so sánh được.
+1. **Tải dữ liệu nghiên cứu.** Hai nút: *Tải CSV dạng long (một dòng mỗi câu trả lời)* và *Tải CSV dạng wide (một dòng mỗi học sinh)*. Tệp tải về đã ẩn danh bằng mã ngẫu nhiên, không có họ tên. Nút tải dùng chính phiên đăng nhập của quản trị viên, không cần nhập token hay gõ lệnh.
+2. **Tiến độ theo lớp.** Bảng với các cột: đã phát thẻ, đang hoạt động, xong đầu vào, xong sau can thiệp, xong theo dõi. Dòng phía trên ghi tổng số học sinh đang hoạt động. Giai đoạn theo dõi chỉ mở sau 28 ngày kể từ khi hoàn thành khảo sát sau can thiệp.
+3. **Điểm kiến thức trung bình theo giai đoạn.** Biểu đồ cột ngang với ba thanh: *Đầu vào (trước can thiệp)*, *Sau can thiệp* và *Theo dõi (sau 28 ngày)*. Mỗi thanh ghi giá trị theo phần trăm câu đúng và cỡ mẫu n. Giá trị là trung bình trên những học sinh đã làm xong giai đoạn đó.
+4. **So sánh trước và sau can thiệp.** Bảng hai dòng: đầu vào so với sau can thiệp, và đầu vào so với theo dõi. Mỗi dòng ghi số học sinh có đủ cả hai lần đo, chênh lệch trung bình và trung vị.
+5. **Hành vi tự báo cáo.** Bảng trung bình và độ lệch chuẩn cho ba giai đoạn, trên thang 1 đến 4, đã điều chỉnh câu đảo chiều.
+6. **Kiến thức theo nhóm chủ đề.** Bảng tỉ lệ đúng theo chủ đề m1 (sân chơi tình huống), m2 (thám tử tên miền) và m3 (phòng thí nghiệm tài khoản), cho ba giai đoạn.
 
-Mỗi thao tác trên trang quản trị được ghi vào nhật ký `audit_log`.
+Quy tắc công bố: ô có dưới năm học sinh được hiển thị là **ẩn** cùng số cỡ mẫu, để không lộ danh tính. Các số trên tab này là mô tả. Kiểm định thống kê được thực hiện riêng theo kế hoạch phân tích của báo cáo.
+
