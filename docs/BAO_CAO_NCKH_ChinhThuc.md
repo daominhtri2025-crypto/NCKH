@@ -283,7 +283,7 @@ Kế hoạch phân tích được xác định trước khi thu dữ liệu, nh�
 
 ## 2.7. Luồng chức năng theo vai trò
 
-Mục này mô tả luồng chức năng chuẩn của hệ thống đối với từng vai trò, theo kiến trúc logic đã trình bày ở mục 2.3. Mục này không mô tả giao diện chi tiết; các nội dung kỹ thuật được nêu ở các mục 2.2 và 2.5.
+Mục này mô tả luồng chức năng chuẩn của hệ thống đối với từng vai trò, theo kiến trúc logic đã trình bày ở mục 2.3. Các hình minh họa được chụp từ môi trường thử nghiệm; thông tin định danh và số liệu trong môi trường thử nghiệm đã được cắt bỏ hoặc không đưa vào. Mục này không mô tả giao diện chi tiết; các nội dung kỹ thuật được nêu ở các mục 2.2 và 2.5.
 
 ### 2.7.1. Vai trò học sinh
 
@@ -291,7 +291,11 @@ Học sinh là người tham gia nghiên cứu. Luồng chức năng của học
 
 **Giai đoạn 1. Kích hoạt và truy cập.** Học sinh kích hoạt thẻ mã được cấp, sau khi đọc thông tin nghiên cứu và đồng ý tham gia. Thẻ chỉ kích hoạt được một lần. Các lần truy cập sau được thực hiện bằng cùng mã thẻ. Phiên làm việc được duy trì trong một khoảng thời gian xác định, và mã thẻ là phương thức xác thực duy nhất của học sinh. Hệ thống không thu họ tên, email hay số điện thoại.
 
+![Hình 4. Trang chọn hoạt động của học sinh](hinh/hinh4_hoc_sinh_trang_chon.png){width=70%}
+
 **Giai đoạn 2. Khảo sát đầu vào.** Trước khi tham gia bất kỳ hoạt động học tập nào, học sinh trả lời bộ khảo sát đầu vào. Bộ khảo sát gồm câu hỏi kiến thức có đáp án và câu hỏi hành vi tự báo cáo. Khảo sát không phản hồi đúng sai trong quá trình làm, nhằm bảo đảm phép đo đầu vào không bị ảnh hưởng bởi quá trình học.
+
+![Hình 5. Màn hình khảo sát đầu vào](hinh/hinh5_hoc_sinh_khao_sat.png){width=70%}
 
 **Giai đoạn 3. Hoạt động học tập và tương tác.** Sau khi hoàn thành khảo sát đầu vào, học sinh tiếp cận ba hoạt động, có thể thực hiện theo thứ tự tùy chọn:
 
@@ -301,6 +305,14 @@ Học sinh là người tham gia nghiên cứu. Luồng chức năng của học
 
 Mỗi hoạt động trả về phản hồi tức thời về tính đúng sai và giải thích, trừ khảo sát. Mỗi lần trả lời được ghi nhận với thời gian phản hồi và mã phiên bản nội dung.
 
+![Hình 6. Hoạt động Sân chơi tình huống](hinh/hinh6_hoc_sinh_san_choi.png){width=70%}
+
+![Hình 7. Hoạt động Thám tử không gian mạng](hinh/hinh7_hoc_sinh_tham_tu.png){width=70%}
+
+![Hình 8. Phòng thí nghiệm tài khoản: kiểm tra mật khẩu mẫu](hinh/hinh8_hoc_sinh_mat_khau.png){width=70%}
+
+![Hình 9. Phòng thí nghiệm tài khoản: cài đặt quyền riêng tư](hinh/hinh9_hoc_sinh_quyen_rieng_tu.png){width=70%}
+
 **Giai đoạn 4. Khảo sát sau can thiệp và theo dõi.** Khảo sát sau can thiệp chỉ mở khi học sinh đã hoàn thành khảo sát đầu vào và đủ ba hoạt động. Khảo sát theo dõi mở sau một khoảng thời gian xác định, mặc định là 28 ngày kể từ khi hoàn thành khảo sát sau can thiệp. Trình tự này được kiểm soát ở máy chủ, không phụ thuộc thao tác phía giao diện.
 
 ### 2.7.2. Vai trò quản trị viên
@@ -309,9 +321,15 @@ Quản trị viên là người vận hành hệ thống trong nhà trường ho
 
 **Quản lý tài khoản giáo viên.** Quản trị viên tạo tài khoản giáo viên, gắn tài khoản với lớp, cấp lại mật khẩu khi cần, và khóa hoặc mở khóa tài khoản. Tài khoản bị khóa không đăng nhập được, nhưng dữ liệu được giữ nguyên. Hệ thống không cho phép khóa chính tài khoản đang đăng nhập hoặc khóa quản trị viên cuối cùng còn hoạt động.
 
+![Hình 10. Trang quản trị: quản lý tài khoản giáo viên](hinh/hinh10_quan_tri_giao_vien.png){width=60%}
+
 **Quản lý bộ câu hỏi khảo sát.** Quản trị viên xem, thêm, sửa và xóa câu hỏi trong bộ khảo sát. Mỗi thay đổi tạo một phiên bản mới của bộ câu hỏi, và phiên bản cũ được giữ nguyên. Học sinh đã bắt đầu khảo sát tiếp tục với phiên bản đã ghim từ lúc bắt đầu, nên dữ liệu thu được ở các phiên bản khác nhau vẫn được xác định rõ.
 
+![Hình 11. Trang quản trị: quản lý bộ câu hỏi khảo sát](hinh/hinh11_quan_tri_cau_hoi.png){width=60%}
+
 **Theo dõi và xuất dữ liệu đo lường.** Quản trị viên theo dõi số liệu đo lường tổng hợp, bao gồm tiến độ hoàn thành của từng giai đoạn theo lớp, điểm kiến thức và hành vi trung bình theo giai đoạn đầu vào, sau can thiệp và theo dõi, so sánh trước và sau can thiệp, và kết quả theo nhóm chủ đề. Số liệu tổng hợp được hiển thị dưới dạng mô tả. Quy tắc công bố áp dụng cho mọi số liệu tổng hợp: nhóm có ít hơn năm học sinh được ẩn để không lộ danh tính. Quản trị viên tải dữ liệu nghiên cứu dưới hai định dạng: dạng dài, mỗi dòng là một câu trả lời, và dạng rộng, mỗi dòng là một học sinh. Dữ liệu xuất ra đã được ẩn danh bằng mã ngẫu nhiên và không chứa thông tin định danh.
+
+![Hình 12. Trang quản trị: tải dữ liệu nghiên cứu](hinh/hinh12_quan_tri_tai_du_lieu.png){width=70%}
 
 Kiểm định thống kê không được thực hiện trong hệ thống. Các kiểm định được tiến hành riêng theo kế hoạch phân tích đã xác định trước tại mục 2.6, trên dữ liệu xuất từ hệ thống.
 
