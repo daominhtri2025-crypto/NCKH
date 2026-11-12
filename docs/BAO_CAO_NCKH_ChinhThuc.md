@@ -281,6 +281,46 @@ Kế hoạch phân tích được xác định trước khi thu dữ liệu, nh�
 - **Liên hệ.** Hệ số tương quan Spearman giữa thời gian phản hồi, cờ dùng gợi ý và độ chính xác (H4). Kết quả chỉ được diễn giải như tương quan, không suy ra nhân quả.
 - **Dữ liệu thiếu.** Không thay thế bằng giá trị ước lượng. Phân tích được thực hiện trên các cặp dữ liệu đầy đủ, và số lượng cặp được báo cáo.
 
+## 2.7. Hướng dẫn sử dụng chi tiết theo vai trò
+
+Mục này mô tả trải nghiệm thực tế của từng vai trò trên giao diện của hệ thống. Mọi nhãn nút và tiêu đề được trích nguyên văn từ giao diện.
+
+### 2.7.1. Học sinh
+
+**Bước 1. Kích hoạt và trang chọn hoạt động.** Học sinh mở ứng dụng và chọn "Em có thẻ mã từ giáo viên" để kích hoạt thẻ lần đầu. Màn hình kích hoạt hiển thị khối thông tin về dữ liệu được thu thập và không thu thập, và học sinh phải tích ô "Em đã đọc và đồng ý tham gia nghiên cứu." trước khi nút "Kích hoạt và bắt đầu" được bật. Các lần sau, học sinh chọn "Em đã kích hoạt, đăng nhập" và nhập mã trên thẻ. Mã không phân biệt chữ hoa, chữ thường, và phiên đăng nhập có hiệu lực 24 giờ. Trang chọn hoạt động có ba thẻ bước theo thứ tự: khảo sát đầu vào (sẵn sàng ngay sau khi đăng nhập), khảo sát sau can thiệp (mở khi đã hoàn thành khảo sát đầu vào và cả ba hoạt động), và khảo sát theo dõi (mở sau 28 ngày kể từ khảo sát sau can thiệp). Mỗi thẻ hiển thị trạng thái và điều kiện mở. Khi chưa đủ điều kiện, hoạt động bị khóa và ghi rõ lý do.
+
+**Bước 2. Khảo sát đầu vào.** Khảo sát được trình bày từng câu một, với tiêu đề dạng "Câu x/n". Phiên bản chuẩn gồm 16 câu, trong đó 10 câu kiến thức có đáp án và 6 câu hành vi thang bốn mức. Số câu của phiên bản hiện hành được hiển thị trên màn hình. Khảo sát không cho biết đúng hay sai, nhằm tránh hiệu ứng luyện tập làm sai lệch phép đo sau can thiệp. Học sinh có thể dừng giữa chừng và tiếp tục bằng nút "Tiếp tục".
+
+**Bước 3. Các hoạt động học tập và tương tác.** Sau khi hoàn thành khảo sát đầu vào, ba hoạt động mở ra và có thể làm theo thứ tự tùy chọn.
+
+*Sân chơi tình huống.* Hoạt động gồm năm kịch bản mô phỏng: cuộc gọi tự xưng công an, yêu cầu đọc mã OTP, tin nhắn trúng thưởng có đường dẫn, tài khoản mạng xã hội nhờ chuyển tiền gấp, và đường dẫn thanh toán dịch vụ công giả. Màn hình đầu hiển thị số tình huống đã trả lời và số lần đúng ngay từ lần đầu. Mỗi kịch bản có bốn lựa chọn xử lý. Sau khi chọn, ứng dụng cho biết đúng hay chưa đúng, kèm giải thích và dấu hiệu cảnh báo. Nếu chưa đúng, học sinh chọn lại.
+
+*Thám tử không gian mạng.* Học sinh xem lần lượt 12 địa chỉ web và phân loại mỗi địa chỉ là "Chính thống" hoặc "Giả mạo". Trong đó có 5 địa chỉ chính thống và 7 địa chỉ giả mạo, và mỗi địa chỉ chỉ được phân loại một lần. Màn hình đầu nêu quy tắc và hai tên gốc chính thức cần ghi nhớ. Khi chưa chắc, học sinh chọn "Đọc từ phải sang trái" để xem cách tách tên miền: nhìn đuôi miền, đọc ngược để tìm phần gốc, rồi đối chiếu với danh sách tên gốc chính thức. Kết quả hiển thị "Chính xác!" hoặc "Chưa đúng, xem cách đọc nhé".
+
+*Phòng thí nghiệm tài khoản.* Hoạt động có thanh tiến trình checklist tám bước và hai tab.
+
+- *Tab kiểm tra mật khẩu.* Học sinh nhập một mật khẩu mẫu, không phải mật khẩu thật, và có thể bấm "Hiện" để xem nội dung đang gõ. Màn hình ghi số mật khẩu mẫu đã thử và mức cao nhất đạt được. Cần thử ít nhất ba mật khẩu mẫu trước khi nút "Hoàn thành phòng thí nghiệm" được bật. Khung hướng dẫn ghi rõ mật khẩu chỉ được đánh giá trên thiết bị của học sinh và không được gửi lên máy chủ, cùng dòng "Mức gửi lên máy chủ: — (không kèm mật khẩu)".
+- *Tab cài đặt quyền riêng tư.* Có hai thẻ theo nền tảng, Zalo và Facebook, mỗi nền tảng bốn bước. Mỗi bước gồm phần thực hành, phần giải thích lý do, một câu kiểm tra hiểu bài nhiều lựa chọn, và ô xác nhận "Em đã thực hành các thao tác này trên điện thoại của mình." Học sinh chọn đáp án, tích ô xác nhận, rồi bấm "Xác nhận". Nếu trả lời sai, học sinh chọn lại. Thẻ nền tảng hiển thị số bước đã hoàn thành.
+
+### 2.7.2. Quản trị viên
+
+Quản trị viên đăng nhập bằng cổng "Giáo viên đăng nhập" với tài khoản có vai trò quản trị. Tài khoản này không gắn với lớp học nào, nên không xem được tiến độ chi tiết của từng lớp. Nếu tài khoản còn dùng mật khẩu mặc định hoặc mật khẩu tạm, một khối nhắc đổi mật khẩu hiển thị ở đầu trang. Trang quản trị gồm ba tab.
+
+**Tab Giáo viên.** Tab này có biểu mẫu thêm tài khoản (tên đăng nhập, vai trò, mã lớp) và bảng danh sách tài khoản. Mỗi tài khoản có các thao tác cấp mật khẩu mới và khóa hoặc mở khóa. Mọi thao tác đều có hộp thoại xác nhận, và mật khẩu mới chỉ hiện một lần.
+
+**Tab Câu hỏi khảo sát.** Tab này hiển thị bộ câu hỏi hiện hành, tách theo kiến thức và hành vi, với đáp án đúng chỉ hiện với quản trị viên. Quản trị viên có thể thêm, sửa hoặc xóa câu hỏi. Mỗi thay đổi tạo một phiên bản mới, và học sinh đã bắt đầu làm khảo sát giữ phiên bản cũ. Nhờ đó dữ liệu thu được trước và sau khi chỉnh sửa vẫn so sánh được.
+
+**Tab Dữ liệu đo lường.** Đây là khu vực theo dõi số liệu nghiên cứu, gồm sáu khối theo thứ tự trên màn hình.
+
+1. *Tải dữ liệu nghiên cứu.* Hai nút tải tệp CSV: dạng long, mỗi dòng là một câu trả lời, và dạng wide, mỗi dòng là một học sinh. Tệp đã được ẩn danh bằng mã ngẫu nhiên và không chứa họ tên. Nút tải dùng chính phiên đăng nhập của quản trị viên, không yêu cầu nhập mã truy cập hay thao tác dòng lệnh.
+2. *Tiến độ theo lớp.* Bảng gồm số thẻ đã phát, số học sinh đang hoạt động, và số học sinh đã hoàn thành từng giai đoạn: đầu vào, sau can thiệp và theo dõi. Dòng tổng ở trên ghi số học sinh đang hoạt động trên toàn hệ thống.
+3. *Điểm kiến thức trung bình theo giai đoạn.* Biểu đồ cột ngang có ba thanh tương ứng với đầu vào, sau can thiệp, và theo dõi sau 28 ngày. Mỗi thanh là tỉ lệ câu đúng trung bình, tính trên những học sinh đã hoàn thành giai đoạn đó, kèm cỡ mẫu.
+4. *So sánh trước và sau can thiệp.* Bảng hai dòng so sánh đầu vào với sau can thiệp, và đầu vào với theo dõi. Mỗi dòng ghi số học sinh có đủ cả hai lần đo, chênh lệch trung bình và trung vị.
+5. *Hành vi tự báo cáo.* Bảng trung bình và độ lệch chuẩn của thang hành vi ở ba giai đoạn, đã điều chỉnh câu đảo chiều.
+6. *Kiến thức theo nhóm chủ đề.* Bảng tỉ lệ câu đúng theo ba chủ đề m1, m2 và m3, tương ứng với sân chơi tình huống, thám tử không gian mạng và phòng thí nghiệm tài khoản, ở ba giai đoạn.
+
+Mọi ô có ít hơn năm học sinh được hiển thị là "ẩn" cùng cỡ mẫu, nhằm hạn chế nguy cơ lộ danh tính khi số lượng nhỏ. Giao diện chỉ hiển thị số tổng hợp và mô tả. Kiểm định thống kê (Wilcoxon, Friedman, Spearman) không được thực hiện trong giao diện và được tiến hành riêng theo kế hoạch phân tích tại mục 2.6.
+
 # CHƯƠNG 3. KẾT QUẢ VÀ THẢO LUẬN
 
 ## 3.1. Sản phẩm và kết quả kiểm chứng kỹ thuật
