@@ -281,45 +281,43 @@ Kế hoạch phân tích được xác định trước khi thu dữ liệu, nh�
 - **Liên hệ.** Hệ số tương quan Spearman giữa thời gian phản hồi, cờ dùng gợi ý và độ chính xác (H4). Kết quả chỉ được diễn giải như tương quan, không suy ra nhân quả.
 - **Dữ liệu thiếu.** Không thay thế bằng giá trị ước lượng. Phân tích được thực hiện trên các cặp dữ liệu đầy đủ, và số lượng cặp được báo cáo.
 
-## 2.7. Hướng dẫn sử dụng chi tiết theo vai trò
+## 2.7. Luồng chức năng theo vai trò
 
-Mục này mô tả trải nghiệm thực tế của từng vai trò trên giao diện của hệ thống. Mọi nhãn nút và tiêu đề được trích nguyên văn từ giao diện.
+Mục này mô tả luồng chức năng chuẩn của hệ thống đối với từng vai trò, theo kiến trúc logic đã trình bày ở mục 2.3. Mục này không mô tả giao diện chi tiết; các nội dung kỹ thuật được nêu ở các mục 2.2 và 2.5.
 
-### 2.7.1. Học sinh
+### 2.7.1. Vai trò học sinh
 
-**Bước 1. Kích hoạt và trang chọn hoạt động.** Học sinh mở ứng dụng và chọn "Em có thẻ mã từ giáo viên" để kích hoạt thẻ lần đầu. Màn hình kích hoạt hiển thị khối thông tin về dữ liệu được thu thập và không thu thập, và học sinh phải tích ô "Em đã đọc và đồng ý tham gia nghiên cứu." trước khi nút "Kích hoạt và bắt đầu" được bật. Các lần sau, học sinh chọn "Em đã kích hoạt, đăng nhập" và nhập mã trên thẻ. Mã không phân biệt chữ hoa, chữ thường, và phiên đăng nhập có hiệu lực 24 giờ. Trang chọn hoạt động có ba thẻ bước theo thứ tự: khảo sát đầu vào (sẵn sàng ngay sau khi đăng nhập), khảo sát sau can thiệp (mở khi đã hoàn thành khảo sát đầu vào và cả ba hoạt động), và khảo sát theo dõi (mở sau 28 ngày kể từ khảo sát sau can thiệp). Mỗi thẻ hiển thị trạng thái và điều kiện mở. Khi chưa đủ điều kiện, hoạt động bị khóa và ghi rõ lý do.
+Học sinh là người tham gia nghiên cứu. Luồng chức năng của học sinh gồm bốn giai đoạn tuần tự, được máy chủ kiểm soát.
 
-**Bước 2. Khảo sát đầu vào.** Khảo sát được trình bày từng câu một, với tiêu đề dạng "Câu x/n". Phiên bản chuẩn gồm 16 câu, trong đó 10 câu kiến thức có đáp án và 6 câu hành vi thang bốn mức. Số câu của phiên bản hiện hành được hiển thị trên màn hình. Khảo sát không cho biết đúng hay sai, nhằm tránh hiệu ứng luyện tập làm sai lệch phép đo sau can thiệp. Học sinh có thể dừng giữa chừng và tiếp tục bằng nút "Tiếp tục".
+**Giai đoạn 1. Kích hoạt và truy cập.** Học sinh kích hoạt thẻ mã được cấp, sau khi đọc thông tin nghiên cứu và đồng ý tham gia. Thẻ chỉ kích hoạt được một lần. Các lần truy cập sau được thực hiện bằng cùng mã thẻ. Phiên làm việc được duy trì trong một khoảng thời gian xác định, và mã thẻ là phương thức xác thực duy nhất của học sinh. Hệ thống không thu họ tên, email hay số điện thoại.
 
-**Bước 3. Các hoạt động học tập và tương tác.** Sau khi hoàn thành khảo sát đầu vào, ba hoạt động mở ra và có thể làm theo thứ tự tùy chọn.
+**Giai đoạn 2. Khảo sát đầu vào.** Trước khi tham gia bất kỳ hoạt động học tập nào, học sinh trả lời bộ khảo sát đầu vào. Bộ khảo sát gồm câu hỏi kiến thức có đáp án và câu hỏi hành vi tự báo cáo. Khảo sát không phản hồi đúng sai trong quá trình làm, nhằm bảo đảm phép đo đầu vào không bị ảnh hưởng bởi quá trình học.
 
-*Sân chơi tình huống.* Hoạt động gồm năm kịch bản mô phỏng: cuộc gọi tự xưng công an, yêu cầu đọc mã OTP, tin nhắn trúng thưởng có đường dẫn, tài khoản mạng xã hội nhờ chuyển tiền gấp, và đường dẫn thanh toán dịch vụ công giả. Màn hình đầu hiển thị số tình huống đã trả lời và số lần đúng ngay từ lần đầu. Mỗi kịch bản có bốn lựa chọn xử lý. Sau khi chọn, ứng dụng cho biết đúng hay chưa đúng, kèm giải thích và dấu hiệu cảnh báo. Nếu chưa đúng, học sinh chọn lại.
+**Giai đoạn 3. Hoạt động học tập và tương tác.** Sau khi hoàn thành khảo sát đầu vào, học sinh tiếp cận ba hoạt động, có thể thực hiện theo thứ tự tùy chọn:
 
-*Thám tử không gian mạng.* Học sinh xem lần lượt 12 địa chỉ web và phân loại mỗi địa chỉ là "Chính thống" hoặc "Giả mạo". Trong đó có 5 địa chỉ chính thống và 7 địa chỉ giả mạo, và mỗi địa chỉ chỉ được phân loại một lần. Màn hình đầu nêu quy tắc và hai tên gốc chính thức cần ghi nhớ. Khi chưa chắc, học sinh chọn "Đọc từ phải sang trái" để xem cách tách tên miền: nhìn đuôi miền, đọc ngược để tìm phần gốc, rồi đối chiếu với danh sách tên gốc chính thức. Kết quả hiển thị "Chính xác!" hoặc "Chưa đúng, xem cách đọc nhé".
+- *Sân chơi tình huống*: học sinh xử lý các kịch bản lừa đảo giả lập, lựa chọn cách phản ứng và nhận giải thích tức thời.
+- *Thám tử không gian mạng*: học sinh phân loại các địa chỉ web là chính thống hoặc giả mạo, có công cụ hỗ trợ đọc tên miền từ phải sang trái.
+- *Phòng thí nghiệm tài khoản*: học sinh đánh giá mức độ mạnh của mật khẩu mẫu, đồng thời thực hành các bước cài đặt quyền riêng tư trên hai nền tảng nhắn tin và mạng xã hội, kèm câu hỏi kiểm tra hiểu bài. Mật khẩu không được gửi lên máy chủ.
 
-*Phòng thí nghiệm tài khoản.* Hoạt động có thanh tiến trình checklist tám bước và hai tab.
+Mỗi hoạt động trả về phản hồi tức thời về tính đúng sai và giải thích, trừ khảo sát. Mỗi lần trả lời được ghi nhận với thời gian phản hồi và mã phiên bản nội dung.
 
-- *Tab kiểm tra mật khẩu.* Học sinh nhập một mật khẩu mẫu, không phải mật khẩu thật, và có thể bấm "Hiện" để xem nội dung đang gõ. Màn hình ghi số mật khẩu mẫu đã thử và mức cao nhất đạt được. Cần thử ít nhất ba mật khẩu mẫu trước khi nút "Hoàn thành phòng thí nghiệm" được bật. Khung hướng dẫn ghi rõ mật khẩu chỉ được đánh giá trên thiết bị của học sinh và không được gửi lên máy chủ, cùng dòng "Mức gửi lên máy chủ: — (không kèm mật khẩu)".
-- *Tab cài đặt quyền riêng tư.* Có hai thẻ theo nền tảng, Zalo và Facebook, mỗi nền tảng bốn bước. Mỗi bước gồm phần thực hành, phần giải thích lý do, một câu kiểm tra hiểu bài nhiều lựa chọn, và ô xác nhận "Em đã thực hành các thao tác này trên điện thoại của mình." Học sinh chọn đáp án, tích ô xác nhận, rồi bấm "Xác nhận". Nếu trả lời sai, học sinh chọn lại. Thẻ nền tảng hiển thị số bước đã hoàn thành.
+**Giai đoạn 4. Khảo sát sau can thiệp và theo dõi.** Khảo sát sau can thiệp chỉ mở khi học sinh đã hoàn thành khảo sát đầu vào và đủ ba hoạt động. Khảo sát theo dõi mở sau một khoảng thời gian xác định, mặc định là 28 ngày kể từ khi hoàn thành khảo sát sau can thiệp. Trình tự này được kiểm soát ở máy chủ, không phụ thuộc thao tác phía giao diện.
 
-### 2.7.2. Quản trị viên
+### 2.7.2. Vai trò quản trị viên
 
-Quản trị viên đăng nhập bằng cổng "Giáo viên đăng nhập" với tài khoản có vai trò quản trị. Tài khoản này không gắn với lớp học nào, nên không xem được tiến độ chi tiết của từng lớp. Nếu tài khoản còn dùng mật khẩu mặc định hoặc mật khẩu tạm, một khối nhắc đổi mật khẩu hiển thị ở đầu trang. Trang quản trị gồm ba tab.
+Quản trị viên là người vận hành hệ thống trong nhà trường hoặc nhóm nghiên cứu. Quản trị viên đăng nhập bằng tài khoản có vai trò quản trị. Tài khoản này không gắn với lớp học cụ thể và không truy cập được dữ liệu cá nhân của học sinh; quyền hạn của quản trị viên được kiểm tra ở máy chủ cho mọi thao tác. Chức năng của quản trị viên gồm ba nhóm.
 
-**Tab Giáo viên.** Tab này có biểu mẫu thêm tài khoản (tên đăng nhập, vai trò, mã lớp) và bảng danh sách tài khoản. Mỗi tài khoản có các thao tác cấp mật khẩu mới và khóa hoặc mở khóa. Mọi thao tác đều có hộp thoại xác nhận, và mật khẩu mới chỉ hiện một lần.
+**Quản lý tài khoản giáo viên.** Quản trị viên tạo tài khoản giáo viên, gắn tài khoản với lớp, cấp lại mật khẩu khi cần, và khóa hoặc mở khóa tài khoản. Tài khoản bị khóa không đăng nhập được, nhưng dữ liệu được giữ nguyên. Hệ thống không cho phép khóa chính tài khoản đang đăng nhập hoặc khóa quản trị viên cuối cùng còn hoạt động.
 
-**Tab Câu hỏi khảo sát.** Tab này hiển thị bộ câu hỏi hiện hành, tách theo kiến thức và hành vi, với đáp án đúng chỉ hiện với quản trị viên. Quản trị viên có thể thêm, sửa hoặc xóa câu hỏi. Mỗi thay đổi tạo một phiên bản mới, và học sinh đã bắt đầu làm khảo sát giữ phiên bản cũ. Nhờ đó dữ liệu thu được trước và sau khi chỉnh sửa vẫn so sánh được.
+**Quản lý bộ câu hỏi khảo sát.** Quản trị viên xem, thêm, sửa và xóa câu hỏi trong bộ khảo sát. Mỗi thay đổi tạo một phiên bản mới của bộ câu hỏi, và phiên bản cũ được giữ nguyên. Học sinh đã bắt đầu khảo sát tiếp tục với phiên bản đã ghim từ lúc bắt đầu, nên dữ liệu thu được ở các phiên bản khác nhau vẫn được xác định rõ.
 
-**Tab Dữ liệu đo lường.** Đây là khu vực theo dõi số liệu nghiên cứu, gồm sáu khối theo thứ tự trên màn hình.
+**Theo dõi và xuất dữ liệu đo lường.** Quản trị viên theo dõi số liệu đo lường tổng hợp, bao gồm tiến độ hoàn thành của từng giai đoạn theo lớp, điểm kiến thức và hành vi trung bình theo giai đoạn đầu vào, sau can thiệp và theo dõi, so sánh trước và sau can thiệp, và kết quả theo nhóm chủ đề. Số liệu tổng hợp được hiển thị dưới dạng mô tả. Quy tắc công bố áp dụng cho mọi số liệu tổng hợp: nhóm có ít hơn năm học sinh được ẩn để không lộ danh tính. Quản trị viên tải dữ liệu nghiên cứu dưới hai định dạng: dạng dài, mỗi dòng là một câu trả lời, và dạng rộng, mỗi dòng là một học sinh. Dữ liệu xuất ra đã được ẩn danh bằng mã ngẫu nhiên và không chứa thông tin định danh.
 
-1. *Tải dữ liệu nghiên cứu.* Hai nút tải tệp CSV: dạng long, mỗi dòng là một câu trả lời, và dạng wide, mỗi dòng là một học sinh. Tệp đã được ẩn danh bằng mã ngẫu nhiên và không chứa họ tên. Nút tải dùng chính phiên đăng nhập của quản trị viên, không yêu cầu nhập mã truy cập hay thao tác dòng lệnh.
-2. *Tiến độ theo lớp.* Bảng gồm số thẻ đã phát, số học sinh đang hoạt động, và số học sinh đã hoàn thành từng giai đoạn: đầu vào, sau can thiệp và theo dõi. Dòng tổng ở trên ghi số học sinh đang hoạt động trên toàn hệ thống.
-3. *Điểm kiến thức trung bình theo giai đoạn.* Biểu đồ cột ngang có ba thanh tương ứng với đầu vào, sau can thiệp, và theo dõi sau 28 ngày. Mỗi thanh là tỉ lệ câu đúng trung bình, tính trên những học sinh đã hoàn thành giai đoạn đó, kèm cỡ mẫu.
-4. *So sánh trước và sau can thiệp.* Bảng hai dòng so sánh đầu vào với sau can thiệp, và đầu vào với theo dõi. Mỗi dòng ghi số học sinh có đủ cả hai lần đo, chênh lệch trung bình và trung vị.
-5. *Hành vi tự báo cáo.* Bảng trung bình và độ lệch chuẩn của thang hành vi ở ba giai đoạn, đã điều chỉnh câu đảo chiều.
-6. *Kiến thức theo nhóm chủ đề.* Bảng tỉ lệ câu đúng theo ba chủ đề m1, m2 và m3, tương ứng với sân chơi tình huống, thám tử không gian mạng và phòng thí nghiệm tài khoản, ở ba giai đoạn.
+Kiểm định thống kê không được thực hiện trong hệ thống. Các kiểm định được tiến hành riêng theo kế hoạch phân tích đã xác định trước tại mục 2.6, trên dữ liệu xuất từ hệ thống.
 
-Mọi ô có ít hơn năm học sinh được hiển thị là "ẩn" cùng cỡ mẫu, nhằm hạn chế nguy cơ lộ danh tính khi số lượng nhỏ. Giao diện chỉ hiển thị số tổng hợp và mô tả. Kiểm định thống kê (Wilcoxon, Friedman, Spearman) không được thực hiện trong giao diện và được tiến hành riêng theo kế hoạch phân tích tại mục 2.6.
+### 2.7.3. Ranh giới quyền hạn
+
+Phân quyền theo vai trò được áp dụng nhất quán ở máy chủ. Học sinh chỉ truy cập được dữ liệu của chính mình và không có quyền quản trị. Giáo viên xem tiến độ tổng hợp của lớp mình và không xem được câu trả lời của từng học sinh. Quản trị viên xem số liệu tổng hợp và tải dữ liệu đã ẩn danh, nhưng không xem được thông tin định danh vì hệ thống không lưu trữ thông tin đó. Mọi thao tác quản trị tài khoản và thay đổi bộ câu hỏi được ghi vào nhật ký kiểm toán nội bộ.
 
 # CHƯƠNG 3. KẾT QUẢ VÀ THẢO LUẬN
 
