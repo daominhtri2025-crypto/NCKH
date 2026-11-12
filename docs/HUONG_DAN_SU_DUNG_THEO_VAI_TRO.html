@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>H�����ng d���n s��� d���ng theo vai tr�� ��� An To��n S��� H���c �������ng</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { color: #008000; } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { color: #008000; font-weight: bold; } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="/dev/null" />
+<style>
+body{font-family:"Times New Roman",Times,serif;font-size:17px;line-height:1.5;max-width:860px;margin:32px auto;padding:0 20px;color:#111;background:#fff}
+h1{font-size:28px;border-bottom:2px solid #0b6e99;padding-bottom:6px}
+h2{font-size:22px;margin-top:32px;color:#0b6e99}
+h3{font-size:18px;margin-top:22px}
+table{border-collapse:collapse;width:100%;margin:12px 0;font-size:15px}
+th,td{border:1px solid #333;padding:6px 8px;vertical-align:top;text-align:left}
+th{background:#e7eef5}
+code{font-family:Consolas,monospace;background:#f2f4f7;padding:1px 4px;border-radius:3px}
+hr{border:none;border-top:1px solid #ccc;margin:28px 0}
+@media (max-width:640px){body{font-size:16px;padding:0 14px}table{font-size:14px}}
+@media (prefers-color-scheme: dark){body{background:#0f1b2b;color:#eef3fa}th{background:#17263a}th,td{border-color:#6b7d95}code{background:#17263a}h2{color:#6cc6ec}}
+</style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">H�����ng d���n s��� d���ng theo vai tr�� ��� An To��n
+S��� H���c �������ng</h1>
+</header>
+<h1 id="hướng-dẫn-sử-dụng-theo-vai-trò">Hướng dẫn sử dụng theo vai
+trò</h1>
+<p>Tài liệu mô tả cách dùng "An Toàn Số Học Đường" theo ba vai trò:
+<strong>học sinh</strong>, <strong>giáo viên hướng dẫn</strong> và
+<strong>nhóm kỹ thuật/nghiên cứu</strong>. Với mỗi vai trò có mục riêng
+về <strong>cách đăng nhập</strong>.</p>
+<p>Bảng tóm tắt cách đăng nhập:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Vai trò</th>
+<th>Đăng nhập bằng gì</th>
+<th>Đăng nhập ở đâu</th>
+<th>Có tài khoản không</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Học sinh</td>
+<td>Mã học sinh <code>XXXX-XXXX</code> in trên thẻ, sau khi kích hoạt
+thẻ</td>
+<td>Trang chủ ứng dụng</td>
+<td>Không có tài khoản; có thẻ mã</td>
+</tr>
+<tr class="even">
+<td>Giáo viên</td>
+<td>Tên đăng nhập và mật khẩu do nhóm kỹ thuật cấp</td>
+<td>Trang chủ ứng dụng, mục "Giáo viên đăng nhập"</td>
+<td>Có tài khoản</td>
+</tr>
+<tr class="odd">
+<td>Nhóm kỹ thuật</td>
+<td>Đăng nhập vào máy chủ (Terminal hoặc phpMyAdmin); không đăng nhập
+vào ứng dụng</td>
+<td>Máy chủ hosting</td>
+<td>Tài khoản hosting và CSDL</td>
+</tr>
+</tbody>
+</table>
+<p>Nguyên tắc chung: học sinh không tự tạo mã. Nhóm kỹ thuật in thẻ mã
+(mỗi thẻ là một mã ngẫu nhiên, không ghi tên), giáo viên nhận và phát
+thẻ, học sinh kích hoạt thẻ.</p>
+<hr />
+<h2 id="1-học-sinh">1. Học sinh</h2>
+<p>Phần này mô tả trải nghiệm của học sinh theo đúng giao diện của ứng
+dụng. Mọi nhãn nút và tiêu đề trong phần này là chữ hiển thị trên màn
+hình.</p>
+<h3 id="11-kích-hoạt-thẻ-mã-lần-đầu">1.1. Kích hoạt thẻ mã (lần
+đầu)</h3>
+<ol type="1">
+<li>Nhận thẻ mã từ giáo viên. Mã có dạng <code>XXXX-XXXX</code>.</li>
+<li>Mở ứng dụng. Trang đầu có hai nút: <strong>Em có thẻ mã từ giáo
+viên</strong> và <strong>Em đã kích hoạt, đăng nhập</strong>.</li>
+<li>Bấm <strong>Em có thẻ mã từ giáo viên</strong>. Màn hình
+<strong>Kích hoạt thẻ mã</strong> hiện ra, kèm khối thông tin về dữ liệu
+được thu thập và không thu thập.</li>
+<li>Nhập mã trên thẻ vào ô <strong>Mã trên thẻ</strong>.</li>
+<li>Tích ô <strong>Em đã đọc và đồng ý tham gia nghiên cứu.</strong> Nút
+<strong>Kích hoạt và bắt đầu</strong> chỉ bật khi đã nhập mã và tích ô
+này.</li>
+<li>Bấm <strong>Kích hoạt và bắt đầu</strong>. Ứng dụng đưa học sinh đến
+trang chọn hoạt động.</li>
+</ol>
+<p>Mỗi thẻ chỉ kích hoạt được một lần. Nếu thẻ không dùng được, học sinh
+báo giáo viên.</p>
+<h3 id="12-đăng-nhập-lại">1.2. Đăng nhập lại</h3>
+<ol type="1">
+<li>Trên trang đầu, bấm <strong>Em đã kích hoạt, đăng
+nhập</strong>.</li>
+<li>Nhập mã trên thẻ vào ô <strong>Mã trên thẻ</strong>. Ứng dụng không
+phân biệt chữ hoa, chữ thường, và bỏ qua dấu gạch nối.</li>
+<li>Bấm <strong>Đăng nhập</strong>.</li>
+</ol>
+<p>Phiên đăng nhập có hiệu lực 24 giờ. Khi hết hạn, ứng dụng yêu cầu
+nhập lại mã. Góc trên bên phải luôn hiển thị <strong>Mã</strong> của học
+sinh và nút <strong>Đăng xuất</strong>.</p>
+<h3 id="13-trang-chọn-hoạt-động">1.3. Trang chọn hoạt động</h3>
+<p>Trang chọn hoạt động có ba thẻ bước ở trên cùng. Mỗi thẻ hiển thị số
+thứ tự, tên khảo sát, trạng thái và điều kiện mở.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Thẻ</th>
+<th>Tên</th>
+<th>Trạng thái ban đầu</th>
+<th>Điều kiện mở</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>Khảo sát đầu vào</td>
+<td>Sẵn sàng</td>
+<td>Mở ngay sau khi đăng nhập</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>Khảo sát sau can thiệp</td>
+<td>Chưa mở</td>
+<td>Hoàn thành khảo sát đầu vào và cả ba hoạt động</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>Khảo sát theo dõi</td>
+<td>Chưa mở</td>
+<td>Hoàn thành khảo sát sau can thiệp và đã qua 28 ngày</td>
+</tr>
+</tbody>
+</table>
+<p>Dòng <strong>Hoạt động đã xong</strong> cho biết số hoạt động đã hoàn
+thành trên tổng số ba. Phía dưới là phần <strong>Chọn một hoạt
+động</strong>, gồm ba thẻ: <em>Sân chơi tình huống</em>, <em>Thám tử
+không gian mạng</em> và <em>Phòng thí nghiệm tài khoản</em>. Khi chưa đủ
+điều kiện, mỗi thẻ hiển thị khóa và dòng ghi lý do, ví dụ "Sau khảo sát
+đầu vào". Khi chưa làm khảo sát đầu vào, khối cảnh báo <strong>Em cần
+làm khảo sát đầu vào trước khi bắt đầu các hoạt động</strong> xuất hiện,
+kèm nút dẫn đến khảo sát.</p>
+<h3 id="14-khảo-sát-đầu-vào-sau-can-thiệp-theo-dõi">1.4. Khảo sát (đầu
+vào, sau can thiệp, theo dõi)</h3>
+<p>Màn hình khảo sát ghi số câu của phiên bản hiện hành. Bản chuẩn của
+đề tài có 16 câu. Học sinh làm từng câu một, tiêu đề mỗi câu ghi <em>Câu
+x/n</em>. Bấm <strong>Bắt đầu</strong> để vào câu đầu tiên, hoặc
+<strong>Tiếp tục</strong> nếu đã làm dở.</p>
+<p>Khảo sát không cho biết đúng hay sai. Học sinh chọn đáp án của mình
+và chuyển sang câu tiếp theo. Câu kiến thức có từ hai đến bốn lựa chọn,
+tùy câu. Câu hành vi có thang bốn mức.</p>
+<h3 id="15-sân-chơi-tình-huống">1.5. Sân chơi tình huống</h3>
+<p>Hoạt động gồm năm tình huống: cuộc gọi tự xưng công an, nhân viên
+ngân hàng cần mã OTP, tin nhắn trúng thưởng có đường link, tài khoản
+Zalo "người thân" nhờ chuyển tiền gấp, và đường link thanh toán dịch vụ
+công giả. Màn hình đầu hiển thị <strong>Đã trả lời x/5 tình
+huống</strong> và <strong>Đúng ngay lần đầu</strong>, kèm thanh tiến
+trình. Mỗi tình huống có trạng thái <strong>Chưa làm</strong>,
+<strong>Đúng ✓</strong> hoặc <strong>Đã làm</strong>.</p>
+<p>Học sinh đọc tình huống trong khung hội thoại, chọn cách xử lý và bấm
+xác nhận. Ứng dụng cho biết đúng hay chưa đúng, kèm giải thích. Nếu chưa
+đúng, học sinh bấm <strong>Chọn lại</strong> để thử lại. Bấm <strong>Bắt
+đầu chơi</strong> lần đầu, hoặc <strong>Tiếp tục chơi</strong> khi đã có
+tiến trình.</p>
+<h3 id="16-thám-tử-không-gian-mạng">1.6. Thám tử không gian mạng</h3>
+<p>Hoạt động gồm 12 địa chỉ web. Mỗi lượt, học sinh chọn <strong>✅
+Chính thống</strong> hoặc <strong>⚠️ Giả mạo</strong> cho địa chỉ hiện
+ra. Mỗi địa chỉ chỉ phân loại một lần. Màn hình đầu nêu quy tắc và hai
+tên gốc chính thức cần nhớ.</p>
+<p>Khi chưa chắc, học sinh bấm <strong>Đọc từ phải sang trái</strong> để
+xem cách tách tên miền: nhìn phần cuối (đuôi miền), đọc ngược sang trái
+để tìm phần gốc, rồi so với danh sách tên gốc chính thức. Kết quả hiển
+thị <strong>Chính xác!</strong> hoặc <strong>Chưa đúng, xem cách đọc
+nhé</strong>.</p>
+<h3 id="17-phòng-thí-nghiệm-tài-khoản">1.7. Phòng thí nghiệm tài
+khoản</h3>
+<p>Hoạt động có thanh <strong>Checklist</strong> ghi số bước đã hoàn
+thành trên tổng số tám bước, và nhãn <strong>Phòng thí nghiệm</strong>
+cho biết tình trạng chung. Hoạt động có hai tab.</p>
+<p><strong>Tab Kiểm tra mật khẩu.</strong> Học sinh nhập một <strong>mật
+khẩu mẫu</strong> vào ô có gợi ý dạng ví dụ, không nhập mật khẩu thật.
+Nút <strong>Hiện</strong> cho phép xem nội dung đang gõ. Màn hình hiển
+thị số mật khẩu mẫu đã thử và mức cao nhất đạt được. Cần thử ít nhất ba
+mật khẩu mẫu trước khi nút <strong>Hoàn thành phòng thí nghiệm</strong>
+được bật. Khung xanh ghi rõ mật khẩu chỉ được kiểm tra trên máy này,
+không được gửi lên máy chủ, và dòng cuối ghi <strong>Mức gửi lên máy
+chủ: — (không kèm mật khẩu)</strong>.</p>
+<p><strong>Tab Cài đặt quyền riêng tư.</strong> Có hai thẻ theo nền
+tảng: <strong>Zalo</strong> và <strong>Facebook</strong>, mỗi nền tảng
+bốn bước. Mỗi bước gồm ba mục:</p>
+<ul>
+<li><strong>Thực hành:</strong> thao tác cần làm trên điện thoại của học
+sinh.</li>
+<li><strong>Vì sao quan trọng:</strong> lý do ngắn gọn.</li>
+<li><strong>Kiểm tra hiểu bài:</strong> câu hỏi nhiều lựa chọn.</li>
+</ul>
+<p>Để hoàn thành bước, học sinh chọn đáp án, tích ô <strong>Em đã thực
+hành các thao tác này trên điện thoại của mình</strong>, rồi bấm
+<strong>Xác nhận</strong>. Nếu sai, bấm <strong>Chọn lại</strong>. Thẻ
+nền tảng hiển thị số bước đã xong, ví dụ <em>Zalo 0/4</em>.</p>
+<h3 id="18-điều-học-sinh-cần-nhớ">1.8. Điều học sinh cần nhớ</h3>
+<ul>
+<li>Không nhập mật khẩu thật vào ứng dụng.</li>
+<li>Không đọc mã OTP hay mã xác thực cho bất kỳ ai.</li>
+<li>Giữ thẻ mã. Nếu làm mất thẻ, báo giáo viên để được cấp thẻ mới; tiến
+độ được giữ nguyên khi giáo viên đối chiếu được sổ phát thẻ.</li>
+<li>Tham gia là tự nguyện. Học sinh có thể dừng bất cứ lúc nào, và báo
+giáo viên nếu muốn rút khỏi nghiên cứu.</li>
+</ul>
+<hr />
+<h2 id="2-giáo-viên-hướng-dẫn">2. Giáo viên hướng dẫn</h2>
+<h3 id="21-cách-đăng-nhập">2.1. Cách đăng nhập</h3>
+<p>Giáo viên có tài khoản do nhóm kỹ thuật cấp, gồm <strong>tên đăng
+nhập</strong> và <strong>mật khẩu</strong>. Tài khoản chỉ xem được tiến
+độ của lớp được gán.</p>
+<ol type="1">
+<li>Mở ứng dụng trên trình duyệt, ở trang chủ.</li>
+<li>Ở dòng cuối, bấm <strong>Giáo viên đăng nhập</strong>.</li>
+<li>Nhập tên đăng nhập và mật khẩu, rồi bấm <strong>Đăng
+nhập</strong>.</li>
+<li>Danh sách lớp hiện ra. Khi xong, bấm <strong>Đăng xuất</strong> ở
+góc trên bên phải.</li>
+</ol>
+<p><strong>Lần đầu đăng nhập bằng mật khẩu tạm:</strong> ở đầu trang
+hiện khối <strong>"Tài khoản đang dùng mật khẩu mặc định hoặc mật khẩu
+tạm"</strong>. Bấm <strong>Đổi mật khẩu</strong>, nhập mật khẩu hiện tại
+và mật khẩu mới (10 ký tự trở lên, có cả chữ và số, khác mật khẩu cũ),
+rồi bấm <strong>Lưu mật khẩu mới</strong>. Có thể bỏ qua và đổi sau,
+nhưng nên đổi ngay.</p>
+<p>Lưu ý:</p>
+<ul>
+<li>Phiên đăng nhập giữ <strong>8 giờ</strong>. Hết hạn thì đăng nhập
+lại.</li>
+<li>Nếu quên mật khẩu, liên hệ nhóm kỹ thuật để được đặt lại. Không chia
+sẻ tài khoản cho người khác.</li>
+<li>Tên đăng nhập và mật khẩu không được gửi qua tin nhắn công khai hay
+lưu trong ảnh chụp màn hình.</li>
+</ul>
+<h3 id="22-tạo-thẻ-mới-cho-học-sinh">2.2. Tạo thẻ mới cho học sinh</h3>
+<p>Chọn đúng thao tác theo tình huống. Điều quan trọng nhất là
+<strong>không tạo thẻ mới cho học sinh đã có tiến độ</strong>, vì sẽ làm
+mất tiến độ cũ.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Tình huống</th>
+<th>Thao tác</th>
+<th>Tiến độ</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Học sinh mới của lớp, chưa có thẻ</td>
+<td>Tạo thẻ mới (mục dưới)</td>
+<td>Bắt đầu từ đầu</td>
+</tr>
+<tr class="even">
+<td>Thẻ đã phát nhưng chưa ai kích hoạt</td>
+<td>Tạo thẻ mới; bỏ thẻ cũ</td>
+<td>Bắt đầu từ đầu</td>
+</tr>
+<tr class="odd">
+<td>Học sinh <strong>đã kích hoạt</strong>, làm mất hoặc quên mã</td>
+<td><strong>Cấp thẻ mới</strong> trên danh sách lớp (cần đối chiếu sổ
+phát thẻ)</td>
+<td><strong>Giữ nguyên</strong></td>
+</tr>
+<tr class="even">
+<td>Học sinh đã kích hoạt, quên mã và không có sổ phát thẻ</td>
+<td>Không tìm lại được mã cũ. Tạo thẻ mới</td>
+<td>Mất tiến độ cũ</td>
+</tr>
+</tbody>
+</table>
+<ol type="1">
+<li>Đăng nhập (mục 2.1), ở phần <strong>Tạo thẻ mới</strong>, nhập số
+thẻ (từ 1 đến 20 mỗi lần).</li>
+<li>Bấm <strong>Tạo thẻ</strong>. Danh sách mã hiện ra. Bấm <strong>In
+danh sách</strong> để in.</li>
+<li>Phát thẻ cho học sinh và ghi vào sổ phát thẻ riêng (thẻ nào cho
+ai).</li>
+</ol>
+<p>Lưu ý:</p>
+<ul>
+<li>Thẻ mới <strong>không</strong> kế thừa tiến độ cũ. Với học sinh đã
+kích hoạt, dùng <strong>Cấp thẻ mới</strong> trên danh sách lớp thay vì
+tạo thẻ mới.</li>
+<li>Mỗi lớp có tổng số thẻ tối đa, do nhóm kỹ thuật đặt (mặc định 300).
+Khi vượt giới hạn, ứng dụng báo và giáo viên liên hệ nhóm kỹ thuật.</li>
+<li>Thẻ do giáo viên tạo được ghi nhận là do tài khoản của giáo viên
+tạo, để có trách nhiệm đối với việc phát thẻ.</li>
+</ul>
+<p><strong>Cấp thẻ mới cho học sinh đã có tiến độ (làm mất
+thẻ):</strong></p>
+<ol type="1">
+<li>Mở sổ phát thẻ, tìm mã đã phát cho học sinh đó. Đây là bước bắt
+buộc: danh sách lớp chỉ hiển thị mã, không hiển thị tên.</li>
+<li>Trong danh sách lớp, tìm đúng mã đó (đối chiếu số lượng câu đã làm
+với học sinh), rồi bấm <strong>Cấp thẻ mới</strong>.</li>
+<li>Trong khối xác nhận hiện ra dưới tên học sinh, <strong>tích ô "Tôi
+đã đối chiếu mã cũ với sổ phát thẻ"</strong>, rồi bấm <strong>Xác nhận
+cấp thẻ mới</strong>. Nút này chỉ bật khi đã tích ô.</li>
+<li>Mã mới hiện ra; in và phát cho học sinh.</li>
+<li>Ghi vào sổ: mã cũ, mã mới, học sinh nào, ngày nào.</li>
+</ol>
+<p>Mỗi lần cấp lại được hệ thống ghi nhật ký (người thực hiện, mã cũ, mã
+mới, thời điểm, việc đã xác nhận đối chiếu) để truy vết trách nhiệm.
+Nhật ký này chỉ dùng nội bộ, không nằm trong tệp xuất nghiên cứu. Yêu
+cầu không tích ô xác nhận sẽ bị từ chối và mã không đổi.</p>
+<p>Mã cũ mất hiệu lực ngay. Học sinh đăng nhập lại bằng mã mới và tiếp
+tục từ chỗ đã dừng. Chỉ cấp lại được cho học sinh của lớp mình.</p>
+<h3 id="23-trước-khi-học-sinh-tham-gia">2.3. Trước khi học sinh tham
+gia</h3>
+<ol type="1">
+<li>Thống nhất với nhà trường và phụ huynh về việc triển khai nghiên
+cứu.</li>
+<li>Đề nghị nhóm kỹ thuật tạo lớp, in lô thẻ đầu tiên và cấp tài khoản
+giáo viên. Sau đó giáo viên có thể tự tạo thẻ mới cho lớp (mục
+2.2).</li>
+<li>Nhận thẻ và tài khoản. Chuẩn bị phòng máy hoặc điện thoại có kết nối
+mạng ổn định.</li>
+</ol>
+<h3 id="24-trong-giờ-học">2.4. Trong giờ học</h3>
+<ol type="1">
+<li>Phát thẻ cho học sinh. <strong>Ghi lại thẻ nào phát cho học sinh nào
+trong sổ riêng của giáo viên</strong>, không ghi vào bất kỳ tệp nào của
+hệ thống. Sổ này là thông tin nhạy cảm và phải được bảo quản riêng.</li>
+<li>Hướng dẫn học sinh kích hoạt thẻ (mục 1.1) và làm theo trình tự (mục
+1.3).</li>
+<li>Nhắc học sinh giữ thẻ cẩn thận.</li>
+</ol>
+<h3 id="25-theo-dõi-tiến-độ">2.5. Theo dõi tiến độ</h3>
+<p>Sau khi đăng nhập, danh sách lớp hiển thị cho mỗi học sinh:</p>
+<ul>
+<li><strong>Trạng thái:</strong> đã kích hoạt hay chưa. Thẻ chưa kích
+hoạt chỉ hiển thị mã.</li>
+<li><strong>Khảo sát đầu vào, hậu kiểm, theo dõi:</strong> số câu đã làm
+trên tổng 16.</li>
+<li><strong>Sân chơi tình huống, thám tử tên miền, checklist:</strong>
+số mục đã hoàn thành, và đã đạt phòng thí nghiệm hay chưa.</li>
+</ul>
+<p>Dùng danh sách này để nhắc những học sinh còn thiếu. Khi khảo sát
+theo dõi mở, nhắc học sinh làm vì hệ thống chưa tự nhắc.</p>
+<p>Danh sách chỉ hiển thị số lượng và trạng thái. Giáo viên không xem
+được câu trả lời, đáp án hay nội dung học sinh nhập.</p>
+<h3 id="26-điều-giáo-viên-không-làm">2.6. Điều giáo viên không làm</h3>
+<ul>
+<li>Không yêu cầu học sinh nhập họ tên, email, số điện thoại hay mật
+khẩu thật vào ứng dụng.</li>
+<li>Không chia sẻ thẻ mã, mã học sinh hay tài khoản giáo viên.</li>
+<li>Không tạo thẻ vượt nhu cầu thực tế của lớp; không tự đổi lớp hay mật
+khẩu (việc này do nhóm kỹ thuật thực hiện).</li>
+<li>Không cố gắng xem câu trả lời của học sinh; giao diện không hiển thị
+chúng.</li>
+<li>Không tự sửa dữ liệu trong cơ sở dữ liệu.</li>
+</ul>
+<hr />
+<h2 id="3-nhóm-kỹ-thuật-và-nghiên-cứu">3. Nhóm kỹ thuật và nghiên
+cứu</h2>
+<h3 id="31-cách-làm-việc-và-đăng-nhập">3.1. Cách làm việc và đăng
+nhập</h3>
+<p>Nhóm kỹ thuật có hai cách làm việc:</p>
+<ul>
+<li><strong>Trang quản trị trên ứng dụng.</strong> Quản trị viên đăng
+nhập bằng cổng <strong>Giáo viên đăng nhập</strong> bằng tài khoản có
+vai trò quản trị. Sau khi đăng nhập, trang quản trị hiện ra với hai tab
+(mục 3.8). Quản trị viên không gắn lớp và không xem được tiến độ của lớp
+nào.</li>
+<li><strong>Dòng lệnh trên máy chủ.</strong> Dùng cho các việc hệ thống:
+tạo lớp, in thẻ, nạp schema, xuất dữ liệu.</li>
+</ul>
+<p>Dòng lệnh là cách chính cho: Cần Terminal của hosting, hoặc chạy trên
+máy cá nhân khi phát triển cục bộ. Các lệnh chạy từ thư mục gốc của dự
+án (hoặc <code>public_html</code> trên hosting), ví dụ
+<code>php api/bin/add_class.php</code>.</p>
+<ul>
+<li><strong>Đường HTTP có token quản trị (chỉ để xuất dữ liệu).</strong>
+Gửi yêu cầu có header <code>X-Admin-Token</code> đúng với
+<code>ADMIN_TOKEN</code> trong <code>api/.env</code>. Nếu
+<code>ADMIN_TOKEN</code> để trống, chức năng này bị tắt.</li>
+</ul>
+<p>Quản lý tài khoản hosting và CSDL do nhóm giữ trong bảng điều khiển
+iNET và phpMyAdmin. Không chia sẻ các thông tin này qua kênh công
+khai.</p>
+<h3 id="32-quyền-quản-trị-của-nhóm-kỹ-thuật">3.2. Quyền quản trị của
+nhóm kỹ thuật</h3>
+<p>Nhóm kỹ thuật có <strong>toàn quyền</strong> đối với tài khoản giáo
+viên và thẻ mã:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Việc</th>
+<th>Lệnh (chạy trên máy chủ, từ thư mục gốc)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Tạo lớp</td>
+<td><code>php api/bin/add_class.php &lt;MÃ_LỚP&gt; "&lt;Tên lớp&gt;" "&lt;Tên cơ sở&gt;"</code></td>
+</tr>
+<tr class="even">
+<td>In lô thẻ</td>
+<td><code>php api/bin/issue_cards.php &lt;MÃ_LỚP&gt; &lt;SỐ_THẺ&gt; &lt;tệp.csv&gt;</code></td>
+</tr>
+<tr class="odd">
+<td>Xem danh sách giáo viên</td>
+<td><code>php api/bin/manage_teacher.php list</code></td>
+</tr>
+<tr class="even">
+<td>Thêm tài khoản giáo viên</td>
+<td><code>php api/bin/manage_teacher.php create &lt;tên&gt; &lt;MÃ_LỚP&gt;</code></td>
+</tr>
+<tr class="odd">
+<td>Khôi phục mật khẩu giáo viên</td>
+<td><code>php api/bin/manage_teacher.php reset &lt;tên&gt;</code></td>
+</tr>
+<tr class="even">
+<td>Cấp thẻ mới cho học sinh đã có tiến độ (làm mất thẻ)</td>
+<td><code>php api/bin/reissue_card.php &lt;MÃ_CŨ&gt; --da-doi-chieu-so</code>
+(cờ bắt buộc: xác nhận đã đối chiếu sổ phát thẻ)</td>
+</tr>
+<tr class="odd">
+<td>Sửa lớp của giáo viên</td>
+<td><code>php api/bin/manage_teacher.php move &lt;tên&gt; &lt;MÃ_LỚP&gt;</code></td>
+</tr>
+<tr class="even">
+<td>Khóa tài khoản (không xóa dữ liệu)</td>
+<td><code>php api/bin/manage_teacher.php disable &lt;tên&gt;</code></td>
+</tr>
+<tr class="odd">
+<td>Khôi phục tài khoản đã khóa</td>
+<td><code>php api/bin/manage_teacher.php enable &lt;tên&gt;</code></td>
+</tr>
+<tr class="even">
+<td>Xóa hẳn tài khoản</td>
+<td><code>php api/bin/manage_teacher.php delete &lt;tên&gt;</code></td>
+</tr>
+</tbody>
+</table>
+<p>Mật khẩu mới (khi tạo hoặc đặt lại) được in ra <strong>một
+lần</strong>. Ghi lại và trao cho giáo viên qua kênh trực tiếp.</p>
+<p>Phân biệt hai thao tác dễ nhầm:</p>
+<ul>
+<li><strong>Khóa (disable)</strong> là tạm dừng: tài khoản không đăng
+nhập được, dữ liệu và thẻ giữ nguyên, có thể mở lại bằng
+<code>enable</code>.</li>
+<li><strong>Xóa (delete)</strong> là xóa hẳn tài khoản. Thẻ đã phát vẫn
+giữ nguyên; chỉ bỏ liên kết với người tạo.</li>
+</ul>
+<p>Mọi thao tác khóa, chuyển lớp, đặt lại mật khẩu hoặc xóa đều thu hồi
+các phiên đăng nhập đang mở của giáo viên đó.</p>
+<p>Sau khi tạo lớp và tài khoản, in lô thẻ đầu tiên:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">php</span> api/bin/issue_cards.php <span class="op">&lt;</span>MÃ_LỚP<span class="op">&gt;</span> <span class="op">&lt;</span>SỐ_THẺ<span class="op">&gt;</span> <span class="op">&lt;</span>tệp.csv<span class="op">&gt;</span></span></code></pre></div>
+<p>Tệp CSV chứa mã thẻ. In ra, trao cho giáo viên, rồi <strong>xóa tệp
+khỏi máy chủ</strong>. Ghi vào sổ phát thẻ: thẻ nào đã phát, cho lớp
+nào, ngày nào.</p>
+<h3 id="33-cấu-hình-liên-quan-đến-thẻ-và-giáo-viên">3.3. Cấu hình liên
+quan đến thẻ và giáo viên</h3>
+<table>
+<thead>
+<tr class="header">
+<th>Biến trong <code>api/.env</code></th>
+<th>Ý nghĩa</th>
+<th>Khuyến nghị</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>APP_URL</code></td>
+<td>Địa chỉ ứng dụng (chống CSRF)</td>
+<td>Đúng địa chỉ thực tế</td>
+</tr>
+<tr class="even">
+<td><code>ADMIN_TOKEN</code></td>
+<td>Khóa xuất dữ liệu qua HTTP</td>
+<td>Chuỗi ngẫu nhiên dài; để trống nếu không cần</td>
+</tr>
+<tr class="odd">
+<td><code>DELAYED_MIN_DAYS</code></td>
+<td>Số ngày trước khảo sát theo dõi</td>
+<td>28 theo đề cương</td>
+</tr>
+<tr class="even">
+<td><code>CLASS_CARD_LIMIT</code></td>
+<td>Tổng số thẻ tối đa mỗi lớp (kể cả thẻ giáo viên tự tạo)</td>
+<td>300 hoặc theo sĩ số lớp cộng dự phòng</td>
+</tr>
+</tbody>
+</table>
+<h3 id="34-xem-tiến-độ-và-hỗ-trợ">3.4. Xem tiến độ và hỗ trợ</h3>
+<ul>
+<li><p>Tiến độ lớp là thông tin của giáo viên. Nhóm kỹ thuật không có
+màn hình riêng để xem tiến độ; khi cần kiểm tra, dùng công cụ kiểm thử
+hoặc truy vấn CSDL theo mục 3.6.</p></li>
+<li><p>Học sinh làm mất thẻ đã kích hoạt: giáo viên đối chiếu sổ phát
+thẻ rồi tự cấp thẻ mới (mục 2.2). Nếu giáo viên không còn sổ, nhóm kỹ
+thuật <strong>không tìm được</strong> mã cũ vì hệ thống không lưu tên;
+khi đó học sinh phải bắt đầu với thẻ mới.</p></li>
+<li><p>Nhóm kỹ thuật có thể cấp lại bằng dòng lệnh, nhưng phải có cờ
+<code>--da-doi-chieu-so</code> (mục 3.3). Lệnh này chỉ dùng khi giáo
+viên không thể thao tác trên ứng dụng và đã đối chiếu sổ.</p></li>
+<li><p><strong>Xem nhật ký cấp lại thẻ</strong> (chỉ nhóm kỹ thuật, qua
+CSDL): mỗi lần cấp lại có một dòng trong bảng <code>audit_log</code>.
+Truy vấn mẫu:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode sql"><code class="sourceCode sql"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> created_at, actor_type, actor_id, old_code, new_code, ledger_confirmed</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> audit_log <span class="kw">WHERE</span> action <span class="op">=</span> <span class="st">&#39;reissue_card&#39;</span> <span class="kw">ORDER</span> <span class="kw">BY</span> created_at <span class="kw">DESC</span> <span class="kw">LIMIT</span> <span class="dv">50</span>;</span></code></pre></div>
+<p><code>actor_type = teacher</code> kèm <code>actor_id</code> là mã tài
+khoản giáo viên (bảng <code>teachers</code>);
+<code>actor_type = technical</code> và <code>actor_id</code> trống là
+nhóm kỹ thuật. Bảng này chỉ dùng để truy vết trách nhiệm, không đưa vào
+phân tích nghiên cứu.</p></li>
+</ul>
+<h3 id="35-xuất-dữ-liệu-nghiên-cứu">3.5. Xuất dữ liệu nghiên cứu</h3>
+<p>Hai tệp CSV theo <code>docs/CODEBOOK_NGHIEN_CUU.md</code>. Chỉ có học
+sinh đã kích hoạt được đưa vào tệp.</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">php</span> api/bin/export_assessments.php wide antoanso_wide.csv</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">php</span> api/bin/export_assessments.php long antoanso_long.csv</span></code></pre></div>
+<p>Hoặc qua HTTP (cần <code>ADMIN_TOKEN</code>):</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-H</span> <span class="st">&quot;X-Admin-Token: &lt;token&gt;&quot;</span> <span class="at">-o</span> antoanso_wide.csv https://<span class="op">&lt;</span>tên-miền<span class="op">&gt;</span>/api/admin/export/wide.csv</span></code></pre></div>
+<h3 id="36-bảo-mật-và-đạo-đức-dữ-liệu">3.6. Bảo mật và đạo đức dữ
+liệu</h3>
+<ul>
+<li>Dữ liệu nghiên cứu không chứa họ tên, email, số điện thoại, mật khẩu
+hay thời điểm đồng ý.</li>
+<li><strong>Ranh giới ẩn danh:</strong> giáo viên phát thẻ trực tiếp nên
+có thể biết thẻ nào thuộc học sinh nào. Ẩn danh đúng với nhóm nghiên cứu
+và tệp xuất, không đúng với giáo viên. Điều này phải được nêu trong
+phiếu đồng ý.</li>
+<li><strong>Quyền truy cập CSDL:</strong> nhóm kỹ thuật có quyền đọc cơ
+sở dữ liệu, nên về mặt kỹ thuật có thể xem câu trả lời của học sinh. Chỉ
+truy cập khi cần cho bảo trì, kiểm tra kỹ thuật hoặc phân tích đã được
+phê duyệt. Ghi nhật ký mọi truy vấn trực tiếp vào CSDL, và không sao
+chép dữ liệu thô ra ngoài.</li>
+<li>Không công bố kết quả theo lớp khi lớp có dưới 5 học sinh.</li>
+<li>Bảo quản riêng: sổ phát thẻ, tệp CSV chứa mã thẻ,
+<code>api/.env</code>, <code>ADMIN_TOKEN</code>, mật khẩu giáo
+viên.</li>
+<li>Sao lưu CSDL định kỳ.</li>
+</ul>
+<h3 id="37-giới-hạn-đã-biết">3.7. Giới hạn đã biết</h3>
+<ul>
+<li>Đăng nhập học sinh và giáo viên chưa có giới hạn số lần thử
+sai.</li>
+<li>Trang quản trị chưa có màn hình xem nhật ký <code>audit_log</code>;
+cần truy vấn trực tiếp. Việc in thẻ và tạo lớp vẫn dùng dòng lệnh.</li>
+<li>Chưa có cơ chế nhắc khảo sát theo dõi.</li>
+<li>Mật khẩu tạm chỉ được nhắc đổi, chưa bị chặn. Đây là chủ ý cho bản
+chạy cục bộ; trên hosting, cần bổ sung chặn trước khi triển khai
+rộng.</li>
+</ul>
+<h3 id="38-trang-quản-trị-và-tab-dữ-liệu-đo-lường">3.8. Trang quản trị
+và tab Dữ liệu đo lường</h3>
+<p>Quản trị viên đăng nhập bằng cổng <strong>Giáo viên đăng
+nhập</strong> trên trang đầu, với tài khoản có vai trò quản trị. Trang
+quản trị có ba tab: <strong>Giáo viên</strong>, <strong>Câu hỏi khảo
+sát</strong> và <strong>Dữ liệu đo lường</strong>. Quản trị viên không
+gắn lớp, nên không xem được tiến độ chi tiết của lớp nào.</p>
+<p>Nếu tài khoản còn dùng mật khẩu mặc định hoặc mật khẩu tạm, khối nhắc
+<strong>Đổi mật khẩu</strong> hiển thị ở đầu trang. Có thể đổi ngay hoặc
+đổi sau.</p>
+<p><strong>Tab Giáo viên.</strong> Gồm biểu mẫu <strong>Thêm tài
+khoản</strong> (tên đăng nhập, vai trò, mã lớp) và bảng <strong>Danh
+sách tài khoản</strong>. Mỗi dòng có nút <strong>Cấp mật khẩu
+mới</strong> và <strong>Khóa</strong> (hoặc <strong>Mở khóa</strong>).
+Mọi thao tác đều có hộp thoại xác nhận. Mật khẩu mới chỉ hiện một
+lần.</p>
+<p><strong>Tab Câu hỏi khảo sát.</strong> Hiển thị bộ câu hỏi hiện hành,
+tách theo kiến thức và hành vi. Mỗi câu có nút <strong>Sửa</strong> và
+<strong>Xóa</strong>, và có nút <strong>Thêm câu hỏi</strong>. Đáp án
+đúng chỉ quản trị viên thấy. Mỗi lần thay đổi tạo một phiên bản mới; học
+sinh đã làm dở giữ phiên bản cũ.</p>
+<p><strong>Tab Dữ liệu đo lường.</strong> Gồm các khối sau, sắp theo thứ
+tự trên màn hình:</p>
+<ol type="1">
+<li><strong>Tải dữ liệu nghiên cứu.</strong> Hai nút: <em>Tải CSV dạng
+long (một dòng mỗi câu trả lời)</em> và <em>Tải CSV dạng wide (một dòng
+mỗi học sinh)</em>. Tệp tải về đã ẩn danh bằng mã ngẫu nhiên, không có
+họ tên. Nút tải dùng chính phiên đăng nhập của quản trị viên, không cần
+nhập token hay gõ lệnh.</li>
+<li><strong>Tiến độ theo lớp.</strong> Bảng với các cột: đã phát thẻ,
+đang hoạt động, xong đầu vào, xong sau can thiệp, xong theo dõi. Dòng
+phía trên ghi tổng số học sinh đang hoạt động. Giai đoạn theo dõi chỉ mở
+sau 28 ngày kể từ khi hoàn thành khảo sát sau can thiệp.</li>
+<li><strong>Điểm kiến thức trung bình theo giai đoạn.</strong> Biểu đồ
+cột ngang với ba thanh: <em>Đầu vào (trước can thiệp)</em>, <em>Sau can
+thiệp</em> và <em>Theo dõi (sau 28 ngày)</em>. Mỗi thanh ghi giá trị
+theo phần trăm câu đúng và cỡ mẫu n. Giá trị là trung bình trên những
+học sinh đã làm xong giai đoạn đó.</li>
+<li><strong>So sánh trước và sau can thiệp.</strong> Bảng hai dòng: đầu
+vào so với sau can thiệp, và đầu vào so với theo dõi. Mỗi dòng ghi số
+học sinh có đủ cả hai lần đo, chênh lệch trung bình và trung vị.</li>
+<li><strong>Hành vi tự báo cáo.</strong> Bảng trung bình và độ lệch
+chuẩn cho ba giai đoạn, trên thang 1 đến 4, đã điều chỉnh câu đảo
+chiều.</li>
+<li><strong>Kiến thức theo nhóm chủ đề.</strong> Bảng tỉ lệ đúng theo
+chủ đề m1 (sân chơi tình huống), m2 (thám tử tên miền) và m3 (phòng thí
+nghiệm tài khoản), cho ba giai đoạn.</li>
+</ol>
+<p>Quy tắc công bố: ô có dưới năm học sinh được hiển thị là
+<strong>ẩn</strong> cùng số cỡ mẫu, để không lộ danh tính. Các số trên
+tab này là mô tả. Kiểm định thống kê được thực hiện riêng theo kế hoạch
+phân tích của báo cáo.</p>
+</body>
+</html>
