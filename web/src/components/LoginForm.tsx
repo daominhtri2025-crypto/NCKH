@@ -1,6 +1,8 @@
 import { FormEvent, useState } from 'react';
 import { api, ApiError } from '../lib/api';
 import type { Participant } from '../lib/types';
+import AuthLayout from './AuthLayout';
+import { Alert, Button, Field, TextInput } from './ui';
 
 interface Props {
   onLoggedIn: (participant: Participant) => void;
@@ -27,15 +29,10 @@ export default function LoginForm({ onLoggedIn, onBack }: Props) {
   }
 
   return (
-    <section className="card">
-      <button className="link-btn" onClick={onBack}>← Quay lại</button>
-      <h2>Nhập mã học sinh</h2>
-      <p className="lead">Mã có dạng XXXX-XXXX. Em đã ghi mã này khi tạo tài khoản.</p>
-
-      <form onSubmit={submit} className="stack">
-        <label className="field">
-          <span>Mã học sinh</span>
-          <input
+    <AuthLayout title="Nhập mã học sinh" lead="Mã có dạng XXXX-XXXX. Em đã ghi mã này khi tạo tài khoản." onBack={onBack}>
+      <form onSubmit={submit} className="grid grid-cols-1 gap-4">
+        <Field label="Mã học sinh">
+          <TextInput
             value={code}
             onChange={(e) => setCode(e.target.value.toUpperCase())}
             placeholder="XXXX-XXXX"
@@ -43,13 +40,14 @@ export default function LoginForm({ onLoggedIn, onBack }: Props) {
             autoCapitalize="characters"
             required
             maxLength={12}
+            className="text-center font-mono text-xl tracking-[0.2em]"
           />
-        </label>
-        {error && <p className="alert" role="alert">{error}</p>}
-        <button className="btn btn-primary btn-xl" type="submit" disabled={submitting || !code.trim()}>
+        </Field>
+        {error && <Alert>{error}</Alert>}
+        <Button type="submit" variant="primary" size="lg" block disabled={submitting || !code.trim()}>
           {submitting ? 'Đang kiểm tra…' : 'Đăng nhập'}
-        </button>
+        </Button>
       </form>
-    </section>
+    </AuthLayout>
   );
 }

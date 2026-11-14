@@ -1,6 +1,8 @@
 import { FormEvent, useState } from 'react';
 import { api, ApiError } from '../lib/api';
+import Icon from './icons';
 import Modal from './Modal';
+import { Alert, Button, Field, TextInput } from './ui';
 
 interface Props {
   onChanged: () => void;
@@ -39,26 +41,26 @@ export default function PasswordReminder({ onChanged }: Props) {
 
   return (
     <>
-      <div className="reminder" role="status">
-        <p>Tài khoản đang dùng mật khẩu mặc định hoặc mật khẩu tạm. Hãy đổi mật khẩu để bảo vệ tài khoản.</p>
-        <button className="btn btn-primary small-btn" onClick={() => setOpen(true)}>Đổi mật khẩu</button>
+      <div role="status" className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-warn/30 bg-warn-bg px-4 py-3 no-print">
+        <p className="m-0 flex items-start gap-2 text-sm font-semibold text-warn">
+          <Icon name="key" size={18} className="mt-0.5 shrink-0" />
+          Tài khoản đang dùng mật khẩu mặc định hoặc mật khẩu tạm. Hãy đổi mật khẩu để bảo vệ tài khoản.
+        </p>
+        <Button variant="primary" size="sm" onClick={() => setOpen(true)}>Đổi mật khẩu</Button>
       </div>
       {open && (
         <Modal title="Đổi mật khẩu" confirmLabel="Lưu mật khẩu mới" busy={busy} onConfirm={() => submit()} onCancel={() => setOpen(false)}>
-          <form className="stack" onSubmit={submit}>
-            <label className="field">
-              <span>Mật khẩu hiện tại</span>
-              <input type="password" value={current} onChange={(e) => setCurrent(e.target.value)} autoComplete="current-password" required />
-            </label>
-            <label className="field">
-              <span>Mật khẩu mới (10 ký tự trở lên, có cả chữ và số)</span>
-              <input type="password" value={next} onChange={(e) => setNext(e.target.value)} autoComplete="new-password" required />
-            </label>
-            <label className="field">
-              <span>Nhập lại mật khẩu mới</span>
-              <input type="password" value={confirm} onChange={(e) => setConfirm(e.target.value)} autoComplete="new-password" required />
-            </label>
-            {error && <p className="alert" role="alert">{error}</p>}
+          <form className="grid grid-cols-1 gap-3" onSubmit={submit}>
+            <Field label="Mật khẩu hiện tại">
+              <TextInput type="password" value={current} onChange={(e) => setCurrent(e.target.value)} autoComplete="current-password" required />
+            </Field>
+            <Field label="Mật khẩu mới" hint="10 ký tự trở lên, có cả chữ và số.">
+              <TextInput type="password" value={next} onChange={(e) => setNext(e.target.value)} autoComplete="new-password" required />
+            </Field>
+            <Field label="Nhập lại mật khẩu mới">
+              <TextInput type="password" value={confirm} onChange={(e) => setConfirm(e.target.value)} autoComplete="new-password" required />
+            </Field>
+            {error && <Alert>{error}</Alert>}
           </form>
         </Modal>
       )}

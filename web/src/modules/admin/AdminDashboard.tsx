@@ -1,8 +1,16 @@
-import { FormEvent, useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { api, ApiError } from '../../lib/api';
-import Modal from '../../components/Modal';
+import Icon, { type IconName } from '../../components/icons';
 import PasswordReminder from '../../components/PasswordReminder';
-import AnalyticsPanel from './AnalyticsPanel';
+import { cx } from '../../components/ui';
+import { PROJECT } from '../../lib/project';
+import AnalyticsSection from './AnalyticsSection';
+import ExportSection from './ExportSection';
+import OverviewSection from './OverviewSection';
+import QuestionsSection from './QuestionsSection';
+import ReportSection from './ReportSection';
+import TeachersSection from './TeachersSection';
+import type { AdminSection, AdminTeacher, AnalyticsOverview } from './types';
 
 interface Props {
   onLogout: () => void;
@@ -10,201 +18,76 @@ interface Props {
   onPasswordChanged: () => void;
 }
 
-interface AdminTeacher {
-  id: number;
-  username: string;
-  role: 'teacher' | 'admin';
-  class_code: string | null;
-  active: boolean;
-  created_at: string;
-  last_login_at: string | null;
+interface NavItem {
+  key: AdminSection;
+  label: string;
+  icon: IconName;
 }
 
-interface Question {
-  id: string;
-  instrument: 'knowledge' | 'behavior';
-  topic: string;
-  question: string;
-  options?: string[];
-  correct?: number;
-  reverse?: boolean;
+interface NavGroup {
+  label: string | null;
+  items: NavItem[];
 }
 
-interface VersionInfo {
-  version: string;
-  created_at: string;
-  active: boolean;
-  items: number;
-}
-
-interface QuestionSet {
-  version: string;
-  title: string;
-  behavior_scale: string[];
-  items: Question[];
-  versions: VersionInfo[];
-  note: string;
-}
-
-interface QuestionForm {
-  id: string;
-  instrument: 'knowledge' | 'behavior';
-  topic: string;
-  question: string;
-  options: string[];
-  correct: number;
-  reverse: boolean;
-}
-
-const EMPTY_FORM: QuestionForm = {
-  id: '', instrument: 'knowledge', topic: 'm1', question: '', options: ['', '', '', ''], correct: 0, reverse: false,
-};
-
-type Tab = 'teachers' | 'questions' | 'data';
-type Pending =
-  | { kind: 'reset'; username: string }
-  | { kind: 'toggle'; username: string; disable: boolean }
-  | { kind: 'delete'; item: Question };
-
-type QuestionDialog = { mode: 'add' } | { mode: 'edit'; item: Question };
+/** Menu chia theo nhóm chức năng để thao tác nhanh, tránh rối mắt. */
+const NAV: NavGroup[] = [
+  { label: null, items: [{ key: 'overview', label: 'Tổng quan', icon: 'dashboard' }] },
+  {
+    label: 'Quản lý đào tạo',
+    items: [
+      { key: 'teachers', label: 'Tài khoản giáo viên', icon: 'users' },
+      { key: 'questions', label: 'Bộ câu hỏi khảo sát', icon: 'help' },
+    ],
+  },
+  { label: 'Thống kê', items: [{ key: 'analytics', label: 'Số liệu đo lường', icon: 'chart' }] },
+  {
+    label: 'In ấn & Xuất dữ liệu',
+    items: [
+      { key: 'export', label: 'Xuất dữ liệu CSV', icon: 'download' },
+      { key: 'report', label: 'Báo cáo tổng hợp (in)', icon: 'printer' },
+    ],
+  },
+];
 
 /** Trang quản trị: chỉ tài khoản role = admin mới vào được. Máy chủ kiểm tra lại mọi thao tác. */
 export default function AdminDashboard({ onLogout, mustChange, onPasswordChanged }: Props) {
-  const [tab, setTab] = useState<Tab>('teachers');
+  const [section, setSection] = useState<AdminSection>('overview');
+  const [drawer, setDrawer] = useState(false);
   const [teachers, setTeachers] = useState<AdminTeacher[] | null>(null);
-  const [questions, setQuestions] = useState<QuestionSet | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [notice, setNotice] = useState<{ username: string; password: string; created: boolean } | null>(null);
-  const [pending, setPending] = useState<Pending | null>(null);
-  const [busy, setBusy] = useState(false);
-  const [form, setForm] = useState({ username: '', class_code: '', role: 'teacher' as 'teacher' | 'admin' });
-  const [dialog, setDialog] = useState<QuestionDialog | null>(null);
-  const [qForm, setQForm] = useState<QuestionForm>(EMPTY_FORM);
-  const [qError, setQError] = useState<string | null>(null);
+  const [analytics, setAnalytics] = useState<AnalyticsOverview | null>(null);
+  const [teacherError, setTeacherError] = useState<string | null>(null);
+  const [analyticsError, setAnalyticsError] = useState<string | null>(null);
 
   const loadTeachers = useCallback(async () => {
     try {
       const data = await api.get<{ teachers: AdminTeacher[] }>('/admin/teachers');
       setTeachers(data.teachers);
+      setTeacherError(null);
     } catch (err) {
       if (err instanceof ApiError && err.status === 401) return onLogout();
-      setError(err instanceof ApiError ? err.message : 'Không tải được danh sách giáo viên.');
+      setTeacherError(err instanceof ApiError ? err.message : 'Không tải được danh sách giáo viên.');
+    }
+  }, [onLogout]);
+
+  const loadAnalytics = useCallback(async () => {
+    try {
+      setAnalytics(await api.get<AnalyticsOverview>('/admin/analytics'));
+      setAnalyticsError(null);
+    } catch (err) {
+      if (err instanceof ApiError && err.status === 401) return onLogout();
+      setAnalyticsError(err instanceof ApiError ? err.message : 'Không tải được số liệu.');
     }
   }, [onLogout]);
 
   useEffect(() => {
-    loadTeachers();
-  }, [loadTeachers]);
+    void loadTeachers();
+    void loadAnalytics();
+  }, [loadTeachers, loadAnalytics]);
 
-  const loadQuestions = useCallback(async () => {
-    try {
-      setQuestions(await api.get<QuestionSet>('/admin/questions'));
-    } catch (err) {
-      setError(err instanceof ApiError ? err.message : 'Không tải được câu hỏi.');
-    }
-  }, []);
-
-  useEffect(() => {
-    if (tab === 'questions' && questions === null) loadQuestions();
-  }, [tab, questions, loadQuestions]);
-
-  function openAdd() {
-    setQError(null);
-    setQForm(EMPTY_FORM);
-    setDialog({ mode: 'add' });
-  }
-
-  function openEdit(item: Question) {
-    setQError(null);
-    setQForm({
-      id: item.id,
-      instrument: item.instrument,
-      topic: item.topic,
-      question: item.question,
-      options: item.options ?? ['', '', '', ''],
-      correct: item.correct ?? 0,
-      reverse: item.reverse ?? false,
-    });
-    setDialog({ mode: 'edit', item });
-  }
-
-  /** Gửi biểu mẫu. Mọi kiểm tra cuối cùng nằm ở máy chủ; giao diện chỉ gửi đúng trường của loại câu. */
-  async function saveQuestion() {
-    setQError(null);
-    const body: Record<string, unknown> = { topic: qForm.topic.trim(), question: qForm.question.trim() };
-    if (dialog?.mode === 'add') {
-      body.id = qForm.id.trim();
-      body.instrument = qForm.instrument;
-    }
-    if (qForm.instrument === 'knowledge') {
-      body.options = qForm.options.map((o) => o.trim()).filter((o) => o !== '');
-      body.correct = qForm.correct;
-    } else {
-      body.reverse = qForm.reverse;
-    }
-    setBusy(true);
-    try {
-      if (dialog?.mode === 'add') {
-        await api.post('/admin/questions', body);
-      } else if (dialog?.mode === 'edit') {
-        const { id: _ignored, instrument: _kind, ...patch } = body;
-        await api.put(`/admin/questions/${encodeURIComponent(dialog.item.id)}`, patch);
-      }
-      setDialog(null);
-      await loadQuestions();
-    } catch (err) {
-      setQError(err instanceof ApiError ? err.message : 'Không lưu được câu hỏi.');
-    } finally {
-      setBusy(false);
-    }
-  }
-
-  async function createAccount(event: FormEvent) {
-    event.preventDefault();
-    setError(null);
-    setNotice(null);
-    setBusy(true);
-    try {
-      const body: Record<string, string> = { username: form.username.trim(), role: form.role };
-      if (form.role === 'teacher') body.class_code = form.class_code.trim().toUpperCase();
-      const data = await api.post<{ username: string; password: string }>('/admin/teachers', body);
-      setNotice({ username: data.username, password: data.password, created: true });
-      setForm({ username: '', class_code: '', role: 'teacher' });
-      await loadTeachers();
-    } catch (err) {
-      setError(err instanceof ApiError ? err.message : 'Không tạo được tài khoản.');
-    } finally {
-      setBusy(false);
-    }
-  }
-
-  async function confirmPending() {
-    if (!pending) return;
-    setBusy(true);
-    setError(null);
-    try {
-      if (pending.kind === 'delete') {
-        await api.delete(`/admin/questions/${encodeURIComponent(pending.item.id)}`);
-        setPending(null);
-        await loadQuestions();
-        return;
-      }
-      if (pending.kind === 'reset') {
-        const data = await api.put<{ username: string; password: string }>(
-          `/admin/teachers/${encodeURIComponent(pending.username)}/password`, {}
-        );
-        setNotice({ username: data.username, password: data.password, created: false });
-      } else {
-        await api.put(`/admin/teachers/${encodeURIComponent(pending.username)}/status`, { disabled: pending.disable });
-      }
-      setPending(null);
-      await loadTeachers();
-    } catch (err) {
-      setError(err instanceof ApiError ? err.message : 'Thao tác không thành công.');
-      setPending(null);
-    } finally {
-      setBusy(false);
-    }
+  function go(next: AdminSection) {
+    setSection(next);
+    setDrawer(false);
+    window.scrollTo({ top: 0 });
   }
 
   async function logout() {
@@ -215,268 +98,109 @@ export default function AdminDashboard({ onLogout, mustChange, onPasswordChanged
     }
   }
 
+  const current = NAV.flatMap((g) => g.items).find((i) => i.key === section);
+
+  const sidebar = (
+    <nav aria-label="Chức năng quản trị" className="flex h-full flex-col gap-5 overflow-y-auto p-4">
+      <div className="flex items-center gap-2.5 px-2 py-1">
+        <span className="grid grid-cols-1 size-10 shrink-0 place-items-center rounded-xl bg-brand text-brand-ink shadow-card">
+          <Icon name="shield" size={22} />
+        </span>
+        <div className="min-w-0 leading-tight">
+          <p className="m-0 text-[15px] font-extrabold tracking-tight text-ink">{PROJECT.name}</p>
+          <p className="m-0 text-xs font-semibold text-ink-soft">Quản trị hệ thống</p>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 flex-1 content-start gap-5">
+        {NAV.map((group, gi) => (
+          <div key={gi} className="grid grid-cols-1 gap-1">
+            {group.label && (
+              <p className="m-0 px-3 pb-1 text-[11px] font-bold tracking-widest text-ink-soft uppercase">{group.label}</p>
+            )}
+            {group.items.map((item) => {
+              const active = item.key === section;
+              return (
+                <button
+                  key={item.key}
+                  type="button"
+                  onClick={() => go(item.key)}
+                  aria-current={active ? 'page' : undefined}
+                  className={cx(
+                    'flex min-h-11 w-full cursor-pointer items-center gap-3 rounded-xl px-3 text-left text-sm font-semibold transition',
+                    'focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-brand',
+                    active ? 'bg-brand-soft text-brand' : 'text-ink-soft hover:bg-canvas hover:text-ink',
+                  )}
+                >
+                  <Icon name={item.icon} size={19} />
+                  {item.label}
+                </button>
+              );
+            })}
+          </div>
+        ))}
+      </div>
+
+      <button
+        type="button"
+        onClick={logout}
+        className="flex min-h-11 w-full cursor-pointer items-center gap-3 rounded-xl border border-line px-3 text-left text-sm font-semibold text-ink-soft transition hover:border-danger hover:bg-danger-bg hover:text-danger focus-visible:outline-2 focus-visible:outline-brand"
+      >
+        <Icon name="logout" size={19} />
+        Đăng xuất
+      </button>
+    </nav>
+  );
+
   return (
-    <section className="admin-dashboard">
-      <header className="admin-head">
-        <h2>Quản trị hệ thống</h2>
-        <button className="btn btn-ghost small-btn" onClick={logout}>Đăng xuất</button>
+    <div className="min-h-screen bg-canvas text-ink lg:grid lg:grid-cols-[272px_minmax(0,1fr)]">
+      {/* Thanh bên cố định trên màn hình rộng */}
+      <aside className="sticky top-0 hidden h-screen border-r border-line bg-surface lg:block no-print">{sidebar}</aside>
+
+      {/* Thanh trên + ngăn kéo cho điện thoại */}
+      <header className="sticky top-0 z-30 flex items-center justify-between gap-3 border-b border-line bg-surface/90 px-4 py-2.5 backdrop-blur lg:hidden no-print">
+        <button
+          type="button"
+          onClick={() => setDrawer(true)}
+          aria-label="Mở menu"
+          aria-expanded={drawer}
+          className="grid grid-cols-1 size-10 cursor-pointer place-items-center rounded-xl text-ink transition hover:bg-brand-soft focus-visible:outline-2 focus-visible:outline-brand"
+        >
+          <Icon name="menu" size={22} />
+        </button>
+        <p className="m-0 truncate text-base font-extrabold text-ink">{current?.label}</p>
+        <span className="size-10" aria-hidden="true" />
       </header>
 
-      {mustChange && <PasswordReminder onChanged={onPasswordChanged} />}
-
-      <nav className="tabs" role="tablist" aria-label="Chức năng quản trị">
-        <button role="tab" aria-selected={tab === 'teachers'} className={`tab ${tab === 'teachers' ? 'active' : ''}`} onClick={() => setTab('teachers')}>
-          Giáo viên
-        </button>
-        <button role="tab" aria-selected={tab === 'questions'} className={`tab ${tab === 'questions' ? 'active' : ''}`} onClick={() => setTab('questions')}>
-          Câu hỏi khảo sát
-        </button>
-        <button role="tab" aria-selected={tab === 'data'} className={`tab ${tab === 'data' ? 'active' : ''}`} onClick={() => setTab('data')}>
-          Dữ liệu đo lường
-        </button>
-      </nav>
-
-      {error && <p className="alert" role="alert">{error}</p>}
-
-      {notice && (
-        <div className="new-codes" role="status">
-          <p>
-            <strong>{notice.created ? 'Đã tạo tài khoản' : 'Đã đặt mật khẩu mới'} cho </strong>
-            <code>{notice.username}</code>. Mật khẩu chỉ hiện một lần, hãy trao cho người dùng qua kênh trực tiếp:
-          </p>
-          <p><code className="code-chip">{notice.password}</code></p>
-          <button className="btn btn-ghost small-btn" onClick={() => setNotice(null)}>Đã ghi lại</button>
+      {drawer && (
+        <div className="fixed inset-0 z-40 lg:hidden no-print" role="dialog" aria-modal="true" aria-label="Menu quản trị">
+          <button type="button" aria-label="Đóng menu" className="absolute inset-0 cursor-default bg-slate-900/55 backdrop-blur-sm" onClick={() => setDrawer(false)} />
+          <div className="relative h-full w-72 max-w-[85%] bg-surface shadow-pop">
+            <button
+              type="button"
+              onClick={() => setDrawer(false)}
+              aria-label="Đóng menu"
+              className="absolute top-3 right-3 grid grid-cols-1 size-9 cursor-pointer place-items-center rounded-lg text-ink-soft hover:bg-canvas"
+            >
+              <Icon name="x" size={20} />
+            </button>
+            {sidebar}
+          </div>
         </div>
       )}
 
-      {tab === 'teachers' && (
-        <>
-          <section className="card">
-            <h3>Thêm tài khoản</h3>
-            <form className="stack" onSubmit={createAccount}>
-              <label className="field">
-                <span>Tên đăng nhập (chữ thường, số, gạch dưới)</span>
-                <input value={form.username} onChange={(e) => setForm({ ...form, username: e.target.value })} required maxLength={40} />
-              </label>
-              <label className="field">
-                <span>Vai trò</span>
-                <select value={form.role} onChange={(e) => setForm({ ...form, role: e.target.value as 'teacher' | 'admin' })}>
-                  <option value="teacher">Giáo viên (gắn lớp)</option>
-                  <option value="admin">Quản trị viên (không gắn lớp)</option>
-                </select>
-              </label>
-              {form.role === 'teacher' && (
-                <label className="field">
-                  <span>Mã lớp (lớp phải đã được tạo)</span>
-                  <input value={form.class_code} onChange={(e) => setForm({ ...form, class_code: e.target.value })} required maxLength={40} />
-                </label>
-              )}
-              <button className="btn btn-primary" type="submit" disabled={busy}>Tạo tài khoản</button>
-            </form>
-          </section>
+      <main className="min-w-0 px-4 py-6 sm:px-6 lg:px-10 lg:py-8">
+        <div className="mx-auto grid grid-cols-1 max-w-6xl gap-6">
+          {mustChange && <PasswordReminder onChanged={onPasswordChanged} />}
 
-          <section className="card">
-            <h3>Danh sách tài khoản</h3>
-            {teachers === null ? <p>Đang tải…</p> : (
-              <div className="table-wrap">
-                <table className="admin-table">
-                  <thead>
-                    <tr><th>Tên đăng nhập</th><th>Vai trò</th><th>Lớp</th><th>Trạng thái</th><th>Thao tác</th></tr>
-                  </thead>
-                  <tbody>
-                    {teachers.map((t) => (
-                      <tr key={t.id}>
-                        <td data-label="Tên đăng nhập"><code>{t.username}</code></td>
-                        <td data-label="Vai trò">{t.role === 'admin' ? 'Quản trị' : 'Giáo viên'}</td>
-                        <td data-label="Lớp">{t.class_code ?? '—'}</td>
-                        <td data-label="Trạng thái"><span className={`status ${t.active ? 'status-answered' : 'status-new'}`}>{t.active ? 'Đang hoạt động' : 'Đã khóa'}</span></td>
-                        <td data-label="Thao tác" className="row-actions">
-                          <button className="btn btn-ghost small-btn" onClick={() => setPending({ kind: 'reset', username: t.username })} disabled={busy}>
-                            Cấp mật khẩu mới
-                          </button>
-                          <button
-                            className={`btn ${t.active ? 'btn-danger' : 'btn-primary'} small-btn`}
-                            onClick={() => setPending({ kind: 'toggle', username: t.username, disable: t.active })}
-                            disabled={busy}
-                          >
-                            {t.active ? 'Khóa' : 'Mở khóa'}
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            )}
-          </section>
-        </>
-      )}
-
-      {tab === 'data' && <AnalyticsPanel />}
-
-      {tab === 'questions' && (
-        <section className="card">
-          <div className="admin-head">
-            <h3>{questions ? `${questions.title}` : 'Câu hỏi khảo sát'}</h3>
-            <button className="btn btn-primary small-btn" onClick={openAdd} disabled={!questions || busy}>Thêm câu hỏi</button>
-          </div>
-          {questions && (
-            <>
-              <p className="fineprint">Phiên bản hiện hành: <code>{questions.version}</code>. {questions.note}</p>
-              <p className="fineprint">Mỗi thay đổi tạo một phiên bản mới. Học sinh đã làm dở giữ phiên bản cũ, nên dữ liệu đã thu thập vẫn so sánh được.</p>
-              {(['knowledge', 'behavior'] as const).map((kind) => {
-                const rows = questions.items.filter((i) => i.instrument === kind);
-                return (
-                  <div key={kind} className="table-wrap">
-                    <h4>{kind === 'knowledge' ? 'Kiến thức' : 'Hành vi'} ({rows.length} câu)</h4>
-                    <table className="admin-table">
-                      <thead>
-                        <tr><th>Mã</th><th>Chủ đề</th><th>Nội dung</th><th>Thao tác</th></tr>
-                      </thead>
-                      <tbody>
-                        {rows.map((i) => (
-                          <tr key={i.id}>
-                            <td data-label="Mã"><code>{i.id}</code></td>
-                            <td data-label="Chủ đề">{i.topic}</td>
-                            <td data-label="Nội dung">
-                              {i.question}
-                              {i.options && (
-                                <ul className="question-options">
-                                  {i.options.map((o, idx) => <li key={idx}>{o}{i.correct === idx ? ' ✓' : ''}</li>)}
-                                </ul>
-                              )}
-                            </td>
-                            <td data-label="Thao tác" className="row-actions">
-                              <button className="btn btn-ghost small-btn" onClick={() => openEdit(i)} disabled={busy}>Sửa</button>
-                              <button className="btn btn-danger small-btn" onClick={() => setPending({ kind: 'delete', item: i })} disabled={busy}>Xóa</button>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                );
-              })}
-              <details>
-                <summary>Lịch sử phiên bản ({questions.versions.length})</summary>
-                <ul>
-                  {questions.versions.map((v) => (
-                    <li key={v.version}>
-                      <code>{v.version}</code> · {v.items} câu · {v.created_at}{v.active ? ' · hiện hành' : ''}
-                    </li>
-                  ))}
-                </ul>
-              </details>
-            </>
-          )}
-        </section>
-      )}
-
-      {dialog && (
-        <Modal
-          title={dialog.mode === 'add' ? 'Thêm câu hỏi' : `Sửa câu ${dialog.item.id}`}
-          confirmLabel={dialog.mode === 'add' ? 'Thêm' : 'Lưu thay đổi'}
-          busy={busy}
-          onConfirm={saveQuestion}
-          onCancel={() => setDialog(null)}
-        >
-          <form className="stack" onSubmit={(e) => { e.preventDefault(); saveQuestion(); }}>
-            {dialog.mode === 'add' ? (
-              <>
-                <label className="field">
-                  <span>Mã câu (chữ thường, số, gạch ngang)</span>
-                  <input value={qForm.id} onChange={(e) => setQForm({ ...qForm, id: e.target.value })} required maxLength={60} />
-                </label>
-                <label className="field">
-                  <span>Loại câu</span>
-                  <select value={qForm.instrument} onChange={(e) => setQForm({ ...qForm, instrument: e.target.value as 'knowledge' | 'behavior' })}>
-                    <option value="knowledge">Kiến thức (có đáp án đúng)</option>
-                    <option value="behavior">Hành vi (thang 1-4)</option>
-                  </select>
-                </label>
-              </>
-            ) : (
-              <p className="fineprint">Mã và loại câu không đổi được sau khi tạo.</p>
-            )}
-            <label className="field">
-              <span>Chủ đề (m1, m2, m3 hoặc chủ đề khác)</span>
-              <input value={qForm.topic} onChange={(e) => setQForm({ ...qForm, topic: e.target.value })} required maxLength={20} />
-            </label>
-            <label className="field">
-              <span>Nội dung câu hỏi</span>
-              <textarea value={qForm.question} onChange={(e) => setQForm({ ...qForm, question: e.target.value })} required maxLength={400} rows={3} />
-            </label>
-            {qForm.instrument === 'knowledge' ? (
-              <fieldset className="field">
-                <legend>Lựa chọn (2 đến 4, đánh dấu đáp án đúng)</legend>
-                {qForm.options.map((o, idx) => (
-                  <label key={idx} className="check-row">
-                    <input type="radio" name="correct" checked={qForm.correct === idx} onChange={() => setQForm({ ...qForm, correct: idx })} />
-                    <input
-                      aria-label={`Lựa chọn ${idx + 1}`}
-                      value={o}
-                      maxLength={200}
-                      onChange={(e) => {
-                        const next = [...qForm.options];
-                        next[idx] = e.target.value;
-                        setQForm({ ...qForm, options: next });
-                      }}
-                    />
-                  </label>
-                ))}
-              </fieldset>
-            ) : (
-              <label className="check-row">
-                <input type="checkbox" checked={qForm.reverse} onChange={(e) => setQForm({ ...qForm, reverse: e.target.checked })} />
-                <span>Câu đảo chiều (điểm được tính 5 trừ mức trả lời)</span>
-              </label>
-            )}
-            {qError && <p className="alert" role="alert">{qError}</p>}
-          </form>
-        </Modal>
-      )}
-
-      {pending?.kind === 'delete' && (
-        <Modal
-          title="Xóa câu hỏi?"
-          confirmLabel="Xóa"
-          danger
-          busy={busy}
-          onConfirm={confirmPending}
-          onCancel={() => setPending(null)}
-        >
-          <p>Câu <code>{pending.item.id}</code> sẽ bị bỏ khỏi phiên bản hiện hành. Các phiên bản cũ và dữ liệu đã thu thập vẫn được giữ.</p>
-        </Modal>
-      )}
-
-      {pending?.kind === 'reset' && (
-        <Modal
-          title="Cấp mật khẩu mới?"
-          confirmLabel="Cấp mật khẩu mới"
-          busy={busy}
-          onConfirm={confirmPending}
-          onCancel={() => setPending(null)}
-        >
-          <p>Mật khẩu của <code>{pending.username}</code> sẽ được thay bằng mật khẩu mới và mọi phiên đang mở bị đăng xuất.</p>
-        </Modal>
-      )}
-
-      {pending?.kind === 'toggle' && (
-        <Modal
-          title={pending.disable ? 'Khóa tài khoản?' : 'Mở khóa tài khoản?'}
-          confirmLabel={pending.disable ? 'Khóa' : 'Mở khóa'}
-          danger={pending.disable}
-          busy={busy}
-          onConfirm={confirmPending}
-          onCancel={() => setPending(null)}
-        >
-          <p>
-            {pending.disable
-              ? <>Tài khoản <code>{pending.username}</code> sẽ không đăng nhập được cho đến khi được mở khóa. Dữ liệu được giữ nguyên.</>
-              : <>Tài khoản <code>{pending.username}</code> sẽ đăng nhập lại được.</>}
-          </p>
-        </Modal>
-      )}
-    </section>
+          {section === 'overview' && <OverviewSection analytics={analytics} teachers={teachers} error={analyticsError ?? teacherError} onNavigate={go} />}
+          {section === 'teachers' && <TeachersSection teachers={teachers} onChanged={async () => { await loadTeachers(); }} />}
+          {section === 'questions' && <QuestionsSection />}
+          {section === 'analytics' && <AnalyticsSection analytics={analytics} error={analyticsError} />}
+          {section === 'export' && <ExportSection />}
+          {section === 'report' && <ReportSection analytics={analytics} teachers={teachers} error={analyticsError} />}
+        </div>
+      </main>
+    </div>
   );
 }

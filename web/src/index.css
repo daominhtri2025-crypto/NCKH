@@ -1,0 +1,116 @@
+/*
+ * Điểm vào CSS của ứng dụng.
+ *
+ * Thứ tự tầng (thấp → cao): theme, base (preflight), legacy (styles.css của các trang hoạt động),
+ * components, utilities. Tiện ích Tailwind luôn thắng CSS cũ, còn CSS cũ vẫn thắng preflight,
+ * nên các trang hoạt động chưa đổi markup không bị vỡ bố cục.
+ */
+@layer theme, base, legacy, components, utilities;
+
+@import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/preflight.css' layer(base);
+@import './styles.css' layer(legacy);
+@import 'tailwindcss/utilities.css' layer(utilities);
+
+/* Màu ngữ nghĩa đọc từ biến CSS ở :root (styles.css) nên tự đổi theo chế độ sáng/tối. */
+@theme inline {
+  --color-canvas: var(--bg);
+  --color-surface: var(--surface);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-line: var(--line);
+  --color-brand: var(--brand);
+  --color-brand-strong: var(--brand-strong);
+  --color-brand-ink: var(--brand-ink);
+  --color-brand-soft: var(--brand-soft);
+  --color-ok: var(--ok);
+  --color-ok-bg: var(--ok-bg);
+  --color-warn: var(--warn);
+  --color-warn-bg: var(--warn-bg);
+  --color-danger: var(--danger);
+  --color-danger-bg: var(--danger-bg);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --shadow-card: var(--shadow);
+  --shadow-pop: var(--shadow-pop);
+}
+
+/* In ấn: ẩn toàn bộ ứng dụng, chỉ giữ vùng được đánh dấu để in (thẻ học sinh, báo cáo). */
+@media print {
+  body > #root,
+  .no-print {
+    display: none !important;
+  }
+  html,
+  body {
+    background: #fff !important;
+  }
+  * {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
+
+@media screen {
+  .print-only {
+    display: none !important;
+  }
+}
+
+/*
+ * Thẻ học sinh: kích thước thật 85,6 × 54 mm (CR80). Mỗi trang A4 xếp 2 cột × 5 hàng = 10 thẻ.
+ * Màu cố định (không theo chế độ tối) để bản in luôn đúng.
+ */
+.sc-sheet-page {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 85.6mm);
+  gap: 3mm;
+  justify-content: center;
+  align-content: start;
+}
+
+.sc-card {
+  width: 85.6mm;
+  height: 54mm;
+  box-sizing: border-box;
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+@page {
+  size: A4;
+  margin: 8mm;
+}
+
+@media print {
+  .sc-print-root {
+    position: static !important;
+    inset: auto !important;
+    overflow: visible !important;
+    height: auto !important;
+    background: #fff !important;
+    padding: 0 !important;
+  }
+
+  .sc-sheet-page {
+    grid-template-columns: repeat(2, 85.6mm) !important;
+    gap: 2mm 3mm !important;
+  }
+
+  .sc-section {
+    break-after: page;
+    page-break-after: always;
+  }
+
+  .sc-section:last-child {
+    break-after: auto;
+    page-break-after: auto;
+  }
+
+  .sc-card {
+    box-shadow: none !important;
+  }
+}

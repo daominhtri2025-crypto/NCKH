@@ -37,17 +37,17 @@ Mỗi thẻ chỉ kích hoạt được một lần. Nếu thẻ không dùng đ
 
 Phiên đăng nhập có hiệu lực 24 giờ. Khi hết hạn, ứng dụng yêu cầu nhập lại mã. Góc trên bên phải luôn hiển thị **Mã** của học sinh và nút **Đăng xuất**.
 
-### 1.3. Trang chọn hoạt động
+### 1.3. Bảng học tập
 
-Trang chọn hoạt động có ba thẻ bước ở trên cùng. Mỗi thẻ hiển thị số thứ tự, tên khảo sát, trạng thái và điều kiện mở.
+Sau khi đăng nhập, học sinh vào **bảng học tập**. Bảng được chia thành các khối:
 
-| Thẻ | Tên | Trạng thái ban đầu | Điều kiện mở |
-|---|---|---|---|
-| 1 | Khảo sát đầu vào | Sẵn sàng | Mở ngay sau khi đăng nhập |
-| 2 | Khảo sát sau can thiệp | Chưa mở | Hoàn thành khảo sát đầu vào và cả ba hoạt động |
-| 3 | Khảo sát theo dõi | Chưa mở | Hoàn thành khảo sát sau can thiệp và đã qua 28 ngày |
+- **Khối tiến độ (đầu trang).** Vòng phần trăm cho biết em đã hoàn thành bao nhiêu trên sáu chặng của chương trình (khảo sát đầu vào, ba hoạt động, khảo sát sau can thiệp, khảo sát theo dõi). Nút lớn bên phải dẫn thẳng tới việc nên làm tiếp theo.
+- **Hoạt động học tập.** Ba thẻ: *Sân chơi tình huống*, *Thám tử không gian mạng* và *Phòng thí nghiệm tài khoản*. Mỗi thẻ có thanh tiến độ (số tình huống, địa chỉ hoặc bước đã làm), nhãn trạng thái và nút **Bắt đầu**, **Tiếp tục** hoặc **Ôn lại**. Mục **Danh sách bài học** mở ra các bài nhỏ trong hoạt động đó, đã làm hay chưa. Khi chưa làm khảo sát đầu vào, ba thẻ bị khóa và có khối nhắc kèm nút dẫn đến khảo sát.
+- **Thông báo.** Các nhắc việc suy ra từ tình trạng khảo sát, ví dụ khảo sát sau can thiệp đã mở, hoặc ngày khảo sát theo dõi sẽ mở.
+- **Hành trình của em.** Danh sách sáu chặng theo thứ tự, đánh dấu chặng đã xong, chặng đang sẵn sàng và chặng chưa mở.
+- **Kết quả của em.** Số tình huống chọn an toàn ngay lần đầu, độ chính xác khi đọc tên miền, số bước bảo mật đã đạt và thử thách mật khẩu.
 
-Dòng **Hoạt động đã xong** cho biết số hoạt động đã hoàn thành trên tổng số ba. Phía dưới là phần **Chọn một hoạt động**, gồm ba thẻ: *Sân chơi tình huống*, *Thám tử không gian mạng* và *Phòng thí nghiệm tài khoản*. Khi chưa đủ điều kiện, mỗi thẻ hiển thị khóa và dòng ghi lý do, ví dụ "Sau khảo sát đầu vào". Khi chưa làm khảo sát đầu vào, khối cảnh báo **Em cần làm khảo sát đầu vào trước khi bắt đầu các hoạt động** xuất hiện, kèm nút dẫn đến khảo sát.
+Điều kiện mở các khảo sát: đầu vào mở ngay sau khi đăng nhập; sau can thiệp mở khi đã xong khảo sát đầu vào và cả ba hoạt động; theo dõi mở khi đã xong khảo sát sau can thiệp và qua 28 ngày. Trên điện thoại, các khối xếp thành một cột.
 
 ### 1.4. Khảo sát (đầu vào, sau can thiệp, theo dõi)
 
@@ -119,8 +119,8 @@ Chọn đúng thao tác theo tình huống. Điều quan trọng nhất là **kh
 | Học sinh **đã kích hoạt**, làm mất hoặc quên mã | **Cấp thẻ mới** trên danh sách lớp (cần đối chiếu sổ phát thẻ) | **Giữ nguyên** |
 | Học sinh đã kích hoạt, quên mã và không có sổ phát thẻ | Không tìm lại được mã cũ. Tạo thẻ mới | Mất tiến độ cũ |
 
-1. Đăng nhập (mục 2.1), ở phần **Tạo thẻ mới**, nhập số thẻ (từ 1 đến 20 mỗi lần).
-2. Bấm **Tạo thẻ**. Danh sách mã hiện ra. Bấm **In danh sách** để in.
+1. Đăng nhập (mục 2.1), bấm **Tạo thẻ mới** ở đầu trang lớp và nhập số thẻ (từ 1 đến 20 mỗi lần).
+2. Bấm **Tạo thẻ**. Danh sách mã hiện ra. Bấm **In các thẻ này** để in ngay thẻ học sinh (xem phần *In thẻ học sinh* bên dưới).
 3. Phát thẻ cho học sinh và ghi vào sổ phát thẻ riêng (thẻ nào cho ai).
 
 Lưu ý:
@@ -140,6 +140,10 @@ Mỗi lần cấp lại được hệ thống ghi nhật ký (người thực hi
 
 Mã cũ mất hiệu lực ngay. Học sinh đăng nhập lại bằng mã mới và tiếp tục từ chỗ đã dừng. Chỉ cấp lại được cho học sinh của lớp mình.
 
+**In thẻ học sinh.** Ở trang lớp có nút **In thẻ học sinh** (hoặc **In n thẻ đã chọn** khi đã tích chọn ở cột đầu của danh sách). Mỗi dòng cũng có nút **In thẻ** riêng. Trang xem trước hiển thị các thẻ đúng kích thước thật (85,6 × 54 mm), 10 thẻ mỗi trang A4. Bấm **In / Lưu PDF** để mở hộp thoại in của trình duyệt; chọn **Lưu dưới dạng PDF** nếu muốn lưu tệp thay vì in giấy.
+
+Mỗi thẻ gồm tên dự án, lớp, mã kích hoạt và một mã QR. Thẻ **không** có họ tên hay ảnh học sinh, vì dự án giữ ẩn danh; danh tính chỉ nằm trong sổ phát thẻ của giáo viên. Quét mã QR bằng điện thoại sẽ mở ứng dụng và điền sẵn mã vào màn **Kích hoạt thẻ mã**; học sinh vẫn phải đọc thông tin và tích đồng ý. Mã QR chứa chính mã thẻ nên cần giữ kín thẻ như giữ mật khẩu.
+
 ### 2.3. Trước khi học sinh tham gia
 
 1. Thống nhất với nhà trường và phụ huynh về việc triển khai nghiên cứu.
@@ -154,7 +158,7 @@ Mã cũ mất hiệu lực ngay. Học sinh đăng nhập lại bằng mã mới
 
 ### 2.5. Theo dõi tiến độ
 
-Sau khi đăng nhập, danh sách lớp hiển thị cho mỗi học sinh:
+Sau khi đăng nhập, đầu trang lớp có bốn chỉ số: số thẻ đã cấp (và tỉ lệ đã kích hoạt), số học sinh xong khảo sát đầu vào, xong cả ba hoạt động và xong khảo sát sau can thiệp. Có ô tìm theo mã thẻ và bộ lọc *Tất cả*, *Đã kích hoạt*, *Chưa kích hoạt*. Trên máy tính, danh sách là một bảng; trên điện thoại, mỗi học sinh là một thẻ. Danh sách hiển thị cho mỗi học sinh:
 - **Trạng thái:** đã kích hoạt hay chưa. Thẻ chưa kích hoạt chỉ hiển thị mã.
 - **Khảo sát đầu vào, hậu kiểm, theo dõi:** số câu đã làm trên tổng 16.
 - **Sân chơi tình huống, thám tử tên miền, checklist:** số mục đã hoàn thành, và đã đạt phòng thí nghiệm hay chưa.
@@ -179,7 +183,7 @@ Danh sách chỉ hiển thị số lượng và trạng thái. Giáo viên khôn
 
 Nhóm kỹ thuật có hai cách làm việc:
 
-- **Trang quản trị trên ứng dụng.** Quản trị viên đăng nhập bằng cổng **Giáo viên đăng nhập** bằng tài khoản có vai trò quản trị. Sau khi đăng nhập, trang quản trị hiện ra với hai tab (mục 3.8). Quản trị viên không gắn lớp và không xem được tiến độ của lớp nào.
+- **Trang quản trị trên ứng dụng.** Quản trị viên đăng nhập bằng cổng **Giáo viên đăng nhập** bằng tài khoản có vai trò quản trị. Sau khi đăng nhập, trang quản trị hiện ra với thanh menu bên trái chia theo nhóm chức năng (mục 3.8). Quản trị viên không gắn lớp và không xem được tiến độ của lớp nào.
 - **Dòng lệnh trên máy chủ.** Dùng cho các việc hệ thống: tạo lớp, in thẻ, nạp schema, xuất dữ liệu.
 
 Dòng lệnh là cách chính cho: Cần Terminal của hosting, hoặc chạy trên máy cá nhân khi phát triển cục bộ. Các lệnh chạy từ thư mục gốc của dự án (hoặc `public_html` trên hosting), ví dụ `php api/bin/add_class.php`.
@@ -274,24 +278,31 @@ curl -H "X-Admin-Token: <token>" -o antoanso_wide.csv https://<tên-miền>/api/
 - Chưa có cơ chế nhắc khảo sát theo dõi.
 - Mật khẩu tạm chỉ được nhắc đổi, chưa bị chặn. Đây là chủ ý cho bản chạy cục bộ; trên hosting, cần bổ sung chặn trước khi triển khai rộng.
 
-### 3.8. Trang quản trị và tab Dữ liệu đo lường
+### 3.8. Trang quản trị
 
-Quản trị viên đăng nhập bằng cổng **Giáo viên đăng nhập** trên trang đầu, với tài khoản có vai trò quản trị. Trang quản trị có ba tab: **Giáo viên**, **Câu hỏi khảo sát** và **Dữ liệu đo lường**. Quản trị viên không gắn lớp, nên không xem được tiến độ chi tiết của lớp nào.
+Quản trị viên đăng nhập bằng cổng **Giáo viên đăng nhập** trên trang đầu, với tài khoản có vai trò quản trị. Trang quản trị có thanh menu bên trái (trên điện thoại là nút menu ở góc trái, mở ra ngăn kéo), chia thành các nhóm:
 
-Nếu tài khoản còn dùng mật khẩu mặc định hoặc mật khẩu tạm, khối nhắc **Đổi mật khẩu** hiển thị ở đầu trang. Có thể đổi ngay hoặc đổi sau.
+| Nhóm | Mục | Nội dung |
+|---|---|---|
+| (đầu menu) | **Tổng quan** | Chỉ số chính và biểu đồ |
+| Quản lý đào tạo | **Tài khoản giáo viên** | Thêm, cấp mật khẩu mới, khóa hoặc mở khóa tài khoản |
+| Quản lý đào tạo | **Bộ câu hỏi khảo sát** | Xem, thêm, sửa, xóa câu hỏi |
+| Thống kê | **Số liệu đo lường** | Bảng số liệu chi tiết |
+| In ấn & Xuất dữ liệu | **Xuất dữ liệu CSV** | Tải hai tệp CSV |
+| In ấn & Xuất dữ liệu | **Báo cáo tổng hợp (in)** | Báo cáo A4 để in hoặc lưu PDF |
 
-**Tab Giáo viên.** Gồm biểu mẫu **Thêm tài khoản** (tên đăng nhập, vai trò, mã lớp) và bảng **Danh sách tài khoản**. Mỗi dòng có nút **Cấp mật khẩu mới** và **Khóa** (hoặc **Mở khóa**). Mọi thao tác đều có hộp thoại xác nhận. Mật khẩu mới chỉ hiện một lần.
+Quản trị viên không gắn lớp, nên không xem được tiến độ chi tiết của lớp nào. Nếu tài khoản còn dùng mật khẩu mặc định hoặc mật khẩu tạm, khối nhắc **Đổi mật khẩu** hiển thị ở đầu trang; có thể đổi ngay hoặc đổi sau.
 
-**Tab Câu hỏi khảo sát.** Hiển thị bộ câu hỏi hiện hành, tách theo kiến thức và hành vi. Mỗi câu có nút **Sửa** và **Xóa**, và có nút **Thêm câu hỏi**. Đáp án đúng chỉ quản trị viên thấy. Mỗi lần thay đổi tạo một phiên bản mới; học sinh đã làm dở giữ phiên bản cũ.
+**Tổng quan.** Bốn thẻ chỉ số: số thẻ đã phát (kèm tỉ lệ kích hoạt), số giáo viên đang hoạt động, số lớp tham gia và tỉ lệ xong khảo sát sau can thiệp. Bên dưới là các biểu đồ: tiến trình theo chặng nghiên cứu (từ phát thẻ đến xong khảo sát theo dõi), tỉ lệ kích hoạt thẻ, điểm kiến thức trung bình theo giai đoạn, tiến độ theo lớp và tỉ lệ đúng theo nhóm chủ đề. Các biểu đồ lấy số liệu tổng hợp từ máy chủ; ô có dưới năm học sinh không được vẽ.
 
-**Tab Dữ liệu đo lường.** Gồm các khối sau, sắp theo thứ tự trên màn hình:
+**Tài khoản giáo viên.** Gồm biểu mẫu **Thêm tài khoản** (tên đăng nhập, vai trò, mã lớp) và danh sách tài khoản kèm nút **Cấp mật khẩu mới** và **Khóa** (hoặc **Mở khóa**). Mọi thao tác đều có hộp thoại xác nhận. Mật khẩu mới chỉ hiện một lần.
 
-1. **Tải dữ liệu nghiên cứu.** Hai nút: *Tải CSV dạng long (một dòng mỗi câu trả lời)* và *Tải CSV dạng wide (một dòng mỗi học sinh)*. Tệp tải về đã ẩn danh bằng mã ngẫu nhiên, không có họ tên. Nút tải dùng chính phiên đăng nhập của quản trị viên, không cần nhập token hay gõ lệnh.
-2. **Tiến độ theo lớp.** Bảng với các cột: đã phát thẻ, đang hoạt động, xong đầu vào, xong sau can thiệp, xong theo dõi. Dòng phía trên ghi tổng số học sinh đang hoạt động. Giai đoạn theo dõi chỉ mở sau 28 ngày kể từ khi hoàn thành khảo sát sau can thiệp.
-3. **Điểm kiến thức trung bình theo giai đoạn.** Biểu đồ cột ngang với ba thanh: *Đầu vào (trước can thiệp)*, *Sau can thiệp* và *Theo dõi (sau 28 ngày)*. Mỗi thanh ghi giá trị theo phần trăm câu đúng và cỡ mẫu n. Giá trị là trung bình trên những học sinh đã làm xong giai đoạn đó.
-4. **So sánh trước và sau can thiệp.** Bảng hai dòng: đầu vào so với sau can thiệp, và đầu vào so với theo dõi. Mỗi dòng ghi số học sinh có đủ cả hai lần đo, chênh lệch trung bình và trung vị.
-5. **Hành vi tự báo cáo.** Bảng trung bình và độ lệch chuẩn cho ba giai đoạn, trên thang 1 đến 4, đã điều chỉnh câu đảo chiều.
-6. **Kiến thức theo nhóm chủ đề.** Bảng tỉ lệ đúng theo chủ đề m1 (sân chơi tình huống), m2 (thám tử tên miền) và m3 (phòng thí nghiệm tài khoản), cho ba giai đoạn.
+**Bộ câu hỏi khảo sát.** Hiển thị bộ câu hỏi hiện hành, tách theo kiến thức và hành vi. Mỗi câu có nút **Sửa** và **Xóa**, và có nút **Thêm câu hỏi**. Đáp án đúng chỉ quản trị viên thấy. Mỗi lần thay đổi tạo một phiên bản mới; học sinh đã làm dở giữ phiên bản cũ.
 
-Quy tắc công bố: ô có dưới năm học sinh được hiển thị là **ẩn** cùng số cỡ mẫu, để không lộ danh tính. Các số trên tab này là mô tả. Kiểm định thống kê được thực hiện riêng theo kế hoạch phân tích của báo cáo.
+**Số liệu đo lường.** Các bảng: tiến độ theo lớp (kèm dòng tổng và tỉ lệ), so sánh trước và sau can thiệp (số cặp, chênh lệch trung bình, trung vị), hành vi tự báo cáo (trung bình và độ lệch chuẩn, thang 1 đến 4, đã điều chỉnh câu đảo chiều) và kiến thức theo nhóm chủ đề m1 (sân chơi tình huống), m2 (thám tử tên miền), m3 (phòng thí nghiệm tài khoản). Giai đoạn theo dõi chỉ mở sau 28 ngày kể từ khi xong khảo sát sau can thiệp.
 
+**Xuất dữ liệu CSV.** Hai tệp: *CSV dạng long* (một dòng mỗi câu trả lời) và *CSV dạng wide* (một dòng mỗi học sinh). Nút tải dùng chính phiên đăng nhập của quản trị viên, không cần nhập token hay gõ lệnh. **Lưu ý:** tệp không có họ tên, nhưng cột `pseudonym` chính là mã thẻ của học sinh (cũng là mã đăng nhập) và có cột mã lớp. Hãy lưu tệp an toàn, không gửi qua kênh công khai, và thay bằng mã giả trước khi chia sẻ hoặc công bố.
+
+**Báo cáo tổng hợp (in).** Mở bản xem trước báo cáo A4 gồm chỉ số chính, tiến độ theo lớp, điểm theo giai đoạn và tỉ lệ đúng theo chủ đề; bấm **In / Lưu PDF** để in hoặc lưu tệp. Báo cáo chỉ gồm số tổng hợp.
+
+Quy tắc công bố: ô có dưới năm học sinh được hiển thị là **ẩn** cùng số cỡ mẫu, để không lộ danh tính. Các số trên trang này là mô tả. Kiểm định thống kê được thực hiện riêng theo kế hoạch phân tích của báo cáo.

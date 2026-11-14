@@ -1,12 +1,14 @@
 import { FormEvent, useState } from 'react';
 import { api, ApiError } from '../../lib/api';
+import AuthLayout from '../../components/AuthLayout';
+import { Alert, Button, Field, TextInput } from '../../components/ui';
 
 interface Props {
   onLoggedIn: (role: 'teacher' | 'admin', mustChange: boolean) => void;
   onBack: () => void;
 }
 
-/** Đăng nhập giáo viên. Tài khoản do nhóm kỹ thuật cấp. */
+/** Đăng nhập giáo viên / quản trị viên. Tài khoản do nhóm kỹ thuật cấp. */
 export default function TeacherLogin({ onLoggedIn, onBack }: Props) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -30,24 +32,23 @@ export default function TeacherLogin({ onLoggedIn, onBack }: Props) {
   }
 
   return (
-    <section className="card">
-      <button className="link-btn" onClick={onBack}>← Quay lại</button>
-      <h2>Giáo viên đăng nhập</h2>
-      <p className="lead">Tài khoản do nhóm nghiên cứu cấp. Chỉ xem được tiến độ của lớp được gán.</p>
-      <form onSubmit={submit} className="stack">
-        <label className="field">
-          <span>Tên đăng nhập</span>
-          <input value={username} onChange={(e) => setUsername(e.target.value)} autoComplete="username" required />
-        </label>
-        <label className="field">
-          <span>Mật khẩu</span>
-          <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} autoComplete="current-password" required />
-        </label>
-        {error && <p className="alert" role="alert">{error}</p>}
-        <button className="btn btn-primary btn-xl" type="submit" disabled={submitting || !username || !password}>
+    <AuthLayout
+      title="Giáo viên đăng nhập"
+      lead="Tài khoản do nhóm nghiên cứu cấp. Giáo viên chỉ xem được tiến độ của lớp được gán."
+      onBack={onBack}
+    >
+      <form onSubmit={submit} className="grid grid-cols-1 gap-4">
+        <Field label="Tên đăng nhập">
+          <TextInput value={username} onChange={(e) => setUsername(e.target.value)} autoComplete="username" required />
+        </Field>
+        <Field label="Mật khẩu">
+          <TextInput type="password" value={password} onChange={(e) => setPassword(e.target.value)} autoComplete="current-password" required />
+        </Field>
+        {error && <Alert>{error}</Alert>}
+        <Button type="submit" variant="primary" size="lg" block disabled={submitting || !username || !password}>
           {submitting ? 'Đang đăng nhập…' : 'Đăng nhập'}
-        </button>
+        </Button>
       </form>
-    </section>
+    </AuthLayout>
   );
 }
