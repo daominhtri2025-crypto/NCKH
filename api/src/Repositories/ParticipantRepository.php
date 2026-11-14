@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace AnToanSo\Repositories;
 
 use AnToanSo\Support\Database;
+use AnToanSo\Support\ResearchId;
 use PDO;
+use PDOException;
 
 final class ParticipantRepository
 {
@@ -32,13 +34,24 @@ final class ParticipantRepository
         return $row === false ? null : $row;
     }
 
+    /** Phát một thẻ mới và cấp luôn mã định danh nghiên cứu ngẫu nhiên (không dùng để đăng nhập). */
     public function insertIssued(string $code, string $classCode, ?int $issuedByTeacherId): void
     {
         $stmt = $this->db()->prepare(
-            "INSERT INTO participants (code, class_code, status, created_at, issued_by_teacher_id)
-             VALUES (?, ?, 'issued', ?, ?)"
+            "INSERT INTO participants (code, research_id, class_code, status, created_at, issued_by_teacher_id)
+             VALUES (?, ?, ?, 'issued', ?, ?)"
         );
-        $stmt->execute([$code, $classCode, date('Y-m-d H:i:s'), $issuedByTeacherId]);
+        for ($attempt = 0; ; $attempt++) {
+            try {
+                $stmt->execute([$code, ResearchId::generate(), $classCode, date('Y-m-d H:i:s'), $issuedByTeacherId]);
+                return;
+            } catch (PDOException $e) {
+                // Chỉ thử lại khi trùng mã nghiên cứu (cực hiếm); trùng mã thẻ do nơi gọi xử lý.
+                if ($attempt >= 7 || !str_contains($e->getMessage(), 'uq_participants_research')) {
+                    throw $e;
+                }
+            }
+        }
     }
 
     /**

@@ -40,6 +40,9 @@ CREATE TABLE IF NOT EXISTS teachers (
 CREATE TABLE IF NOT EXISTS participants (
   id              BIGINT       NOT NULL AUTO_INCREMENT,
   code            CHAR(9)      NOT NULL,
+  -- Mã định danh nghiên cứu (ẩn danh): ngẫu nhiên, độc lập với `code`, KHÔNG dùng để đăng nhập.
+  -- Đây là mã duy nhất xuất hiện trong tệp dữ liệu nghiên cứu. Giữ nguyên khi cấp lại thẻ.
+  research_id     CHAR(10)     NULL,
   class_code      VARCHAR(40)  NOT NULL,
   status          ENUM('issued','active') NOT NULL,
   token_hash      CHAR(64)     NULL,
@@ -56,6 +59,7 @@ CREATE TABLE IF NOT EXISTS participants (
   reissued_by_teacher_id BIGINT NULL,
   PRIMARY KEY (id),
   UNIQUE KEY uq_participants_code (code),
+  UNIQUE KEY uq_participants_research (research_id),
   UNIQUE KEY uq_participants_token (token_hash),
   KEY idx_participants_class (class_code),
   CONSTRAINT fk_participants_class FOREIGN KEY (class_code) REFERENCES classes (code),

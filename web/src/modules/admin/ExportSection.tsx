@@ -27,15 +27,15 @@ const ITEMS: Item[] = [
 ];
 
 /**
- * Xuất dữ liệu nghiên cứu. Tệp chỉ gồm học sinh đang hoạt động và không có họ tên,
- * nhưng cột `pseudonym` là mã thẻ thật (cũng là mã đăng nhập) nên phải xử lý như tài liệu mật.
+ * Xuất dữ liệu nghiên cứu. Tệp chỉ gồm học sinh đang hoạt động và không có họ tên. Cột `pseudonym`
+ * là mã định danh nghiên cứu ngẫu nhiên, KHÁC mã thẻ đăng nhập; mã thẻ không bao giờ có trong tệp.
  */
 export default function ExportSection() {
   return (
     <div className="grid grid-cols-1 gap-6">
       <PageTitle
         title="Xuất dữ liệu CSV"
-        subtitle="Tệp gồm học sinh đang hoạt động. Không có họ tên; học sinh được nhận diện bằng mã thẻ và mã lớp."
+        subtitle="Tệp gồm học sinh đang hoạt động. Không có họ tên và không có mã thẻ đăng nhập; mỗi học sinh được nhận diện bằng một mã định danh nghiên cứu ngẫu nhiên và mã lớp."
       />
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         {ITEMS.map((item) => (
@@ -57,8 +57,9 @@ export default function ExportSection() {
       </div>
       <Card className="p-5">
         <p className="m-0 text-sm text-ink-soft">
-          <strong className="text-ink">Lưu ý bảo mật:</strong> cột <code>pseudonym</code> trong tệp chính là mã thẻ của học sinh, đồng thời là mã đăng nhập.
-          Hãy coi tệp là tài liệu mật: chỉ dùng cho mục đích của đề tài, lưu trữ an toàn, không gửi qua kênh công khai, và thay mã (bằng mã giả) trước khi chia sẻ hoặc công bố.
+          <strong className="text-ink">Mã định danh nghiên cứu:</strong> cột <code>pseudonym</code> (dạng <code>R…</code>, 10 ký tự) là mã ngẫu nhiên, độc lập với mã thẻ
+          và không dùng để đăng nhập; mã này giữ nguyên khi học sinh được cấp lại thẻ nên vẫn nối được dữ liệu các giai đoạn.
+          Tệp vẫn có mã lớp, nên hãy lưu an toàn và không công bố dữ liệu từng học sinh khi chưa tổng hợp.
           Tệp wide chấm điểm theo đúng phiên bản bộ câu hỏi của từng học sinh.
         </p>
       </Card>

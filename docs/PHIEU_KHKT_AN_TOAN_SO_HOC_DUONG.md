@@ -75,7 +75,7 @@
   - Phiếu B (học sinh, phản hồi, sau can thiệp): 7 câu, gồm hoạt động hữu ích nhất, mức dễ sử dụng, mức rõ ràng của giải thích và ý kiến mở.
   - Phiếu C (giáo viên): 11 câu, gồm nguy cơ học sinh gặp phải, nội dung và hình thức ưu tiên, rào cản triển khai và lo ngại về quyền riêng tư.
   - Phân tích: thống kê mô tả (tỉ lệ theo lựa chọn; trung bình và độ lệch chuẩn cho thang 1–5). Kết quả ở mục II.3.
-- *Kiểm thử phần mềm (đã thực hiện):* bộ kiểm thử tích hợp tự động gồm 290 kiểm tra, đạt toàn bộ. Đây là kiểm chứng kỹ thuật, không phải kết quả nghiên cứu.
+- *Kiểm thử phần mềm (đã thực hiện):* bộ kiểm thử tích hợp tự động gồm 321 kiểm tra, đạt toàn bộ. Đây là kiểm chứng kỹ thuật, không phải kết quả nghiên cứu.
 
 **3. Các giai đoạn thực hiện, cách thu thập, lưu trữ và xử lý dữ liệu**
 
@@ -175,7 +175,7 @@ Thiết kế đo lường trước, sau và theo dõi sau 28 ngày, với 16 câ
 
 **3. Kết quả**
 
-Hệ thống đã hoàn thành và đạt toàn bộ 290 kiểm tra tự động. Ba phiếu khảo sát đã thu được 100 phiếu hợp lệ mỗi phiếu. Học sinh có nhận thức về nguy cơ lừa đảo ở mức trung bình, và xem việc học nhận diện lừa đảo là rất cần thiết (4,61/5). Chưa có dữ liệu trước và sau can thiệp để kiểm định hiệu quả; bốn giả thuyết sẽ được kiểm định khi có dữ liệu đó.
+Hệ thống đã hoàn thành và đạt toàn bộ 321 kiểm tra tự động. Ba phiếu khảo sát đã thu được 100 phiếu hợp lệ mỗi phiếu. Học sinh có nhận thức về nguy cơ lừa đảo ở mức trung bình, và xem việc học nhận diện lừa đảo là rất cần thiết (4,61/5). Chưa có dữ liệu trước và sau can thiệp để kiểm định hiệu quả; bốn giả thuyết sẽ được kiểm định khi có dữ liệu đó.
 
 **4. Ý nghĩa**
 
@@ -196,7 +196,7 @@ Hệ thống đã hoàn thành và đạt toàn bộ 290 kiểm tra tự động
 | Ngày/tháng | Công việc, phương pháp thực hiện | Kết quả; mã minh chứng | Người thực hiện, phần việc |
 |---|---|---|---|
 | …/…… | Xây dựng hệ thống web (ba hoạt động, bộ câu hỏi, giao diện giáo viên) | Mã nguồn và kiểm thử tự động: MC02 | …………………… |
-| …/…… | Kiểm chứng kỹ thuật: 290 kiểm tra tự động; kiểm thử giao diện trên điện thoại và máy tính | MC03 | …………………… |
+| …/…… | Kiểm chứng kỹ thuật: 321 kiểm tra tự động; kiểm thử giao diện trên điện thoại và máy tính | MC03 | …………………… |
 | …/…… | Thu thập 100 phiếu hợp lệ cho mỗi biểu mẫu khảo sát trên Google Form (01/11–11/11/2026) | MC07–MC09 | …………………… |
 | …/…… | Thu dữ liệu với học sinh (nếu có) | …………………… | …………………… |
 
@@ -218,7 +218,7 @@ Hệ thống đã hoàn thành và đạt toàn bộ 290 kiểm tra tự động
 |---|---|---|---|
 | MC01 | Bộ câu hỏi khảo sát (phiên bản a-v1) | Nội dung 16 câu ba giai đoạn, đáp án và thang đo | …………… |
 | MC02 | Mã nguồn hệ thống (nhánh claude/gifted-brown-mfv1i8) | Cài đặt ba hoạt động, kiểm soát trình tự và ẩn danh | …………… |
-| MC03 | Kết quả kiểm thử tự động (290 kiểm tra, 0 lỗi) | Kiểm chứng kỹ thuật, không phải kết quả nghiên cứu | …………… |
+| MC03 | Kết quả kiểm thử tự động (321 kiểm tra, 0 lỗi) | Kiểm chứng kỹ thuật, không phải kết quả nghiên cứu | …………… |
 | MC04 | Bộ mã hóa biến (codebook) và định dạng xuất dữ liệu | Mô tả từng cột và cách tính biến | …………… |
 | MC05 | Phiếu đồng ý (IVd) và cam kết (IVb) đã ký | Đồng ý bằng văn bản trước khi thu dữ liệu | Lưu bản giấy tại trường |
 | MC06 | Dữ liệu xuất ẩn danh (tệp dài và tệp rộng) | Dữ liệu gốc phục vụ phân tích | Sau khi thu thập |

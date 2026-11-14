@@ -10,6 +10,8 @@ Bảng tóm tắt cách đăng nhập:
 | Giáo viên | Tên đăng nhập và mật khẩu do nhóm kỹ thuật cấp | Trang chủ ứng dụng, mục "Giáo viên đăng nhập" | Có tài khoản |
 | Nhóm kỹ thuật | Đăng nhập vào máy chủ (Terminal hoặc phpMyAdmin); không đăng nhập vào ứng dụng | Máy chủ hosting | Tài khoản hosting và CSDL |
 
+> **Về các hình minh họa.** Mọi ảnh trong tài liệu được chụp trên bản chạy thử với **dữ liệu mẫu rất nhỏ** (một lớp mẫu, vài thẻ mẫu). Các con số trong ảnh chỉ để minh họa giao diện, không phải kết quả nghiên cứu. Mã thẻ trong ảnh là mã mẫu.
+
 Nguyên tắc chung: học sinh không tự tạo mã. Nhóm kỹ thuật in thẻ mã (mỗi thẻ là một mã ngẫu nhiên, không ghi tên), giáo viên nhận và phát thẻ, học sinh kích hoạt thẻ.
 
 ---
@@ -20,22 +22,28 @@ Phần này mô tả trải nghiệm của học sinh theo đúng giao diện c�
 
 ### 1.1. Kích hoạt thẻ mã (lần đầu)
 
-1. Nhận thẻ mã từ giáo viên. Mã có dạng `XXXX-XXXX`.
-2. Mở ứng dụng. Trang đầu có hai nút: **Em có thẻ mã từ giáo viên** và **Em đã kích hoạt, đăng nhập**.
+1. Nhận thẻ mã từ giáo viên. Thẻ có lớp, mã `XXXX-XXXX` và một mã QR.
+2. Mở ứng dụng. Trang đầu có khối **Bắt đầu** với hai nút: **Em có thẻ mã từ giáo viên** và **Em đã kích hoạt, đăng nhập**.
 3. Bấm **Em có thẻ mã từ giáo viên**. Màn hình **Kích hoạt thẻ mã** hiện ra, kèm khối thông tin về dữ liệu được thu thập và không thu thập.
 4. Nhập mã trên thẻ vào ô **Mã trên thẻ**.
 5. Tích ô **Em đã đọc và đồng ý tham gia nghiên cứu.** Nút **Kích hoạt và bắt đầu** chỉ bật khi đã nhập mã và tích ô này.
-6. Bấm **Kích hoạt và bắt đầu**. Ứng dụng đưa học sinh đến trang chọn hoạt động.
+6. Bấm **Kích hoạt và bắt đầu**. Ứng dụng đưa học sinh đến bảng học tập (mục 1.3).
+
+**Cách nhanh bằng mã QR.** Thay cho bước 2 đến 4, học sinh có thể dùng camera điện thoại quét mã QR trên thẻ. Ứng dụng mở thẳng màn **Kích hoạt thẻ mã** với mã đã được điền sẵn và dòng xác nhận *Đã nhận mã từ thẻ của em*. Học sinh vẫn phải đọc thông tin và tích ô đồng ý (bước 5) trước khi kích hoạt.
 
 Mỗi thẻ chỉ kích hoạt được một lần. Nếu thẻ không dùng được, học sinh báo giáo viên.
+![Hình 1. Trang đầu của ứng dụng](hinh/hd01_vao.png){width=80%}
+
+![Hình 2. Màn Kích hoạt thẻ mã khi vào bằng mã QR (mã đã được điền sẵn)](hinh/hd02_kich_hoat_qr.png){width=80%}
+
 
 ### 1.2. Đăng nhập lại
 
 1. Trên trang đầu, bấm **Em đã kích hoạt, đăng nhập**.
-2. Nhập mã trên thẻ vào ô **Mã trên thẻ**. Ứng dụng không phân biệt chữ hoa, chữ thường, và bỏ qua dấu gạch nối.
+2. Nhập mã trên thẻ vào ô **Mã học sinh**. Ứng dụng không phân biệt chữ hoa, chữ thường, và bỏ qua dấu gạch nối.
 3. Bấm **Đăng nhập**.
 
-Phiên đăng nhập có hiệu lực 24 giờ. Khi hết hạn, ứng dụng yêu cầu nhập lại mã. Góc trên bên phải luôn hiển thị **Mã** của học sinh và nút **Đăng xuất**.
+Phiên đăng nhập có hiệu lực 24 giờ. Khi hết hạn, ứng dụng yêu cầu nhập lại mã. Thanh đầu trang hiển thị mã của học sinh và nút **Đăng xuất** (trên điện thoại chỉ còn biểu tượng đăng xuất).
 
 ### 1.3. Bảng học tập
 
@@ -49,11 +57,19 @@ Sau khi đăng nhập, học sinh vào **bảng học tập**. Bảng được c
 
 Điều kiện mở các khảo sát: đầu vào mở ngay sau khi đăng nhập; sau can thiệp mở khi đã xong khảo sát đầu vào và cả ba hoạt động; theo dõi mở khi đã xong khảo sát sau can thiệp và qua 28 ngày. Trên điện thoại, các khối xếp thành một cột.
 
+![Hình 3. Bảng học tập của học sinh đã làm khảo sát đầu vào và đang làm hai hoạt động](hinh/hd03_bang_hoc_tap.png){width=80%}
+
+![Hình 4. Bảng học tập khi học sinh chưa làm khảo sát đầu vào: ba hoạt động bị khóa](hinh/hd03a_bang_hoc_tap_khoa.png){width=80%}
+
+![Hình 5. Bảng học tập trên điện thoại](hinh/hd04_bang_hoc_tap_dt.png){width=38%}
+
 ### 1.4. Khảo sát (đầu vào, sau can thiệp, theo dõi)
 
 Màn hình khảo sát ghi số câu của phiên bản hiện hành. Bản chuẩn của đề tài có 16 câu. Học sinh làm từng câu một, tiêu đề mỗi câu ghi *Câu x/n*. Bấm **Bắt đầu** để vào câu đầu tiên, hoặc **Tiếp tục** nếu đã làm dở.
 
 Khảo sát không cho biết đúng hay sai. Học sinh chọn đáp án của mình và chuyển sang câu tiếp theo. Câu kiến thức có từ hai đến bốn lựa chọn, tùy câu. Câu hành vi có thang bốn mức.
+
+![Hình 6. Một câu trong khảo sát đầu vào](hinh/hd09_khao_sat.png){width=70%}
 
 ### 1.5. Sân chơi tình huống
 
@@ -61,17 +77,23 @@ Hoạt động gồm năm tình huống: cuộc gọi tự xưng công an, nhân
 
 Học sinh đọc tình huống trong khung hội thoại, chọn cách xử lý và bấm xác nhận. Ứng dụng cho biết đúng hay chưa đúng, kèm giải thích. Nếu chưa đúng, học sinh bấm **Chọn lại** để thử lại. Bấm **Bắt đầu chơi** lần đầu, hoặc **Tiếp tục chơi** khi đã có tiến trình.
 
+![Hình 7. Một tình huống trong Sân chơi tình huống](hinh/hd05_tinh_huong.png){width=70%}
+
 ### 1.6. Thám tử không gian mạng
 
 Hoạt động gồm 12 địa chỉ web. Mỗi lượt, học sinh chọn **✅ Chính thống** hoặc **⚠️ Giả mạo** cho địa chỉ hiện ra. Mỗi địa chỉ chỉ phân loại một lần. Màn hình đầu nêu quy tắc và hai tên gốc chính thức cần nhớ.
 
 Khi chưa chắc, học sinh bấm **Đọc từ phải sang trái** để xem cách tách tên miền: nhìn phần cuối (đuôi miền), đọc ngược sang trái để tìm phần gốc, rồi so với danh sách tên gốc chính thức. Kết quả hiển thị **Chính xác!** hoặc **Chưa đúng, xem cách đọc nhé**.
 
+![Hình 8. Một lượt của Thám tử không gian mạng (địa chỉ web hư cấu)](hinh/hd06_tham_tu.png){width=70%}
+
 ### 1.7. Phòng thí nghiệm tài khoản
 
 Hoạt động có thanh **Checklist** ghi số bước đã hoàn thành trên tổng số tám bước, và nhãn **Phòng thí nghiệm** cho biết tình trạng chung. Hoạt động có hai tab.
 
 **Tab Kiểm tra mật khẩu.** Học sinh nhập một **mật khẩu mẫu** vào ô có gợi ý dạng ví dụ, không nhập mật khẩu thật. Nút **Hiện** cho phép xem nội dung đang gõ. Màn hình hiển thị số mật khẩu mẫu đã thử và mức cao nhất đạt được. Cần thử ít nhất ba mật khẩu mẫu trước khi nút **Hoàn thành phòng thí nghiệm** được bật. Khung xanh ghi rõ mật khẩu chỉ được kiểm tra trên máy này, không được gửi lên máy chủ, và dòng cuối ghi **Mức gửi lên máy chủ: — (không kèm mật khẩu)**.
+
+![Hình 9. Tab Kiểm tra mật khẩu của Phòng thí nghiệm tài khoản](hinh/hd07_mat_khau.png){width=70%}
 
 **Tab Cài đặt quyền riêng tư.** Có hai thẻ theo nền tảng: **Zalo** và **Facebook**, mỗi nền tảng bốn bước. Mỗi bước gồm ba mục:
 
@@ -80,6 +102,8 @@ Hoạt động có thanh **Checklist** ghi số bước đã hoàn thành trên 
 - **Kiểm tra hiểu bài:** câu hỏi nhiều lựa chọn.
 
 Để hoàn thành bước, học sinh chọn đáp án, tích ô **Em đã thực hành các thao tác này trên điện thoại của mình**, rồi bấm **Xác nhận**. Nếu sai, bấm **Chọn lại**. Thẻ nền tảng hiển thị số bước đã xong, ví dụ *Zalo 0/4*.
+
+![Hình 10. Tab Cài đặt quyền riêng tư](hinh/hd08_quyen_rieng_tu.png){width=70%}
 
 ### 1.8. Điều học sinh cần nhớ
 
@@ -97,9 +121,9 @@ Hoạt động có thanh **Checklist** ghi số bước đã hoàn thành trên 
 Giáo viên có tài khoản do nhóm kỹ thuật cấp, gồm **tên đăng nhập** và **mật khẩu**. Tài khoản chỉ xem được tiến độ của lớp được gán.
 
 1. Mở ứng dụng trên trình duyệt, ở trang chủ.
-2. Ở dòng cuối, bấm **Giáo viên đăng nhập**.
+2. Ở khối **Dành cho giáo viên**, bấm **Giáo viên đăng nhập**.
 3. Nhập tên đăng nhập và mật khẩu, rồi bấm **Đăng nhập**.
-4. Danh sách lớp hiện ra. Khi xong, bấm **Đăng xuất** ở góc trên bên phải.
+4. Trang lớp hiện ra. Khi xong, bấm **Đăng xuất** ở góc trên bên phải.
 
 **Lần đầu đăng nhập bằng mật khẩu tạm:** ở đầu trang hiện khối **"Tài khoản đang dùng mật khẩu mặc định hoặc mật khẩu tạm"**. Bấm **Đổi mật khẩu**, nhập mật khẩu hiện tại và mật khẩu mới (10 ký tự trở lên, có cả chữ và số, khác mật khẩu cũ), rồi bấm **Lưu mật khẩu mới**. Có thể bỏ qua và đổi sau, nhưng nên đổi ngay.
 
@@ -123,6 +147,8 @@ Chọn đúng thao tác theo tình huống. Điều quan trọng nhất là **kh
 2. Bấm **Tạo thẻ**. Danh sách mã hiện ra. Bấm **In các thẻ này** để in ngay thẻ học sinh (xem phần *In thẻ học sinh* bên dưới).
 3. Phát thẻ cho học sinh và ghi vào sổ phát thẻ riêng (thẻ nào cho ai).
 
+![Hình 11. Hộp thoại Tạo thẻ mới](hinh/hd13_tao_the.png){width=70%}
+
 Lưu ý:
 - Thẻ mới **không** kế thừa tiến độ cũ. Với học sinh đã kích hoạt, dùng **Cấp thẻ mới** trên danh sách lớp thay vì tạo thẻ mới.
 - Mỗi lớp có tổng số thẻ tối đa, do nhóm kỹ thuật đặt (mặc định 300). Khi vượt giới hạn, ứng dụng báo và giáo viên liên hệ nhóm kỹ thuật.
@@ -138,11 +164,15 @@ Lưu ý:
 
 Mỗi lần cấp lại được hệ thống ghi nhật ký (người thực hiện, mã cũ, mã mới, thời điểm, việc đã xác nhận đối chiếu) để truy vết trách nhiệm. Nhật ký này chỉ dùng nội bộ, không nằm trong tệp xuất nghiên cứu. Yêu cầu không tích ô xác nhận sẽ bị từ chối và mã không đổi.
 
+![Hình 12. Hộp thoại Cấp thẻ mới cho học sinh: nút xác nhận chỉ bật sau khi tích ô đối chiếu sổ](hinh/hd15_cap_lai.png){width=70%}
+
 Mã cũ mất hiệu lực ngay. Học sinh đăng nhập lại bằng mã mới và tiếp tục từ chỗ đã dừng. Chỉ cấp lại được cho học sinh của lớp mình.
 
 **In thẻ học sinh.** Ở trang lớp có nút **In thẻ học sinh** (hoặc **In n thẻ đã chọn** khi đã tích chọn ở cột đầu của danh sách). Mỗi dòng cũng có nút **In thẻ** riêng. Trang xem trước hiển thị các thẻ đúng kích thước thật (85,6 × 54 mm), 10 thẻ mỗi trang A4. Bấm **In / Lưu PDF** để mở hộp thoại in của trình duyệt; chọn **Lưu dưới dạng PDF** nếu muốn lưu tệp thay vì in giấy.
 
 Mỗi thẻ gồm tên dự án, lớp, mã kích hoạt và một mã QR. Thẻ **không** có họ tên hay ảnh học sinh, vì dự án giữ ẩn danh; danh tính chỉ nằm trong sổ phát thẻ của giáo viên. Quét mã QR bằng điện thoại sẽ mở ứng dụng và điền sẵn mã vào màn **Kích hoạt thẻ mã**; học sinh vẫn phải đọc thông tin và tích đồng ý. Mã QR chứa chính mã thẻ nên cần giữ kín thẻ như giữ mật khẩu.
+
+![Hình 13. Trang xem trước khi in thẻ (ảnh minh họa đã che dòng tên trường ở chân thẻ)](hinh/hd14_in_the.png){width=80%}
 
 ### 2.3. Trước khi học sinh tham gia
 
@@ -167,6 +197,10 @@ Dùng danh sách này để nhắc những học sinh còn thiếu. Khi khảo s
 
 Danh sách chỉ hiển thị số lượng và trạng thái. Giáo viên không xem được câu trả lời, đáp án hay nội dung học sinh nhập.
 
+![Hình 14. Trang lớp của giáo viên trên máy tính](hinh/hd11_lop.png){width=80%}
+
+![Hình 15. Trang lớp trên điện thoại](hinh/hd12_lop_dt.png){width=38%}
+
 ### 2.6. Điều giáo viên không làm
 
 - Không yêu cầu học sinh nhập họ tên, email, số điện thoại hay mật khẩu thật vào ứng dụng.
@@ -184,9 +218,7 @@ Danh sách chỉ hiển thị số lượng và trạng thái. Giáo viên khôn
 Nhóm kỹ thuật có hai cách làm việc:
 
 - **Trang quản trị trên ứng dụng.** Quản trị viên đăng nhập bằng cổng **Giáo viên đăng nhập** bằng tài khoản có vai trò quản trị. Sau khi đăng nhập, trang quản trị hiện ra với thanh menu bên trái chia theo nhóm chức năng (mục 3.8). Quản trị viên không gắn lớp và không xem được tiến độ của lớp nào.
-- **Dòng lệnh trên máy chủ.** Dùng cho các việc hệ thống: tạo lớp, in thẻ, nạp schema, xuất dữ liệu.
-
-Dòng lệnh là cách chính cho: Cần Terminal của hosting, hoặc chạy trên máy cá nhân khi phát triển cục bộ. Các lệnh chạy từ thư mục gốc của dự án (hoặc `public_html` trên hosting), ví dụ `php api/bin/add_class.php`.
+- **Dòng lệnh trên máy chủ.** Dùng cho các việc hệ thống: tạo lớp, in lô thẻ, nạp lược đồ, xuất dữ liệu. Cần Terminal của hosting, hoặc chạy trên máy cá nhân khi phát triển cục bộ. Các lệnh chạy từ thư mục gốc của dự án (hoặc `public_html` trên hosting), ví dụ `php api/bin/add_class.php`.
 - **Đường HTTP có token quản trị (chỉ để xuất dữ liệu).** Gửi yêu cầu có header `X-Admin-Token` đúng với `ADMIN_TOKEN` trong `api/.env`. Nếu `ADMIN_TOKEN` để trống, chức năng này bị tắt.
 
 Quản lý tài khoản hosting và CSDL do nhóm giữ trong bảng điều khiển iNET và phpMyAdmin. Không chia sẻ các thông tin này qua kênh công khai.
@@ -235,7 +267,7 @@ Tệp CSV chứa mã thẻ. In ra, trao cho giáo viên, rồi **xóa tệp kh�
 
 ### 3.4. Xem tiến độ và hỗ trợ
 
-- Tiến độ lớp là thông tin của giáo viên. Nhóm kỹ thuật không có màn hình riêng để xem tiến độ; khi cần kiểm tra, dùng công cụ kiểm thử hoặc truy vấn CSDL theo mục 3.6.
+- Tiến độ chi tiết của từng học sinh là thông tin của giáo viên. Quản trị viên xem **số liệu tổng hợp** (thẻ đã phát, đã kích hoạt, xong từng khảo sát, theo lớp và theo thời gian) ở trang quản trị (mục 3.8), không có mã thẻ hay câu trả lời riêng lẻ. Khi cần kiểm tra sâu hơn, truy vấn CSDL theo mục 3.6.
 - Học sinh làm mất thẻ đã kích hoạt: giáo viên đối chiếu sổ phát thẻ rồi tự cấp thẻ mới (mục 2.2). Nếu giáo viên không còn sổ, nhóm kỹ thuật **không tìm được** mã cũ vì hệ thống không lưu tên; khi đó học sinh phải bắt đầu với thẻ mới.
 - Nhóm kỹ thuật có thể cấp lại bằng dòng lệnh, nhưng phải có cờ `--da-doi-chieu-so` (mục 3.3). Lệnh này chỉ dùng khi giáo viên không thể thao tác trên ứng dụng và đã đối chiếu sổ.
 - **Xem nhật ký cấp lại thẻ** (chỉ nhóm kỹ thuật, qua CSDL): mỗi lần cấp lại có một dòng trong bảng `audit_log`. Truy vấn mẫu:
@@ -251,6 +283,17 @@ Tệp CSV chứa mã thẻ. In ra, trao cho giáo viên, rồi **xóa tệp kh�
 
 Hai tệp CSV theo `docs/CODEBOOK_NGHIEN_CUU.md`. Chỉ có học sinh đã kích hoạt được đưa vào tệp.
 
+**Hai loại mã tách biệt.** Mỗi học sinh có:
+
+| Mã | Dạng | Dùng để | Có trong tệp CSV? |
+|---|---|---|---|
+| **Mã thẻ** (`participants.code`) | `XXXX-XXXX` | Kích hoạt và **đăng nhập**; in trên thẻ; giáo viên biết | **Không bao giờ** |
+| **Mã định danh nghiên cứu** (`participants.research_id`) | `R` + 9 ký tự, ví dụ `R7K2MQX9HB` | Nhận diện học sinh trong dữ liệu nghiên cứu | Có, ở cột `pseudonym` |
+
+Mã nghiên cứu được sinh ngẫu nhiên khi phát thẻ, **độc lập với mã thẻ** (không suy ra được mã này từ mã kia) và **không đăng nhập được**. Mã giữ nguyên khi học sinh được cấp lại thẻ nên dữ liệu các giai đoạn vẫn nối được. Vì vậy người cầm tệp CSV không thể đăng nhập thay học sinh. Tệp vẫn có mã lớp và thời điểm trả lời; với lớp nhỏ, cần cẩn trọng khi công bố.
+
+Nối ngược một mã nghiên cứu với mã thẻ chỉ làm được bằng truy vấn trực tiếp vào CSDL (bảng `participants`) và không có trên giao diện. Chỉ làm khi thật cần, có phê duyệt, và ghi nhật ký.
+
 ```bash
 php api/bin/export_assessments.php wide antoanso_wide.csv
 php api/bin/export_assessments.php long antoanso_long.csv
@@ -262,9 +305,11 @@ Hoặc qua HTTP (cần `ADMIN_TOKEN`):
 curl -H "X-Admin-Token: <token>" -o antoanso_wide.csv https://<tên-miền>/api/admin/export/wide.csv
 ```
 
+**Nâng cấp CSDL đã có.** Chạy `php api/bin/migrate.php` trên CSDL cũ sẽ tự thêm cột `research_id` và cấp mã cho các học sinh hiện có; không cần tạo lại CSDL, chạy lại nhiều lần vẫn an toàn.
+
 ### 3.6. Bảo mật và đạo đức dữ liệu
 
-- Dữ liệu nghiên cứu không chứa họ tên, email, số điện thoại, mật khẩu hay thời điểm đồng ý.
+- Dữ liệu nghiên cứu không chứa họ tên, email, số điện thoại, mật khẩu, **mã thẻ đăng nhập** hay thời điểm đồng ý. Học sinh chỉ được nhận diện bằng mã định danh nghiên cứu (mục 3.5).
 - **Ranh giới ẩn danh:** giáo viên phát thẻ trực tiếp nên có thể biết thẻ nào thuộc học sinh nào. Ẩn danh đúng với nhóm nghiên cứu và tệp xuất, không đúng với giáo viên. Điều này phải được nêu trong phiếu đồng ý.
 - **Quyền truy cập CSDL:** nhóm kỹ thuật có quyền đọc cơ sở dữ liệu, nên về mặt kỹ thuật có thể xem câu trả lời của học sinh. Chỉ truy cập khi cần cho bảo trì, kiểm tra kỹ thuật hoặc phân tích đã được phê duyệt. Ghi nhật ký mọi truy vấn trực tiếp vào CSDL, và không sao chép dữ liệu thô ra ngoài.
 - Không công bố kết quả theo lớp khi lớp có dưới 5 học sinh.
@@ -293,16 +338,28 @@ Quản trị viên đăng nhập bằng cổng **Giáo viên đăng nhập** tr�
 
 Quản trị viên không gắn lớp, nên không xem được tiến độ chi tiết của lớp nào. Nếu tài khoản còn dùng mật khẩu mặc định hoặc mật khẩu tạm, khối nhắc **Đổi mật khẩu** hiển thị ở đầu trang; có thể đổi ngay hoặc đổi sau.
 
-**Tổng quan.** Bốn thẻ chỉ số: số thẻ đã phát (kèm tỉ lệ kích hoạt), số giáo viên đang hoạt động, số lớp tham gia và tỉ lệ xong khảo sát sau can thiệp. Bên dưới là các biểu đồ: tiến trình theo chặng nghiên cứu (từ phát thẻ đến xong khảo sát theo dõi), tỉ lệ kích hoạt thẻ, điểm kiến thức trung bình theo giai đoạn, tiến độ theo lớp và tỉ lệ đúng theo nhóm chủ đề. Các biểu đồ lấy số liệu tổng hợp từ máy chủ; ô có dưới năm học sinh không được vẽ.
+**Tổng quan.** Bốn thẻ chỉ số: số thẻ đã phát (kèm tỉ lệ kích hoạt), số giáo viên đang hoạt động, số lớp tham gia và tỉ lệ xong khảo sát sau can thiệp.
+
+Khối **Số học sinh theo thời gian** vẽ biểu đồ từ dữ liệu thật của máy chủ (điểm cuối `GET /api/admin/analytics/timeline`). Có hai lựa chọn: khoảng thời gian (**30 ngày**, **90 ngày** theo ngày, hoặc **12 tháng** theo tháng) và kiểu hiển thị. Kiểu **Tích lũy** vẽ năm đường: đã phát thẻ, đã kích hoạt, xong đầu vào, xong sau can thiệp, xong theo dõi. Kiểu **Phát sinh mới** vẽ cột số thẻ phát ra, số kích hoạt mới và số khảo sát vừa hoàn thành trong từng kỳ. Mỗi sự kiện được tính vào thời điểm xảy ra (múi giờ máy chủ); một khảo sát được tính là xong khi học sinh trả lời đủ mọi câu, vào thời điểm trả lời câu cuối. Dữ liệu chỉ gồm số đếm, không có mã thẻ hay câu trả lời.
+
+Bên dưới là các biểu đồ chụp nhanh: tiến trình theo chặng nghiên cứu (từ phát thẻ đến xong khảo sát theo dõi), tỉ lệ kích hoạt thẻ, điểm kiến thức trung bình theo giai đoạn, tiến độ theo lớp và tỉ lệ đúng theo nhóm chủ đề. Ô có dưới năm học sinh không được vẽ.
+![Hình 16. Trang Tổng quan của quản trị viên (dữ liệu mẫu)](hinh/hd16_tong_quan.png){width=80%}
+
+![Hình 17. Menu quản trị trên điện thoại](hinh/hd17_menu_dt.png){width=38%}
 
 **Tài khoản giáo viên.** Gồm biểu mẫu **Thêm tài khoản** (tên đăng nhập, vai trò, mã lớp) và danh sách tài khoản kèm nút **Cấp mật khẩu mới** và **Khóa** (hoặc **Mở khóa**). Mọi thao tác đều có hộp thoại xác nhận. Mật khẩu mới chỉ hiện một lần.
+![Hình 18. Mục Tài khoản giáo viên](hinh/hd18_tai_khoan.png){width=80%}
 
 **Bộ câu hỏi khảo sát.** Hiển thị bộ câu hỏi hiện hành, tách theo kiến thức và hành vi. Mỗi câu có nút **Sửa** và **Xóa**, và có nút **Thêm câu hỏi**. Đáp án đúng chỉ quản trị viên thấy. Mỗi lần thay đổi tạo một phiên bản mới; học sinh đã làm dở giữ phiên bản cũ.
+![Hình 19. Mục Bộ câu hỏi khảo sát](hinh/hd19_cau_hoi.png){width=80%}
 
-**Số liệu đo lường.** Các bảng: tiến độ theo lớp (kèm dòng tổng và tỉ lệ), so sánh trước và sau can thiệp (số cặp, chênh lệch trung bình, trung vị), hành vi tự báo cáo (trung bình và độ lệch chuẩn, thang 1 đến 4, đã điều chỉnh câu đảo chiều) và kiến thức theo nhóm chủ đề m1 (sân chơi tình huống), m2 (thám tử tên miền), m3 (phòng thí nghiệm tài khoản). Giai đoạn theo dõi chỉ mở sau 28 ngày kể từ khi xong khảo sát sau can thiệp.
+**Số liệu đo lường.** Các bảng: tiến độ theo lớp (kèm dòng tổng và tỉ lệ), so sánh trước và sau can thiệp (số cặp, chênh lệch trung bình, trung vị), hành vi tự báo cáo (trung bình và độ lệch chuẩn, thang 1 đến 4, đã điều chỉnh câu đảo chiều) và kiến thức theo nhóm chủ đề m1 (sân chơi tình huống), m2 (thám tử tên miền), m3 (phòng thí nghiệm tài khoản). Giai đoạn theo dõi chỉ mở sau 28 ngày kể từ khi xong khảo sát sau can thiệp. Ô có dưới năm học sinh hiển thị **ẩn** (như trong ảnh).
+![Hình 20. Mục Số liệu đo lường: ô ít hơn 5 học sinh được ẩn](hinh/hd20_so_lieu.png){width=80%}
 
-**Xuất dữ liệu CSV.** Hai tệp: *CSV dạng long* (một dòng mỗi câu trả lời) và *CSV dạng wide* (một dòng mỗi học sinh). Nút tải dùng chính phiên đăng nhập của quản trị viên, không cần nhập token hay gõ lệnh. **Lưu ý:** tệp không có họ tên, nhưng cột `pseudonym` chính là mã thẻ của học sinh (cũng là mã đăng nhập) và có cột mã lớp. Hãy lưu tệp an toàn, không gửi qua kênh công khai, và thay bằng mã giả trước khi chia sẻ hoặc công bố.
+**Xuất dữ liệu CSV.** Hai tệp: *CSV dạng long* (một dòng mỗi câu trả lời) và *CSV dạng wide* (một dòng mỗi học sinh). Nút tải dùng chính phiên đăng nhập của quản trị viên, không cần nhập token hay gõ lệnh. Tệp **không có họ tên và không có mã thẻ đăng nhập**: học sinh được nhận diện bằng mã định danh nghiên cứu ngẫu nhiên ở cột `pseudonym` (mục 3.5), kèm mã lớp.
+![Hình 21. Mục Xuất dữ liệu CSV](hinh/hd21_xuat.png){width=75%}
 
 **Báo cáo tổng hợp (in).** Mở bản xem trước báo cáo A4 gồm chỉ số chính, tiến độ theo lớp, điểm theo giai đoạn và tỉ lệ đúng theo chủ đề; bấm **In / Lưu PDF** để in hoặc lưu tệp. Báo cáo chỉ gồm số tổng hợp.
+![Hình 22. Xem trước Báo cáo tổng hợp](hinh/hd22_bao_cao.png){width=75%}
 
 Quy tắc công bố: ô có dưới năm học sinh được hiển thị là **ẩn** cùng số cỡ mẫu, để không lộ danh tính. Các số trên trang này là mô tả. Kiểm định thống kê được thực hiện riêng theo kế hoạch phân tích của báo cáo.

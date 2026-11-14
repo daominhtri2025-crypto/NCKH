@@ -333,7 +333,7 @@ export default function TeacherDashboard({ onLogout, mustChange = false, onPassw
                       <th className="px-3 py-3">Thám tử</th>
                       <th className="px-3 py-3">Phòng TN</th>
                       <th className="px-3 py-3">Sau / Theo dõi</th>
-                      <th className="px-3 py-3">Gần nhất</th>
+                      <th className="hidden px-3 py-3 xl:table-cell">Gần nhất</th>
                       <th className="px-3 py-3 text-right">Thao tác</th>
                     </tr>
                   </thead>
@@ -343,7 +343,7 @@ export default function TeacherDashboard({ onLogout, mustChange = false, onPassw
                         <td className="px-4 py-3">
                           <input type="checkbox" checked={selected.has(s.code)} onChange={() => toggleOne(s.code)} aria-label={`Chọn thẻ ${s.code}`} className="size-4 accent-[var(--brand)]" />
                         </td>
-                        <td className="px-3 py-3"><code className="rounded-md bg-brand-soft px-2 py-1 font-mono font-bold text-brand">{s.code}</code></td>
+                        <td className="px-3 py-3 whitespace-nowrap"><code className="rounded-md bg-brand-soft px-2 py-1 font-mono font-bold text-brand">{s.code}</code></td>
                         <td className="px-3 py-3"><StatusBadge status={s.status} /></td>
                         <ProgressCell active={s.status === 'active'} value={s.phases.pre} max={totals.items_per_phase} />
                         <ProgressCell active={s.status === 'active'} value={s.modules.m1} max={totals.m1} />
@@ -352,9 +352,9 @@ export default function TeacherDashboard({ onLogout, mustChange = false, onPassw
                         <td className="px-3 py-3 whitespace-nowrap text-ink-soft">
                           {s.status === 'active' ? `${s.phases.post}/${totals.items_per_phase} · ${s.phases.delayed}/${totals.items_per_phase}` : '—'}
                         </td>
-                        <td className="px-3 py-3 whitespace-nowrap text-ink-soft">{shortDate(s.last_seen_at)}</td>
+                        <td className="hidden px-3 py-3 whitespace-nowrap text-ink-soft xl:table-cell">{shortDate(s.last_seen_at)}</td>
                         <td className="px-3 py-3">
-                          <RowActions student={s} onPrint={() => setPrintCodes([s.code])} onReissue={() => openReissue(s.code)} />
+                          <RowActions student={s} nowrap onPrint={() => setPrintCodes([s.code])} onReissue={() => openReissue(s.code)} />
                         </td>
                       </tr>
                     ))}
@@ -470,7 +470,7 @@ function StatusBadge({ status }: { status: Student['status'] }) {
 function ProgressCell({ active, value, max, badge }: { active: boolean; value: number; max: number; badge?: string }) {
   if (!active) return <td className="px-3 py-3 text-ink-soft">—</td>;
   return (
-    <td className="min-w-24 px-3 py-3">
+    <td className="min-w-20 px-3 py-3">
       <div className="mb-1 flex items-center justify-between gap-2 text-xs font-semibold text-ink tabular-nums">
         <span>{value}/{max}</span>
         {badge && <Badge tone="ok">{badge}</Badge>}
@@ -492,9 +492,9 @@ function Metric({ label, value, max, note }: { label: string; value: number; max
   );
 }
 
-function RowActions({ student, onPrint, onReissue }: { student: Student; onPrint: () => void; onReissue: () => void }) {
+function RowActions({ student, nowrap = false, onPrint, onReissue }: { student: Student; nowrap?: boolean; onPrint: () => void; onReissue: () => void }) {
   return (
-    <div className="flex flex-wrap justify-end gap-1.5">
+    <div className={cx('flex justify-end gap-1.5', nowrap ? 'flex-nowrap whitespace-nowrap' : 'flex-wrap')}>
       <Button size="sm" variant="secondary" icon="printer" onClick={onPrint}>In thẻ</Button>
       {student.status === 'active' && (
         <Button size="sm" variant="ghost" icon="refresh" onClick={onReissue} title="Cấp thẻ mới khi học sinh làm mất thẻ">Cấp lại</Button>

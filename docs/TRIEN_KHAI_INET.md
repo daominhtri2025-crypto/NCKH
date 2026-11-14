@@ -70,7 +70,7 @@ public_html/
    cd public_html
    php api/bin/migrate.php
    ```
-   Nếu không có Terminal, mở phpMyAdmin, chọn CSDL, tab **Import**, chọn `api/database/schema.sql`, rồi bấm **Go**.
+   Nếu không có Terminal, mở phpMyAdmin, chọn CSDL, tab **Import**, chọn `api/database/schema.sql`, rồi bấm **Go**. Cách này chỉ phù hợp CSDL mới: bước nâng cấp CSDL cũ (thêm cột `research_id` và cấp mã cho học sinh hiện có) chạy bằng `php api/bin/migrate.php` nên cần Terminal.
 
 ## 4. Tạo lớp, in thẻ và cấp tài khoản giáo viên
 
@@ -158,4 +158,4 @@ Nếu iNET không cho phép `RewriteRule ... - [F]`, chặn thư mục bằng `a
 - Chưa có giao diện quản trị cho nhóm kỹ thuật; mọi thao tác trên mục 4 dùng dòng lệnh.
 - Chưa có cơ chế nhắc khảo sát theo dõi.
 - Chưa thử nghiệm trên hosting iNET thật. Mục 6 là bước bắt buộc để xác nhận.
-- Lược đồ hiện tại chưa được triển khai lên hosting nào. Nếu CSDL đã được tạo bằng một phiên bản lược đồ cũ trong môi trường thử nghiệm, phải tạo lại CSDL trên hosting.
+- Lược đồ hiện tại chưa được triển khai lên hosting nào. Nếu CSDL đã được tạo bằng một phiên bản lược đồ cũ trong môi trường thử nghiệm, chạy `php api/bin/migrate.php` sẽ tự nâng cấp cột `research_id`; với thay đổi cột khác của bảng đã có, phải tạo lại CSDL trên hosting.

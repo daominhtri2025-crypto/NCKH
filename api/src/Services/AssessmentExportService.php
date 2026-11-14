@@ -7,8 +7,12 @@ namespace AnToanSo\Services;
 use AnToanSo\Support\Database;
 
 /**
- * Xuất dữ liệu nghiên cứu ẩn danh. Chỉ dùng mã giả danh và mã lớp; không có họ tên, email, số điện thoại,
- * thời điểm đồng ý, hay nội dung mật khẩu. Chuỗi cột được mã hóa ASCII để tránh lỗi font khi mở bằng Excel.
+ * Xuất dữ liệu nghiên cứu ẩn danh.
+ *
+ * Cột `pseudonym` là MÃ ĐỊNH DANH NGHIÊN CỨU (participants.research_id), một mã ngẫu nhiên độc lập với
+ * mã thẻ. Mã thẻ (participants.code) cũng là mã đăng nhập nên KHÔNG BAO GIỜ được đưa vào tệp xuất: nếu để lộ,
+ * người cầm tệp có thể đăng nhập thay học sinh. Không có họ tên, email, số điện thoại, thời điểm đồng ý
+ * hay nội dung mật khẩu. Chuỗi cột được mã hóa ASCII để tránh lỗi font khi mở bằng Excel.
  */
 final class AssessmentExportService
 {
@@ -20,7 +24,7 @@ final class AssessmentExportService
     public function longCsv(): string
     {
         $rows = Database::pdo()->query(
-            'SELECT p.code AS pseudonym, p.class_code, a.phase, a.item_id, a.instrument,
+            'SELECT p.research_id AS pseudonym, p.class_code, a.phase, a.item_id, a.instrument,
                     a.is_correct, a.answer_index, a.answer_value, a.response_ms, a.content_version, a.created_at
              FROM assessments_self a JOIN participants p ON p.id = a.participant_id
              ORDER BY p.id, FIELD(a.phase, "pre", "post", "delayed"), a.id'
@@ -64,7 +68,7 @@ final class AssessmentExportService
         $versionOf = [];
 
         $participants = Database::pdo()->query(
-            "SELECT id, code, class_code FROM participants WHERE status = 'active' ORDER BY id"
+            "SELECT id, research_id, class_code FROM participants WHERE status = 'active' ORDER BY id"
         )->fetchAll();
 
         $answers = [];
@@ -97,7 +101,7 @@ final class AssessmentExportService
         $lines = [$header];
         foreach ($participants as $p) {
             $pid = (int) $p['id'];
-            $row = [$p['code'], $p['class_code']];
+            $row = [$p['research_id'], $p['class_code']];
             $profile = $profileFor($versionOf[$pid] ?? $this->store->active()->version());
             $knowledgeTotal = $profile['knowledgeTotal'];
             $reverse = $profile['reverse'];

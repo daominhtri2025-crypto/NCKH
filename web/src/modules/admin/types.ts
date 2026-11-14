@@ -91,3 +91,30 @@ export function sumClasses(classes: ClassRow[]) {
 export function pct(part: number, whole: number): number {
   return whole > 0 ? Math.round((part / whole) * 100) : 0;
 }
+
+/** Số học sinh theo thời gian, từ GET /admin/analytics/timeline. */
+export type TimelineMetric = 'issued' | 'activated' | 'pre_done' | 'post_done' | 'delayed_done';
+
+export interface TimelinePoint {
+  period: string;
+  new: Record<TimelineMetric, number>;
+  cumulative: Record<TimelineMetric, number>;
+}
+
+export interface Timeline {
+  granularity: 'day' | 'month';
+  span: number;
+  from: string;
+  to: string;
+  points: TimelinePoint[];
+  totals: Record<TimelineMetric, number>;
+  note: string;
+}
+
+export const TIMELINE_LABEL: Record<TimelineMetric, string> = {
+  issued: 'Đã phát thẻ',
+  activated: 'Đã kích hoạt',
+  pre_done: 'Xong đầu vào',
+  post_done: 'Xong sau can thiệp',
+  delayed_done: 'Xong theo dõi',
+};

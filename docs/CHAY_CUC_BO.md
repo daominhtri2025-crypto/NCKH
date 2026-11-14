@@ -149,7 +149,7 @@ Nếu `git status` có tệp đã sửa, cất tạm bằng `git stash` trước
 Theo danh sách tệp ở lệnh cuối:
 
 - Có `web/package.json`: `cd /d D:\UNG_DUNG_VIBE\NCKH\web` rồi `npm install`.
-- Có `api/database/schema.sql`: `cd /d D:\UNG_DUNG_VIBE\NCKH` rồi `"C:\xampp\php\php.exe" api\bin\migrate.php`. Nếu đổi cột của bảng đã có, làm như mục 2.2 bằng `C:\xampp\mysql\bin\mysql.exe`.
+- Có `api/database/schema.sql`: `cd /d D:\UNG_DUNG_VIBE\NCKH` rồi `"C:\xampp\php\php.exe" api\bin\migrate.php`. `migrate.php` cũng tự nâng cấp cột `research_id` cho CSDL cũ. Với thay đổi cột khác của bảng đã có, làm như mục 2.2 bằng `C:\xampp\mysql\bin\mysql.exe`.
 - Kiểm thử: `set DB_NAME=antoanso_test` rồi `"C:\xampp\php\php.exe" api\tests\run.php`. Dòng cuối phải là `0 lỗi`.
 
 Sau đó chạy lại hai cửa sổ như mục 0.3.
@@ -260,7 +260,7 @@ git diff --name-only ORIG_HEAD HEAD
 | Tệp thay đổi | Việc cần làm thêm |
 |---|---|
 | `web/package.json` | `cd web` rồi `npm install` |
-| `api/database/schema.sql` | `php api/bin/migrate.php` (thêm bảng mới). Nếu đổi cột của bảng đã có, xem mục 2.2 |
+| `api/database/schema.sql` | `php api/bin/migrate.php` (thêm bảng mới và tự nâng cấp cột `research_id`). Nếu đổi cột khác của bảng đã có, xem mục 2.2 |
 | `api/src/...`, `api/bin/...`, `web/src/...` | Không cần thêm. Chạy lại hai dịch vụ (mục 7) |
 | Chỉ `docs/...` | Không cần làm gì |
 
@@ -276,7 +276,7 @@ Dòng cuối phải là `Kết quả: ... đạt, 0 lỗi.`
 
 ### 2.2. Đổi cột của bảng đã có (CSDL dev)
 
-Lược đồ không có lệnh `ALTER`. Nếu một bảng đã có thay đổi cột, lệnh `migrate.php` không sửa được bảng cũ. Khi đó cần tạo lại CSDL dev. **Thao tác này xóa dữ liệu thử nghiệm.** Nếu cần giữ dữ liệu, sao lưu trước:
+Lược đồ dùng `CREATE TABLE IF NOT EXISTS` nên `migrate.php` không sửa được cột của bảng đã có. Ngoại lệ duy nhất là cột `participants.research_id` (mã định danh nghiên cứu): `migrate.php` tự thêm cột, thêm khóa duy nhất và cấp mã cho các học sinh cũ, nên **không cần tạo lại CSDL** cho thay đổi này và có thể chạy lại nhiều lần. Với mọi thay đổi cột khác của bảng đã có, cần tạo lại CSDL dev. **Thao tác này xóa dữ liệu thử nghiệm.** Nếu cần giữ dữ liệu, sao lưu trước:
 
 *Chạy trong: **Git Bash** trên Windows, hoặc **Terminal** trên macOS và Linux.*
 
@@ -388,7 +388,7 @@ mysql -u antoanso -p antoanso_dev -e "SHOW TABLES;"
 
 Kết quả phải có: `classes`, `teachers`, `participants`, `module_events`, `assessments_self`, `audit_log`.
 
-> Nếu CSDL đã tồn tại từ trước, chạy lại `php api/bin/migrate.php` sẽ thêm các bảng còn thiếu (lược đồ dùng `CREATE TABLE IF NOT EXISTS`). Lệnh này không thay đổi các bảng đã có. Nếu cần đổi cột của một bảng đã có, phải tạo lại CSDL dev.
+> Nếu CSDL đã tồn tại từ trước, chạy lại `php api/bin/migrate.php` sẽ thêm các bảng còn thiếu (lược đồ dùng `CREATE TABLE IF NOT EXISTS`). Lệnh này không thay đổi các bảng đã có, trừ bước nâng cấp tự động thêm cột `participants.research_id` và cấp mã cho học sinh cũ. Nếu cần đổi cột khác của một bảng đã có, phải tạo lại CSDL dev.
 
 ### 5.1. Tài khoản mặc định để thử nghiệm
 

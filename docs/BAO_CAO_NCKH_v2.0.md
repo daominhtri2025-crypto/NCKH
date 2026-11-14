@@ -377,7 +377,7 @@ Nghiên cứu áp dụng sáu nguyên tắc sau.
 
 ```mermaid
 flowchart LR
-    H[Học sinh] -- "mã giả danh" --> SYS[Hệ thống]
+    H[Học sinh] -- "mã thẻ" --> SYS[Hệ thống]
     H -. "mật khẩu mẫu" .-> LOC[Đánh giá cục bộ]
     LOC -. "chỉ mức đạt" .-> SYS
     SYS --> DB[(Dữ liệu ẩn danh)]
@@ -438,9 +438,9 @@ Kiểm thử bảo mật cho thấy hệ thống từ chối các yêu cầu ghi
 
 **Codebook.** Tài liệu mã hóa dữ liệu mô tả từng cột, từng câu hỏi, cách tính các biến và cách xuất. Bảng câu hỏi trong codebook được sinh tự động từ nội dung nguồn để tránh sai lệch.
 
-**Định dạng dài.** Mỗi dòng là một lần trả lời câu khảo sát, gồm các cột: mã giả danh, mã lớp, giai đoạn, mã câu, loại câu, đúng hoặc sai, chỉ số lựa chọn, mức hành vi, thời gian phản hồi, phiên bản nội dung, thời điểm trả lời. Định dạng này phù hợp cho phân tích từng câu.
+**Định dạng dài.** Mỗi dòng là một lần trả lời câu khảo sát, gồm các cột: mã định danh nghiên cứu, mã lớp, giai đoạn, mã câu, loại câu, đúng hoặc sai, chỉ số lựa chọn, mức hành vi, thời gian phản hồi, phiên bản nội dung, thời điểm trả lời. Định dạng này phù hợp cho phân tích từng câu.
 
-**Định dạng rộng.** Mỗi dòng là một học sinh, gồm: mã giả danh, mã lớp, số câu kiến thức đúng, tỷ lệ phần trăm, điểm hành vi đã điều chỉnh, thời gian phản hồi trung bình cho từng giai đoạn, số hoạt động đã hoàn thành. Định dạng này phù hợp cho phân tích lặp đo.
+**Định dạng rộng.** Mỗi dòng là một học sinh, gồm: mã định danh nghiên cứu, mã lớp, số câu kiến thức đúng, tỷ lệ phần trăm, điểm hành vi đã điều chỉnh, thời gian phản hồi trung bình cho từng giai đoạn, số hoạt động đã hoàn thành. Định dạng này phù hợp cho phân tích lặp đo.
 
 Cả hai định dạng có BOM UTF-8 để tương thích với phần mềm bảng tính. Cả hai không chứa họ tên, email, số điện thoại, thời điểm đồng ý hay nội dung mật khẩu [Thực nghiệm: kiểm thử kiểm tra tiêu đề và dữ liệu].
 

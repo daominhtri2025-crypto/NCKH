@@ -32,6 +32,47 @@ final class Migrator
             $pdo->exec($statement);
             $count++;
         }
+        self::upgrade($pdo);
         return $count;
+    }
+
+    /**
+     * Nâng cấp CSDL đã có từ phiên bản cũ. Mỗi bước kiểm tra trước nên chạy lại nhiều lần vẫn an toàn.
+     * CREATE TABLE IF NOT EXISTS không thêm cột vào bảng đã tồn tại, nên cột mới phải được thêm ở đây.
+     *
+     * @return int số học sinh được cấp mã định danh nghiên cứu bổ sung
+     */
+    public static function upgrade(PDO $pdo): int
+    {
+        $hasColumn = static function (string $column) use ($pdo): bool {
+            $stmt = $pdo->prepare(
+                'SELECT COUNT(*) FROM information_schema.COLUMNS
+                 WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = ? AND COLUMN_NAME = ?'
+            );
+            $stmt->execute(['participants', $column]);
+            return (int) $stmt->fetchColumn() > 0;
+        };
+
+        if (!$hasColumn('research_id')) {
+            $pdo->exec('ALTER TABLE participants ADD COLUMN research_id CHAR(10) NULL AFTER code');
+            $pdo->exec('ALTER TABLE participants ADD UNIQUE KEY uq_participants_research (research_id)');
+        }
+
+        // Cấp mã cho các hàng chưa có (hàng cũ trước khi có cột này).
+        $ids = $pdo->query('SELECT id FROM participants WHERE research_id IS NULL ORDER BY id')->fetchAll(PDO::FETCH_COLUMN);
+        $update = $pdo->prepare('UPDATE participants SET research_id = ? WHERE id = ? AND research_id IS NULL');
+        foreach ($ids as $id) {
+            for ($attempt = 0; $attempt < 8; $attempt++) {
+                try {
+                    $update->execute([ResearchId::generate(), $id]);
+                    break;
+                } catch (\PDOException $e) {
+                    if ($attempt === 7 || !str_contains($e->getMessage(), 'uq_participants_research')) {
+                        throw $e;
+                    }
+                }
+            }
+        }
+        return count($ids);
     }
 }

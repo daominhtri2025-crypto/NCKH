@@ -31,6 +31,6 @@ cd web && npm run test:unit    # kiểm thử đơn vị bộ đánh giá mật 
 
 ## Nguyên tắc nghiên cứu
 
-- Học sinh đăng nhập bằng mã giả danh do hệ thống cấp, không nhập họ tên hay thông tin cá nhân.
+- Học sinh đăng nhập bằng mã thẻ do hệ thống cấp, không nhập họ tên hay thông tin cá nhân. Dữ liệu nghiên cứu chỉ dùng một mã định danh nghiên cứu ngẫu nhiên, tách biệt với mã đăng nhập, nên tệp dữ liệu không cho phép đăng nhập thay học sinh.
 - Điểm nghiên cứu chỉ tính trên lần trả lời đầu tiên của mỗi tình huống. Mọi lần thử đều được lưu để phân tích.
 - Đáp án đúng không bao giờ được gửi đến trình duyệt trước khi học sinh trả lời.

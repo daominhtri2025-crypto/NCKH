@@ -5,6 +5,8 @@ import {
   Cell,
   LabelList,
   Legend,
+  Line,
+  LineChart,
   Pie,
   PieChart,
   ResponsiveContainer,
@@ -177,5 +179,33 @@ export function LegendDots({ items }: { items: Array<{ name: string; value: numb
         </li>
       ))}
     </ul>
+  );
+}
+
+/** Đường theo thời gian (số tích lũy). Trục X là nhãn đã định dạng sẵn; số đếm là số nguyên. */
+export function TrendLines({
+  data,
+  series,
+  ariaLabel,
+  height = 300,
+}: {
+  data: Array<Record<string, string | number>>;
+  series: Series[];
+  ariaLabel: string;
+  height?: number;
+}) {
+  return (
+    <Frame height={height} ariaLabel={ariaLabel}>
+      <LineChart data={data} margin={{ top: 8, right: 12, bottom: 0, left: -12 }}>
+        <CartesianGrid vertical={false} stroke="var(--line)" />
+        <XAxis dataKey="name" tick={AXIS} axisLine={false} tickLine={false} minTickGap={24} />
+        <YAxis tick={AXIS} axisLine={false} tickLine={false} allowDecimals={false} />
+        <Tooltip {...TOOLTIP} cursor={{ stroke: 'var(--line)' }} />
+        <Legend wrapperStyle={{ fontSize: 12, color: 'var(--ink-soft)' }} iconType="circle" />
+        {series.map((s) => (
+          <Line key={s.key} type="monotone" dataKey={s.key} name={s.label} stroke={s.color} strokeWidth={2.5} dot={data.length <= 14} activeDot={{ r: 5 }} />
+        ))}
+      </LineChart>
+    </Frame>
   );
 }

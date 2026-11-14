@@ -56,7 +56,7 @@ export default function AnalyticsSection({ analytics, error }: { analytics: Anal
         </DataTable>
       </Section>
 
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+      <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
         <Section title="So sánh trước và sau can thiệp" hint="Điểm kiến thức (đơn vị: điểm phần trăm) trên các cặp học sinh làm cả hai giai đoạn." padded={false}>
           <DataTable
             minWidth={460}

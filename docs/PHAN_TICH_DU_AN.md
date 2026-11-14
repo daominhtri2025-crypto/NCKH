@@ -98,7 +98,7 @@ Dự án kế thừa cấu trúc frontend React + Vite và backend PHP + PDO MyS
 **Xuất dữ liệu nghiên cứu**
 - Dạng rộng (một dòng mỗi học sinh) cho phân tích lặp đo, dạng dài (một dòng mỗi lần trả lời) cho phân tích từng câu.
 - Xuất bằng dòng lệnh (`php api/bin/export_assessments.php`) hoặc HTTP (`/api/admin/export/*.csv`, header `X-Admin-Token`).
-- Dữ liệu chỉ có mã giả danh và mã lớp. Mã hóa cột và cách tính biến nằm trong `docs/CODEBOOK_NGHIEN_CUU.md`.
+- Dữ liệu chỉ có mã định danh nghiên cứu (ngẫu nhiên, tách biệt với mã thẻ đăng nhập) và mã lớp. Mã hóa cột và cách tính biến nằm trong `docs/CODEBOOK_NGHIEN_CUU.md`.
 
 **Bảo mật và đạo đức dữ liệu**
 - Không công bố kết quả theo lớp khi dưới 5 học sinh. Điều này được khuyến nghị trong codebook nhưng **chưa được thực thi trong mã** [Thực nghiệm: không có kiểm tra ngưỡng trong AssessmentExportService].

@@ -17,7 +17,8 @@ Tài liệu này mô tả các cột trong tệp xuất `antoanso_long.csv` và 
 
 ## 3. Bảo mật dữ liệu
 
-- Mã định danh duy nhất là `pseudonym` (dạng XXXX-XXXX, do hệ thống cấp).
+- Mã định danh duy nhất là `pseudonym`: **mã định danh nghiên cứu** (`participants.research_id`), dạng `R` cộng chín ký tự (ví dụ `R7K2MQX9HB`). Mã được sinh ngẫu nhiên khi phát thẻ, **độc lập với mã thẻ**, không dùng để đăng nhập và giữ nguyên khi học sinh được cấp lại thẻ.
+- **Mã thẻ đăng nhập** (`participants.code`, dạng XXXX-XXXX) **không bao giờ có trong tệp xuất**; bộ kiểm thử tự động xác nhận điều này. Nhờ vậy người có tệp dữ liệu không đăng nhập thay học sinh được.
 - Không xuất họ tên, email, số điện thoại, thời điểm đồng ý, hay bất kỳ nội dung mật khẩu nào.
 - Đề nghị không công bố bảng kết quả theo lớp khi số học sinh trong lớp dưới 5 (nguy cơ suy luận lại danh tính).
 
@@ -27,7 +28,7 @@ Một dòng cho mỗi lần trả lời câu khảo sát.
 
 | Cột | Ý nghĩa |
 |---|---|
-| `pseudonym` | Mã giả danh |
+| `pseudonym` | Mã định danh nghiên cứu (ẩn danh, khác mã thẻ đăng nhập) |
 | `class_code` | Mã lớp |
 | `phase` | `pre`, `post`, hoặc `delayed` |
 | `item_id` | Mã câu hỏi (xem mục 6) |

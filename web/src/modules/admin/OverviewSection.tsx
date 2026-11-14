@@ -9,6 +9,7 @@ import {
 } from '../../components/charts';
 import { type AdminSection, type AdminTeacher, type AnalyticsOverview, PHASE_SHORT, cellValue, pct, sumClasses } from './types';
 import { Section } from './parts';
+import TimelinePanel from './TimelinePanel';
 
 interface Props {
   analytics: AnalyticsOverview | null;
@@ -110,6 +111,8 @@ export default function OverviewSection({ analytics, teachers, error, onNavigate
           tone="ok"
         />
       </section>
+
+      <TimelinePanel />
 
       <div className="grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,1fr)_340px]">
         <Section title="Tiến trình theo các chặng nghiên cứu" hint="Số học sinh đi đến từng chặng, từ phát thẻ đến khảo sát theo dõi.">

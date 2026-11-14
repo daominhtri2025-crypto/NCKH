@@ -21,6 +21,8 @@ final class Request
         private readonly array $headers = [],
         private readonly string $rawBody = '',
         private readonly array $cookies = [],
+        /** @var array<string,string> tham số chuỗi truy vấn (?a=b) */
+        private readonly array $query = [],
     ) {
     }
 
@@ -48,7 +50,14 @@ final class Request
             $headers,
             (string) file_get_contents('php://input'),
             $_COOKIE,
+            array_map('strval', array_filter($_GET, 'is_scalar')),
         );
+    }
+
+    /** Giá trị tham số chuỗi truy vấn, hoặc null nếu không có. */
+    public function query(string $name): ?string
+    {
+        return $this->query[$name] ?? null;
     }
 
     public function header(string $name): ?string

@@ -56,12 +56,15 @@ function call(string $method, string $path, ?array $body = null, array $cookies 
         'origin' => 'http://localhost:5173',
         'content-type' => 'application/json',
     ];
+    $query = [];
+    parse_str((string) parse_url($path, PHP_URL_QUERY), $query);
     $request = new Request(
         $method,
-        (string) preg_replace('#^/api(?=/|$)#', '', $path), // fromGlobals() cũng bỏ tiền tố /api
+        (string) preg_replace('#^/api(?=/|$)#', '', (string) parse_url($path, PHP_URL_PATH)), // fromGlobals() cũng bỏ tiền tố /api
         array_merge($defaults, $headers),
         $body === null ? '' : json_encode($body, JSON_UNESCAPED_UNICODE),
         $cookies,
+        array_map('strval', $query),
     );
     return Routes::build()->handle($request);
 }
@@ -342,14 +345,17 @@ $wideLines = array_values(array_filter(explode("\n", (string) $wide->rawBody()))
 $header = str_getcsv(ltrim($wideLines[0], "\xEF\xBB\xBF"));
 check('Wide CSV: tiêu đề có các cột lặp đo', in_array('pre_knowledge_correct', $header) && in_array('delayed_mean_response_ms', $header) && in_array('m3_lab_passed', $header));
 check('Wide CSV không có cột định danh thật (họ tên, email, số điện thoại, ngày đồng ý)', !preg_match('/name|email|phone|consent|sdt|ho_ten/i', $wideLines[0]));
+$ridStmt = $pdo->prepare('SELECT research_id FROM participants WHERE code = ?');
+$ridStmt->execute([$taCode]);
+$taRid = (string) $ridStmt->fetchColumn();
 $taRow = null;
 foreach ($wideLines as $line) {
     $cells = str_getcsv($line);
-    if (($cells[0] ?? '') === $taCode) {
+    if (($cells[0] ?? '') === $taRid) {
         $taRow = array_combine($header, $cells);
     }
 }
-check('Wide CSV: học sinh thử nghiệm xuất hiện với mã giả danh', $taRow !== null);
+check('Wide CSV: học sinh thử nghiệm xuất hiện với mã định danh nghiên cứu (không phải mã thẻ)', $taRow !== null && $taRid !== $taCode);
 check('Pre: 10/10 câu kiến thức đúng', $taRow !== null && (int) $taRow['pre_knowledge_correct'] === 10 && (float) $taRow['pre_knowledge_pct'] === 100.0);
 check('Post: 9/10 câu kiến thức đúng (một câu sai có chủ đích)', $taRow !== null && (int) $taRow['post_knowledge_correct'] === 9);
 check('Hành vi có đảo chiều: trung bình điều chỉnh pre = 2.5',
@@ -360,9 +366,30 @@ check('Wide CSV: module 1 đã trả lời đủ 5, module 2 đủ 12, module 3 
 
 $long = call('GET', '/api/admin/export/long.csv', null, [], ['x-admin-token' => 'token-quan-tri-thu-nghiem']);
 $longText = (string) $long->rawBody();
-check('Long CSV: đủ 16 dòng pre cho học sinh thử nghiệm', substr_count($longText, "{$taCode},8A1,pre,") === 16);
-check('Long CSV: có dòng câu kiến thức sai với is_correct = 0', str_contains($longText, "{$taCode},8A1,post,k02-shipper-otp,knowledge,0,"));
+check('Long CSV: đủ 16 dòng pre cho học sinh thử nghiệm', substr_count($longText, "{$taRid},8A1,pre,") === 16);
+check('Long CSV: có dòng câu kiến thức sai với is_correct = 0', str_contains($longText, "{$taRid},8A1,post,k02-shipper-otp,knowledge,0,"));
 check('Long CSV không có cột định danh thật', !preg_match('/^pseudonym,class_code,phase,item_id,instrument,is_correct,answer_index,answer_value,response_ms,content_version,answered_at\r?\n/m', '') && !str_contains(explode("\n", $longText)[0], 'email'));
+
+echo "Tách mã định danh nghiên cứu khỏi mã đăng nhập\n";
+$allCodes = $pdo->query('SELECT code FROM participants')->fetchAll(PDO::FETCH_COLUMN);
+$leak = [];
+foreach ($allCodes as $c) {
+    if (str_contains($longText, (string) $c) || str_contains((string) $wide->rawBody(), (string) $c)) {
+        $leak[] = $c;
+    }
+}
+check('Tệp CSV (long và wide) không chứa bất kỳ mã thẻ đăng nhập nào', $leak === [], implode(',', $leak));
+check('Mã định danh nghiên cứu đúng định dạng và khác mã thẻ', (bool) preg_match(AnToanSo\Support\ResearchId::PATTERN, $taRid) && $taRid !== $taCode);
+check('Mã định danh nghiên cứu không dùng để đăng nhập được (bị từ chối)', in_array(call('POST', '/api/session', ['code' => $taRid])->status, [401, 404, 422], true));
+check('Mã định danh nghiên cứu không kích hoạt được thẻ (từ chối)', in_array(call('POST', '/api/participants/claim', ['code' => $taRid, 'consent' => true, 'consent_version' => 'v1'])->status, [404, 422], true));
+check('Mọi học sinh đều có mã nghiên cứu duy nhất', (int) $pdo->query('SELECT COUNT(*) FROM participants WHERE research_id IS NULL')->fetchColumn() === 0
+    && (int) $pdo->query('SELECT COUNT(*) - COUNT(DISTINCT research_id) FROM participants')->fetchColumn() === 0);
+// Di trú: hàng cũ chưa có mã được bổ sung, chạy lại không đổi mã đã có.
+$before = (string) $pdo->query("SELECT research_id FROM participants WHERE code = '{$taCode}'")->fetchColumn();
+$pdo->exec("UPDATE participants SET research_id = NULL WHERE code <> '{$taCode}' LIMIT 1");
+$filled = Migrator::upgrade($pdo);
+$after = (string) $pdo->query("SELECT research_id FROM participants WHERE code = '{$taCode}'")->fetchColumn();
+check('Di trú bổ sung mã còn thiếu và không đổi mã đã có', $filled === 1 && $before === $after && Migrator::upgrade($pdo) === 0);
 
 echo "Module 2: thám tử không gian mạng\n";
 $t2 = sessionTokenFrom(newStudent());
@@ -940,6 +967,47 @@ check('Ô có ít hơn 5 học sinh bị ẩn giá trị (suppressed = true, kh�
 check('Không lộ mã thẻ học sinh trong số liệu tổng hợp', !preg_match('/[23456789A-HJKMNP-Z]{4}-[23456789A-HJKMNP-Z]{4}/', (string) json_encode($an->body)));
 check('Giáo viên thường không xem được số liệu tổng hợp (403)', call('GET', '/api/admin/analytics', null, ['ats_teacher' => $gvTok])->status === 403);
 check('Số liệu tổng hợp khi chưa đăng nhập (401)', call('GET', '/api/admin/analytics')->status === 401);
+
+echo "Số học sinh theo thời gian (biểu đồ quản trị)\n";
+$tl = call('GET', '/api/admin/analytics/timeline', null, ['ats_teacher' => $qtTok]);
+$tlp = $tl->body['points'] ?? [];
+check('Timeline mặc định: 200, theo ngày, đủ 30 điểm liên tiếp', $tl->status === 200 && ($tl->body['granularity'] ?? '') === 'day' && count($tlp) === 30);
+$nIssued = (int) $pdo->query('SELECT COUNT(*) FROM participants')->fetchColumn();
+$nClaimed = (int) $pdo->query('SELECT COUNT(*) FROM participants WHERE claimed_at IS NOT NULL')->fetchColumn();
+check('Timeline: tổng thẻ đã phát và đã kích hoạt khớp CSDL', ($tl->body['totals']['issued'] ?? -1) === $nIssued && ($tl->body['totals']['activated'] ?? -1) === $nClaimed);
+$sumPost = array_sum(array_column($an->body['classes'] ?? [], 'post_done'));
+$sumPre = array_sum(array_column($an->body['classes'] ?? [], 'pre_done'));
+check('Timeline: số xong khảo sát khớp bảng theo lớp của /admin/analytics',
+    ($tl->body['totals']['post_done'] ?? -1) === $sumPost && ($tl->body['totals']['pre_done'] ?? -1) === $sumPre);
+$mono = true;
+foreach ($tlp as $i => $pt) {
+    foreach (AnToanSo\Services\AdminAnalyticsService::TIMELINE_METRICS as $m) {
+        if ($i > 0 && $pt['cumulative'][$m] < $tlp[$i - 1]['cumulative'][$m]) { $mono = false; }
+        if ($i > 0 && $pt['cumulative'][$m] - $tlp[$i - 1]['cumulative'][$m] !== $pt['new'][$m]) { $mono = false; }
+    }
+}
+check('Timeline: số tích lũy không giảm và bằng tổng số mới theo từng kỳ', $mono && $tlp !== []);
+check('Timeline: ngày cuối là hôm nay', ($tl->body['to'] ?? '') === date('Y-m-d'));
+$tlm = call('GET', '/api/admin/analytics/timeline?granularity=month&span=6', null, ['ats_teacher' => $qtTok]);
+check('Timeline theo tháng: 200, đủ 6 điểm, nhãn dạng YYYY-MM', $tlm->status === 200 && count($tlm->body['points'] ?? []) === 6
+    && preg_match('/^\d{4}-\d{2}$/', (string) ($tlm->body['points'][0]['period'] ?? '')) === 1);
+check('Timeline theo tháng cho cùng tổng số', ($tlm->body['totals']['issued'] ?? -1) === $nIssued);
+check('Timeline: đơn vị không hợp lệ bị từ chối (422)', call('GET', '/api/admin/analytics/timeline?granularity=year', null, ['ats_teacher' => $qtTok])->status === 422);
+check('Timeline: khoảng 0 hoặc vượt giới hạn hoặc không phải số bị từ chối (422)',
+    call('GET', '/api/admin/analytics/timeline?span=0', null, ['ats_teacher' => $qtTok])->status === 422
+    && call('GET', '/api/admin/analytics/timeline?span=400', null, ['ats_teacher' => $qtTok])->status === 422
+    && call('GET', '/api/admin/analytics/timeline?granularity=month&span=37', null, ['ats_teacher' => $qtTok])->status === 422
+    && call('GET', '/api/admin/analytics/timeline?span=abc', null, ['ats_teacher' => $qtTok])->status === 422);
+check('Timeline không lộ mã thẻ và mã nghiên cứu', !preg_match('/[23456789A-HJKMNP-Z]{4}-[23456789A-HJKMNP-Z]{4}/', (string) json_encode($tl->body))
+    && !preg_match('/R[23456789A-HJKMNP-Z]{9}/', (string) json_encode($tl->body)));
+check('Timeline: giáo viên thường bị từ chối (403)', call('GET', '/api/admin/analytics/timeline', null, ['ats_teacher' => $gvTok])->status === 403);
+check('Timeline: chưa đăng nhập (401)', call('GET', '/api/admin/analytics/timeline')->status === 401);
+$svc = new AnToanSo\Services\AdminAnalyticsService();
+$future = $svc->timeline('day', 30, new DateTimeImmutable('+40 days'));
+check('Timeline: sự kiện trước cửa sổ vào số nền (tổng giữ nguyên, số mới bằng 0)',
+    $future['totals']['issued'] === $nIssued && array_sum(array_column(array_column($future['points'], 'new'), 'issued')) === 0);
+$past = $svc->timeline('day', 7, new DateTimeImmutable('-2 days'));
+check('Timeline: sự kiện sau cửa sổ không bị tính', $past['totals']['issued'] === 0);
 
 $csvLong = call('GET', '/api/admin/data/export/long', null, ['ats_teacher' => $qtTok]);
 check('Quản trị viên tải CSV dạng long ngay từ giao diện (200)', $csvLong->status === 200

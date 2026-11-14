@@ -80,13 +80,13 @@
 - Học sinh đăng nhập bằng mã thẻ `XXXX-XXXX` do giáo viên cấp. Mã được băm SHA-256 khi lưu, phiên đăng nhập ở cookie HttpOnly.
 - Giáo viên xem được tiến độ lớp (số lượng, trạng thái), không xem được nội dung câu trả lời của học sinh.
 - Cấp lại thẻ giữ nguyên tiến độ, bắt buộc giáo viên xác nhận đã đối chiếu sổ phát thẻ; mọi thao tác được ghi nhật ký kiểm toán (`audit_log`).
-- Xuất dữ liệu nghiên cứu chỉ có mã ẩn danh; không có cột tên, lớp hay mã thẻ trong tệp xuất.
+- Xuất dữ liệu nghiên cứu dùng **mã định danh nghiên cứu** ngẫu nhiên, tách biệt với mã thẻ đăng nhập: tệp không có họ tên và không có mã thẻ (có mã lớp), nên người có tệp không đăng nhập thay học sinh được.
 
 **2.4. Bộ câu hỏi đo lường.** `content/assessment_items.json`, phiên bản a-v1, 16 câu: 10 câu kiến thức có đáp án và 6 câu hành vi thang 1–4. Hai câu hành vi (b03, b04) được đảo chiều khi tính điểm (5 − v). Bộ câu hỏi được quản lý theo phiên bản; học sinh đã làm bài được chấm theo đúng phiên bản của mình.
 
 **2.5. Kiểm thử.** (Thực nghiệm)
 
-- Kiểm thử máy chủ: 301 kiểm tra, 0 lỗi, chạy trên cơ sở dữ liệu thử nghiệm riêng.
+- Kiểm thử máy chủ: 321 kiểm tra, 0 lỗi, chạy trên cơ sở dữ liệu thử nghiệm riêng.
 - Kiểm thử giao diện: kiểm tra kiểu dữ liệu (`tsc`), biên dịch (`build`), và 14 kiểm tra đơn vị.
 - Kiểm thử thủ công trên điện thoại và máy tính: **[Cần bổ sung: ngày, người thực hiện, kết quả]**.
 - Chưa thử trên máy chủ lưu trữ thật; chưa có giới hạn số lần đăng nhập sai (xem Phần II.5).
@@ -105,7 +105,7 @@
 | 6. Theo dõi | Khảo sát delayed, tối thiểu 28 ngày sau hậu kiểm | [Cần bổ sung] | Xuất `assessments_self` |
 | 7. Phân tích và viết báo cáo | Kiểm định H1–H4 | [Cần bổ sung] | Bảng kết quả, tệp xuất |
 
-**Thu thập dữ liệu.** Dữ liệu khảo sát nhu cầu được thu qua Google Form. Dữ liệu đo lường được ghi trong cơ sở dữ liệu của ứng dụng và xuất qua trang quản trị (tab "Dữ liệu đo lường") hoặc công cụ dòng lệnh `bin/export_assessments.php`.
+**Thu thập dữ liệu.** Dữ liệu khảo sát nhu cầu được thu qua Google Form. Dữ liệu đo lường được ghi trong cơ sở dữ liệu của ứng dụng và xuất qua trang quản trị (mục "Xuất dữ liệu CSV") hoặc công cụ dòng lệnh `bin/export_assessments.php`.
 
 **Xử lý dữ liệu.**
 
@@ -165,10 +165,10 @@ Số liệu dưới đây được tính từ 100 phiếu thu thập cho mỗi p
 
 | Rủi ro | Biện pháp | Trạng thái |
 |---|---|---|
-| Dữ liệu cá nhân của học sinh vị thành niên | Không thu họ tên, số điện thoại; mã thẻ băm khi lưu; xuất dữ liệu chỉ có mã ẩn danh | Đã triển khai trong mã nguồn |
+| Dữ liệu cá nhân của học sinh vị thành niên | Không thu họ tên, số điện thoại; mã thẻ băm khi lưu; xuất dữ liệu chỉ có mã nghiên cứu ngẫu nhiên, không có mã thẻ | Đã triển khai trong mã nguồn |
 | Mật khẩu tài khoản của học sinh | Không gửi lên máy chủ; máy chủ từ chối trường `password` | Đã triển khai; có kiểm thử |
 | Nội dung lừa đảo bị lạm dụng | Tên miền hư cấu, dùng hậu tố dành riêng, không dẫn đến trang thật | Đã triển khai |
-| Đoán mã thẻ bằng cách thử liên tiếp | Mã có 8 ký tự từ bảng 32 ký tự; **chưa có giới hạn số lần đăng nhập sai** | Hạn chế, cần khắc phục trước khi mở rộng |
+| Đoán mã thẻ bằng cách thử liên tiếp | Mã có 8 ký tự từ bảng 31 ký tự; **chưa có giới hạn số lần đăng nhập sai** | Hạn chế, cần khắc phục trước khi mở rộng |
 | Giáo viên xem được thông tin đọc trái phép | Giáo viên chỉ xem số lượng và trạng thái tiến độ | Đã triển khai |
 | Thao tác cấp lại thẻ sai hoặc lạm dụng | Yêu cầu xác nhận đối chiếu sổ; ghi nhật ký kiểm toán | Đã triển khai; **chưa có màn hình xem nhật ký** |
 | Mật khẩu tạm của giáo viên không được đổi | Cờ nhắc đổi mật khẩu; không chặn đăng nhập (chủ đích, theo bản triển khai cục bộ) | Hạn chế, cần đánh giá trước khi triển khai thật |
@@ -255,7 +255,7 @@ Số liệu dưới đây được tính từ 100 phiếu thu thập cho mỗi p
 | 1 | [Cần bổ sung] | Khảo sát học sinh (phiếu A) | Trường | [Cần bổ sung] | Biểu mẫu trực tuyến, bảng phản hồi | 100 phiếu (dữ liệu sạch) | [Cần bổ sung] |
 | 2 | [Cần bổ sung] | Khảo sát học sinh sau học (phiếu B) | Trường | [Cần bổ sung] | Biểu mẫu trực tuyến, bảng phản hồi | 100 phiếu (dữ liệu sạch) | [Cần bổ sung] |
 | 3 | [Cần bổ sung] | Khảo sát giáo viên (phiếu C) | Trường | [Cần bổ sung] | Biểu mẫu trực tuyến, bảng phản hồi | 100 phiếu (dữ liệu sạch) | [Cần bổ sung] |
-| 4 | [Cần bổ sung] | Phát triển và kiểm thử ứng dụng | [Cần bổ sung] | [Cần bổ sung] | Mã nguồn, kết quả kiểm thử (301 kiểm tra máy chủ, 14 kiểm tra giao diện) | Ứng dụng chạy được | [Cần bổ sung] |
+| 4 | [Cần bổ sung] | Phát triển và kiểm thử ứng dụng | [Cần bổ sung] | [Cần bổ sung] | Mã nguồn, kết quả kiểm thử (321 kiểm tra máy chủ, 14 kiểm tra giao diện) | Ứng dụng chạy được | [Cần bổ sung] |
 | 5 | [Cần bổ sung] | Đo lường trước, can thiệp, sau, theo dõi | [Cần bổ sung] | [Cần bổ sung] | Tệp xuất dữ liệu | [Cần bổ sung] | [Cần bổ sung] |
 
 *Lưu ý: Người hướng dẫn xác nhận ít nhất một lần mỗi tháng.*

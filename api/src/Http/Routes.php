@@ -71,6 +71,7 @@ final class Routes
         $router->add('PUT', '/admin/questions/{id}', [$dash, 'updateQuestion']);
         $router->add('DELETE', '/admin/questions/{id}', [$dash, 'deleteQuestion']);
         $router->add('GET', '/admin/analytics', [$dash, 'analytics']);
+        $router->add('GET', '/admin/analytics/timeline', [$dash, 'timeline']);
         $router->add('GET', '/admin/data/export/{format}', [$dash, 'exportData']);
 
         return $router;

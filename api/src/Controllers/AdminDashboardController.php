@@ -93,6 +93,23 @@ final class AdminDashboardController
         return Response::json((new AdminAnalyticsService())->overview());
     }
 
+    /**
+     * GET /api/admin/analytics/timeline?granularity=day|month&span=N — số học sinh theo thời gian (quản trị viên).
+     * Mặc định 30 ngày; ngày tối đa 366, tháng tối đa 36.
+     */
+    public function timeline(Request $request): Response
+    {
+        $this->actor($request);
+        $granularity = $request->query('granularity') ?? 'day';
+        $spanRaw = $request->query('span');
+        if ($spanRaw !== null && !ctype_digit($spanRaw)) {
+            throw new HttpException(422, 'Khoảng thời gian phải là số nguyên dương.');
+        }
+        $span = $spanRaw === null ? ($granularity === 'month' ? 12 : 30) : (int) $spanRaw;
+        return Response::json((new AdminAnalyticsService())->timeline($granularity, $span))
+            ->withHeader('Cache-Control: no-store');
+    }
+
     /** GET /api/admin/data/export/{format} — tải CSV long|wide ngay trên trình duyệt (phiên quản trị viên). */
     public function exportData(Request $request, array $params): Response
     {

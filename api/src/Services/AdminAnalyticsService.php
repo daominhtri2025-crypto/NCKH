@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace AnToanSo\Services;
 
 use AnToanSo\Support\Database;
+use AnToanSo\Support\HttpException;
+use DateTimeImmutable;
 
 /**
  * Tổng hợp số liệu đo lường cho trang quản trị. Chỉ trả về số tổng hợp, không trả về câu trả lời từng học sinh.
@@ -73,6 +75,101 @@ final class AdminAnalyticsService
             ],
             'topics' => $this->topics($answers),
             'note' => 'Số liệu tổng hợp. Ô có dưới ' . self::MIN_CELL . ' học sinh được ẩn để không lộ danh tính.',
+        ];
+    }
+
+    public const TIMELINE_METRICS = ['issued', 'activated', 'pre_done', 'post_done', 'delayed_done'];
+
+    /**
+     * Số học sinh theo thời gian (ngày hoặc tháng), dùng cho biểu đồ của quản trị viên.
+     *
+     * Mỗi chỉ số được đếm theo thời điểm xảy ra sự kiện:
+     *  - issued: thẻ được phát (participants.created_at)
+     *  - activated: học sinh kích hoạt thẻ (participants.claimed_at)
+     *  - pre_done / post_done / delayed_done: lần trả lời cuối cùng của giai đoạn, chỉ khi đã trả lời đủ
+     *    mọi câu của đúng phiên bản bộ câu hỏi đã ghim (cùng định nghĩa "xong" với overview()).
+     * Chỉ tính học sinh đang hoạt động cho ba chỉ số khảo sát. Chỉ trả về số đếm, không có mã hay câu trả lời.
+     * Thời gian lấy theo múi giờ của máy chủ (cùng múi giờ đã dùng khi ghi dữ liệu).
+     *
+     * @return array<string,mixed>
+     */
+    public function timeline(string $granularity = 'day', int $span = 30, ?DateTimeImmutable $now = null): array
+    {
+        $max = ['day' => 366, 'month' => 36];
+        if (!isset($max[$granularity])) {
+            throw new HttpException(422, 'Đơn vị thời gian phải là day hoặc month.');
+        }
+        if ($span < 1 || $span > $max[$granularity]) {
+            throw new HttpException(422, "Khoảng thời gian phải từ 1 đến {$max[$granularity]}.");
+        }
+
+        $now ??= new DateTimeImmutable('now');
+        $isDay = $granularity === 'day';
+        $keyLen = $isDay ? 10 : 7;
+        $fmt = $isDay ? 'Y-m-d' : 'Y-m';
+        $first = $isDay
+            ? $now->modify('-' . ($span - 1) . ' days')
+            : $now->modify('first day of this month')->modify('-' . ($span - 1) . ' months');
+
+        $points = [];
+        for ($i = 0; $i < $span; $i++) {
+            $key = $first->modify('+' . $i . ($isDay ? ' days' : ' months'))->format($fmt);
+            $points[$key] = ['period' => $key, 'new' => array_fill_keys(self::TIMELINE_METRICS, 0)];
+        }
+        $firstKey = (string) array_key_first($points);
+        $lastKey = (string) array_key_last($points);
+        $before = array_fill_keys(self::TIMELINE_METRICS, 0); // sự kiện trước cửa sổ: nền của số tích lũy
+
+        $add = static function (string $metric, ?string $when) use (&$points, &$before, $firstKey, $lastKey, $keyLen): void {
+            if ($when === null || $when === '') {
+                return;
+            }
+            $key = substr($when, 0, $keyLen);
+            if ($key < $firstKey) {
+                $before[$metric]++;
+            } elseif ($key <= $lastKey) {
+                $points[$key]['new'][$metric]++;
+            }
+        };
+
+        $pdo = Database::pdo();
+        foreach ($pdo->query('SELECT created_at, claimed_at FROM participants')->fetchAll() as $r) {
+            $add('issued', $r['created_at']);
+            $add('activated', $r['claimed_at']);
+        }
+
+        $totals = [];
+        $rows = $pdo->query(
+            "SELECT a.phase, a.content_version, COUNT(*) AS n, MAX(a.created_at) AS last_at
+             FROM assessments_self a JOIN participants p ON p.id = a.participant_id
+             WHERE p.status = 'active'
+             GROUP BY a.participant_id, a.phase, a.content_version"
+        )->fetchAll();
+        foreach ($rows as $r) {
+            $version = (string) $r['content_version'];
+            $totals[$version] ??= $this->store->get($version)->itemCount();
+            if ((int) $r['n'] >= $totals[$version]) {
+                $add($r['phase'] . '_done', $r['last_at']);
+            }
+        }
+
+        $running = $before;
+        $out = [];
+        foreach ($points as $point) {
+            foreach (self::TIMELINE_METRICS as $m) {
+                $running[$m] += $point['new'][$m];
+            }
+            $out[] = $point + ['cumulative' => $running];
+        }
+
+        return [
+            'granularity' => $granularity,
+            'span' => $span,
+            'from' => $firstKey,
+            'to' => $lastKey,
+            'points' => $out,
+            'totals' => $running,
+            'note' => 'Số đếm theo thời điểm xảy ra sự kiện, múi giờ máy chủ. Không chứa mã thẻ hay câu trả lời từng học sinh.',
         ];
     }
 

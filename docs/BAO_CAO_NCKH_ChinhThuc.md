@@ -12,9 +12,9 @@ Hồ sơ dự thi Khoa học kỹ thuật cấp học dành cho học sinh trung
 
 # TÓM TẮT
 
-Nghiên cứu này thiết kế, xây dựng và kiểm chứng kỹ thuật một hệ thống web tương tác về an toàn thông tin dành cho học sinh trung học cơ sở, cùng mô hình đo lường nhận thức và hành vi theo ba giai đoạn: tiền kiểm, hậu kiểm và theo dõi sau 28 ngày. Hệ thống gồm ba hoạt động: sân chơi tình huống lừa đảo, nhận diện tên miền giả mạo bằng quy tắc đọc từ phải sang trái, và phòng thí nghiệm tài khoản gồm đánh giá mật khẩu cục bộ và checklist quyền riêng tư. Thiết kế bảo đảm ẩn danh bằng mã giả danh, không thu họ tên, email hay số điện thoại; mật khẩu thử nghiệm không rời trình duyệt.
+Nghiên cứu này thiết kế, xây dựng và kiểm chứng kỹ thuật một hệ thống web tương tác về an toàn thông tin dành cho học sinh trung học cơ sở, cùng mô hình đo lường nhận thức và hành vi theo ba giai đoạn: tiền kiểm, hậu kiểm và theo dõi sau 28 ngày. Hệ thống gồm ba hoạt động: sân chơi tình huống lừa đảo, nhận diện tên miền giả mạo bằng quy tắc đọc từ phải sang trái, và phòng thí nghiệm tài khoản gồm đánh giá mật khẩu cục bộ và checklist quyền riêng tư. Thiết kế bảo đảm ẩn danh bằng hai mã tách biệt (mã thẻ dùng để đăng nhập và mã định danh nghiên cứu ngẫu nhiên dùng trong dữ liệu), không thu họ tên, email hay số điện thoại; mật khẩu thử nghiệm không rời trình duyệt.
 
-Hệ thống đã hoàn thành các thành phần chức năng và đạt toàn bộ các kiểm thử tích hợp (290 kiểm tra), kiểm thử đơn vị (14 kiểm thử) và kiểm thử luồng người dùng (23 bước). Nghiên cứu chưa thu thập dữ liệu thực nghiệm; vì vậy báo cáo trình bày thiết kế, phương pháp và khung phân tích, không trình bày kết quả. Ba giả thuyết về sự gia tăng điểm nhận thức và hành vi sau can thiệp, cùng khả năng duy trì kết quả sau 28 ngày, sẽ được kiểm định khi có dữ liệu.
+Hệ thống đã hoàn thành các thành phần chức năng và đạt toàn bộ các kiểm thử tích hợp (321 kiểm tra), kiểm thử đơn vị (14 kiểm thử) và kiểm thử luồng người dùng (23 bước). Nghiên cứu chưa thu thập dữ liệu thực nghiệm; vì vậy báo cáo trình bày thiết kế, phương pháp và khung phân tích, không trình bày kết quả. Ba giả thuyết về sự gia tăng điểm nhận thức và hành vi sau can thiệp, cùng khả năng duy trì kết quả sau 28 ngày, sẽ được kiểm định khi có dữ liệu.
 
 **Từ khóa:** an toàn thông tin; giáo dục an toàn số; học sinh trung học cơ sở; hệ thống web tương tác; đo lường tiền–hậu–theo dõi; quyền riêng tư theo thiết kế.
 
@@ -254,9 +254,9 @@ Học sinh đăng nhập lại bằng mã trên thẻ; mã này là cách duy nh
 Thiết kế áp dụng sáu nguyên tắc sau, tương ứng với các điểm kiểm soát trong mã nguồn.
 
 1. **Tối thiểu hóa dữ liệu.** Hệ thống không thu họ tên, email, số điện thoại, ảnh hay thông tin cá nhân khác. Thời điểm đồng ý và phiên bản phiếu được lưu trong CSDL để kiểm soát phiên bản, nhưng không xuất ra tệp nghiên cứu.
-2. **Định danh giả.** Mã học sinh do hệ thống cấp ngẫu nhiên từ bảng ký tự 32 ký tự, loại bỏ các ký tự dễ nhầm lẫn; không gian mã khoảng 40 bit. Mã được kiểm tra trùng khi cấp và được in trên thẻ không ghi tên. Mã là định danh nghiên cứu, không phải mật khẩu.
+2. **Hai mã tách biệt.** Mỗi học sinh có hai mã độc lập. *Mã thẻ* (dạng XXXX-XXXX) do hệ thống cấp ngẫu nhiên từ bảng 31 ký tự, loại bỏ các ký tự dễ nhầm lẫn (0, O, 1, I, L), không gian mã khoảng 40 bit, được kiểm tra trùng khi cấp và in trên thẻ không ghi tên. Mã thẻ là mã đăng nhập duy nhất của học sinh, vì vậy là thông tin xác thực và không được đưa vào tệp dữ liệu. *Mã định danh nghiên cứu* (dạng R cộng chín ký tự) được sinh ngẫu nhiên riêng khi phát thẻ, không thể suy ra từ mã thẻ, không dùng để đăng nhập, và là mã duy nhất xuất hiện trong tệp dữ liệu nghiên cứu. Mã nghiên cứu giữ nguyên khi học sinh được cấp lại thẻ, nên dữ liệu của các giai đoạn vẫn được nối. Nhờ tách biệt, người có tệp dữ liệu không đăng nhập thay học sinh được.
 
-**Ranh giới của tính ẩn danh.** Giáo viên phát thẻ trực tiếp nên có thể biết thẻ nào thuộc học sinh nào. Vì vậy dữ liệu ẩn danh đối với nhóm nghiên cứu và đối với tệp xuất, nhưng không ẩn danh đối với giáo viên phụ trách lớp. Ranh giới này được nêu trong phiếu đồng ý và được quản lý bằng sổ phát thẻ bảo quản riêng.
+**Ranh giới của tính ẩn danh.** Giáo viên phát thẻ trực tiếp nên có thể biết thẻ nào thuộc học sinh nào. Vì vậy dữ liệu ẩn danh đối với nhóm nghiên cứu và đối với tệp xuất, nhưng không ẩn danh đối với giáo viên phụ trách lớp. Giáo viên biết mã thẻ nhưng không thấy mã nghiên cứu trên giao diện, nên không đối chiếu được tệp dữ liệu với học sinh. Ranh giới này được nêu trong phiếu đồng ý và được quản lý bằng sổ phát thẻ bảo quản riêng.
 3. **Băm phiên đăng nhập.** Cơ sở dữ liệu chỉ lưu băm SHA-256 của token phiên. Đăng nhập lại làm vô hiệu token cũ.
 4. **Mật khẩu không rời trình duyệt.** Máy chủ từ chối mọi yêu cầu có trường mật khẩu và chỉ nhận mức đánh giá tổng hợp (yếu, trung bình, mạnh).
 5. **Không dùng dịch vụ bên ngoài để kiểm tra mật khẩu.** Tích hợp kiểm tra mật khẩu bị rò rỉ theo mô hình k-anonymity của một dịch vụ bên ngoài không được sử dụng trong hệ thống, vì ngay cả tiền tố băm cũng gắn với mật khẩu của học sinh.
@@ -283,15 +283,15 @@ Kế hoạch phân tích được xác định trước khi thu dữ liệu, nh�
 
 ## 2.7. Luồng chức năng theo vai trò
 
-Mục này mô tả luồng chức năng chuẩn của hệ thống đối với từng vai trò, theo kiến trúc logic đã trình bày ở mục 2.3. Các hình minh họa được chụp từ môi trường thử nghiệm; thông tin định danh và số liệu trong môi trường thử nghiệm đã được cắt bỏ hoặc không đưa vào. Mục này không mô tả giao diện chi tiết; các nội dung kỹ thuật được nêu ở các mục 2.2 và 2.5.
+Mục này mô tả luồng chức năng chuẩn của hệ thống đối với từng vai trò, theo kiến trúc logic đã trình bày ở mục 2.3. Các hình minh họa được chụp từ môi trường thử nghiệm với dữ liệu mẫu rất nhỏ; phần thông tin về nhóm thực hiện và nhà trường đã được cắt bỏ, và không đưa vào hình nào số liệu mang ý nghĩa kết quả nghiên cứu. Mục này không mô tả giao diện chi tiết; các nội dung kỹ thuật được nêu ở các mục 2.2 và 2.5.
 
 ### 2.7.1. Vai trò học sinh
 
 Học sinh là người tham gia nghiên cứu. Luồng chức năng của học sinh gồm bốn giai đoạn tuần tự, được máy chủ kiểm soát.
 
-**Giai đoạn 1. Kích hoạt và truy cập.** Học sinh kích hoạt thẻ mã được cấp, sau khi đọc thông tin nghiên cứu và đồng ý tham gia. Thẻ chỉ kích hoạt được một lần. Các lần truy cập sau được thực hiện bằng cùng mã thẻ. Phiên làm việc được duy trì trong một khoảng thời gian xác định, và mã thẻ là phương thức xác thực duy nhất của học sinh. Hệ thống không thu họ tên, email hay số điện thoại.
+**Giai đoạn 1. Kích hoạt và truy cập.** Học sinh kích hoạt thẻ mã được cấp, sau khi đọc thông tin nghiên cứu và đồng ý tham gia. Thẻ chỉ kích hoạt được một lần. Học sinh có thể nhập mã trên thẻ hoặc quét mã QR in trên thẻ, khi đó mã được điền sẵn nhưng học sinh vẫn phải đọc thông tin và đồng ý. Các lần truy cập sau được thực hiện bằng cùng mã thẻ. Phiên làm việc được duy trì trong một khoảng thời gian xác định, và mã thẻ là phương thức xác thực duy nhất của học sinh. Hệ thống không thu họ tên, email hay số điện thoại.
 
-![Hình 4. Trang chọn hoạt động của học sinh](hinh/hinh4_hoc_sinh_trang_chon.png){width=70%}
+![Hình 4. Bảng học tập của học sinh (tiến độ, hoạt động, hành trình)](hinh/hinh4_hoc_sinh_trang_chon.png){width=70%}
 
 **Giai đoạn 2. Khảo sát đầu vào.** Trước khi tham gia bất kỳ hoạt động học tập nào, học sinh trả lời bộ khảo sát đầu vào. Bộ khảo sát gồm câu hỏi kiến thức có đáp án và câu hỏi hành vi tự báo cáo. Khảo sát không phản hồi đúng sai trong quá trình làm, nhằm bảo đảm phép đo đầu vào không bị ảnh hưởng bởi quá trình học.
 
@@ -315,9 +315,15 @@ Mỗi hoạt động trả về phản hồi tức thời về tính đúng sai 
 
 **Giai đoạn 4. Khảo sát sau can thiệp và theo dõi.** Khảo sát sau can thiệp chỉ mở khi học sinh đã hoàn thành khảo sát đầu vào và đủ ba hoạt động. Khảo sát theo dõi mở sau một khoảng thời gian xác định, mặc định là 28 ngày kể từ khi hoàn thành khảo sát sau can thiệp. Trình tự này được kiểm soát ở máy chủ, không phụ thuộc thao tác phía giao diện.
 
-### 2.7.2. Vai trò quản trị viên
+### 2.7.2. Vai trò giáo viên
 
-Quản trị viên là người vận hành hệ thống trong nhà trường hoặc nhóm nghiên cứu. Quản trị viên đăng nhập bằng tài khoản có vai trò quản trị. Tài khoản này không gắn với lớp học cụ thể và không truy cập được dữ liệu cá nhân của học sinh; quyền hạn của quản trị viên được kiểm tra ở máy chủ cho mọi thao tác. Chức năng của quản trị viên gồm ba nhóm.
+Giáo viên là người phát thẻ và theo dõi tiến độ lớp được gán, đăng nhập bằng tài khoản do quản trị viên cấp. Trang lớp hiển thị các chỉ số tổng hợp (số thẻ đã cấp, tỉ lệ kích hoạt, số học sinh xong từng khảo sát) và danh sách học sinh theo mã thẻ kèm tiến độ từng hoạt động; giáo viên không xem được câu trả lời của học sinh. Giáo viên tạo thẻ mới cho học sinh mới, và cấp lại thẻ cho học sinh làm mất thẻ; thao tác cấp lại giữ nguyên tiến độ, bắt buộc giáo viên xác nhận đã đối chiếu mã cũ với sổ phát thẻ và được ghi vào nhật ký kiểm toán.
+
+Hệ thống hỗ trợ in thẻ học sinh theo kích thước thẻ chuẩn (85,6 × 54 mm), mười thẻ trên một trang A4, qua hộp thoại in của trình duyệt, có thể in giấy hoặc lưu thành tệp PDF. Mỗi thẻ gồm tên đề tài, lớp, mã kích hoạt và mã QR; thẻ không có họ tên hay ảnh học sinh. Danh tính học sinh chỉ nằm trong sổ phát thẻ do giáo viên bảo quản riêng.
+
+### 2.7.3. Vai trò quản trị viên
+
+Quản trị viên là người vận hành hệ thống trong nhà trường hoặc nhóm nghiên cứu. Quản trị viên đăng nhập bằng tài khoản có vai trò quản trị. Tài khoản này không gắn với lớp học cụ thể và không truy cập được dữ liệu cá nhân của học sinh; quyền hạn của quản trị viên được kiểm tra ở máy chủ cho mọi thao tác. Giao diện quản trị chia chức năng thành các nhóm trên thanh menu: tổng quan, quản lý đào tạo, thống kê, và in ấn kèm xuất dữ liệu.
 
 **Quản lý tài khoản giáo viên.** Quản trị viên tạo tài khoản giáo viên, gắn tài khoản với lớp, cấp lại mật khẩu khi cần, và khóa hoặc mở khóa tài khoản. Tài khoản bị khóa không đăng nhập được, nhưng dữ liệu được giữ nguyên. Hệ thống không cho phép khóa chính tài khoản đang đăng nhập hoặc khóa quản trị viên cuối cùng còn hoạt động.
 
@@ -327,15 +333,15 @@ Quản trị viên là người vận hành hệ thống trong nhà trường ho
 
 ![Hình 11. Trang quản trị: quản lý bộ câu hỏi khảo sát](hinh/hinh11_quan_tri_cau_hoi.png){width=60%}
 
-**Theo dõi và xuất dữ liệu đo lường.** Quản trị viên theo dõi số liệu đo lường tổng hợp, bao gồm tiến độ hoàn thành của từng giai đoạn theo lớp, điểm kiến thức và hành vi trung bình theo giai đoạn đầu vào, sau can thiệp và theo dõi, so sánh trước và sau can thiệp, và kết quả theo nhóm chủ đề. Số liệu tổng hợp được hiển thị dưới dạng mô tả. Quy tắc công bố áp dụng cho mọi số liệu tổng hợp: nhóm có ít hơn năm học sinh được ẩn để không lộ danh tính. Quản trị viên tải dữ liệu nghiên cứu dưới hai định dạng: dạng dài, mỗi dòng là một câu trả lời, và dạng rộng, mỗi dòng là một học sinh. Dữ liệu xuất ra đã được ẩn danh bằng mã ngẫu nhiên và không chứa thông tin định danh.
+**Theo dõi và xuất dữ liệu đo lường.** Trang tổng quan hiển thị các chỉ số chính (số thẻ đã phát và tỉ lệ kích hoạt, số giáo viên, số lớp, tỉ lệ hoàn thành khảo sát sau can thiệp) và các biểu đồ: số học sinh theo thời gian (theo ngày hoặc theo tháng, dạng tích lũy hoặc phát sinh mới, tính từ thời điểm phát thẻ, kích hoạt và hoàn thành từng khảo sát), tiến trình theo các chặng nghiên cứu, tỉ lệ kích hoạt, điểm kiến thức theo giai đoạn, tiến độ theo lớp và tỉ lệ đúng theo nhóm chủ đề. Các bảng số liệu chi tiết gồm tiến độ hoàn thành của từng giai đoạn theo lớp, điểm kiến thức và hành vi trung bình, so sánh trước và sau can thiệp, và kết quả theo nhóm chủ đề. Số liệu tổng hợp được hiển thị dưới dạng mô tả. Quy tắc công bố áp dụng cho mọi số liệu tổng hợp: nhóm có ít hơn năm học sinh được ẩn để không lộ danh tính. Quản trị viên có thể in báo cáo tổng hợp hoặc lưu thành tệp PDF. Quản trị viên tải dữ liệu nghiên cứu dưới hai định dạng: dạng dài, mỗi dòng là một câu trả lời, và dạng rộng, mỗi dòng là một học sinh. Dữ liệu xuất ra không chứa họ tên, email, số điện thoại hay mã thẻ đăng nhập; học sinh được nhận diện bằng mã định danh nghiên cứu ngẫu nhiên, tách biệt với mã đăng nhập.
 
 ![Hình 12. Trang quản trị: tải dữ liệu nghiên cứu](hinh/hinh12_quan_tri_tai_du_lieu.png){width=70%}
 
 Kiểm định thống kê không được thực hiện trong hệ thống. Các kiểm định được tiến hành riêng theo kế hoạch phân tích đã xác định trước tại mục 2.6, trên dữ liệu xuất từ hệ thống.
 
-### 2.7.3. Ranh giới quyền hạn
+### 2.7.4. Ranh giới quyền hạn
 
-Phân quyền theo vai trò được áp dụng nhất quán ở máy chủ. Học sinh chỉ truy cập được dữ liệu của chính mình và không có quyền quản trị. Giáo viên xem tiến độ tổng hợp của lớp mình và không xem được câu trả lời của từng học sinh. Quản trị viên xem số liệu tổng hợp và tải dữ liệu đã ẩn danh, nhưng không xem được thông tin định danh vì hệ thống không lưu trữ thông tin đó. Mọi thao tác quản trị tài khoản và thay đổi bộ câu hỏi được ghi vào nhật ký kiểm toán nội bộ.
+Phân quyền theo vai trò được áp dụng nhất quán ở máy chủ. Học sinh chỉ truy cập được dữ liệu của chính mình và không có quyền quản trị. Giáo viên xem tiến độ tổng hợp của lớp mình và không xem được câu trả lời của từng học sinh. Quản trị viên xem số liệu tổng hợp và tải dữ liệu chỉ có mã định danh nghiên cứu (không có mã thẻ đăng nhập), nhưng không xem được thông tin định danh cá nhân vì hệ thống không lưu trữ thông tin đó. Mọi thao tác quản trị tài khoản và thay đổi bộ câu hỏi được ghi vào nhật ký kiểm toán nội bộ.
 
 # CHƯƠNG 3. KẾT QUẢ VÀ THẢO LUẬN
 
@@ -347,7 +353,7 @@ Hệ thống đã hoàn thành các thành phần chức năng: kích hoạt th�
 
 | Loại kiểm thử | Phạm vi | Kết quả |
 |---|---|---|
-| Tích hợp API | Kích hoạt thẻ, cấp lại thẻ (có xác nhận đối chiếu sổ và nhật ký), xác thực, tài khoản giáo viên và quản trị, đổi mật khẩu, quản lý câu hỏi theo phiên bản, ba hoạt động, khảo sát, khóa trình tự, xuất dữ liệu, bảo mật | 290 kiểm tra, đạt toàn bộ |
+| Tích hợp API | Kích hoạt thẻ, cấp lại thẻ (có xác nhận đối chiếu sổ và nhật ký), xác thực, tài khoản giáo viên và quản trị, đổi mật khẩu, quản lý câu hỏi theo phiên bản, ba hoạt động, khảo sát, khóa trình tự, xuất dữ liệu, tách mã định danh nghiên cứu khỏi mã đăng nhập, thống kê theo thời gian, bảo mật | 321 kiểm tra, đạt toàn bộ |
 | Đơn vị | Bộ đánh giá mật khẩu | 14 kiểm thử, đạt toàn bộ |
 | Biên dịch và đóng gói giao diện | Kiểm tra kiểu nghiêm ngặt, đóng gói | Đạt |
 | Luồng người dùng qua máy chủ trung gian | Từ kích hoạt thẻ đến khảo sát theo dõi | 23 bước, đạt toàn bộ |
@@ -368,7 +374,7 @@ Các bảng dữ liệu chính được mô tả trong Bảng 6.
 | Bảng | Trường chính | Mục đích |
 |---|---|---|
 | classes | Mã lớp, tên lớp, tên cơ sở, thời điểm tạo | Danh sách lớp tham gia |
-| participants | Mã học sinh, mã lớp, trạng thái thẻ (đã phát hoặc đã kích hoạt), băm token phiên, phiên bản phiếu, thời điểm kích hoạt, số lần cấp lại thẻ | Định danh giả và kiểm soát phiên |
+| participants | Mã thẻ, mã định danh nghiên cứu, mã lớp, trạng thái thẻ (đã phát hoặc đã kích hoạt), băm token phiên, phiên bản phiếu, thời điểm kích hoạt, số lần cấp lại thẻ | Định danh học sinh (hai mã tách biệt) và kiểm soát phiên |
 | teachers | Tên đăng nhập, băm mật khẩu, vai trò (giáo viên hoặc quản trị), lớp được gán (trống với quản trị), cờ đổi mật khẩu tạm, băm token phiên | Tài khoản giáo viên và quản trị viên. Giáo viên chỉ xem tiến độ lớp được gán; quản trị viên quản lý tài khoản và câu hỏi nhưng không xem tiến độ lớp |
 | module_events | Mã học sinh, hoạt động, mã mục, số lần thử, lựa chọn, đúng hoặc sai, thời gian phản hồi, cờ gợi ý, phiên bản nội dung | Nhật ký ba hoạt động |
 | assessments_self | Mã học sinh, giai đoạn, mã câu, đáp án hoặc mức, đúng hoặc sai, thời gian phản hồi, phiên bản | Kết quả khảo sát ba giai đoạn |
@@ -384,19 +390,19 @@ Tài liệu mã hóa mô tả từng cột, từng câu hỏi, cách tính biế
 
 ### Định dạng dài
 
-Mỗi dòng là một lần trả lời khảo sát, gồm: mã học sinh, mã lớp, giai đoạn, mã câu, loại câu, đúng hoặc sai, chỉ số lựa chọn, mức hành vi, thời gian phản hồi, phiên bản nội dung và thời điểm trả lời. Định dạng này phục vụ phân tích từng câu.
+Mỗi dòng là một lần trả lời khảo sát, gồm: mã định danh nghiên cứu, mã lớp, giai đoạn, mã câu, loại câu, đúng hoặc sai, chỉ số lựa chọn, mức hành vi, thời gian phản hồi, phiên bản nội dung và thời điểm trả lời. Định dạng này phục vụ phân tích từng câu.
 
 ### Định dạng rộng
 
-Mỗi dòng là một học sinh, gồm: mã học sinh, mã lớp, số câu kiến thức đúng, tỷ lệ phần trăm, điểm hành vi đã điều chỉnh, thời gian phản hồi trung bình cho từng giai đoạn, và số hoạt động đã hoàn thành. Định dạng này phục vụ phân tích lặp đo.
+Mỗi dòng là một học sinh, gồm: mã định danh nghiên cứu, mã lớp, số câu kiến thức đúng, tỷ lệ phần trăm, điểm hành vi đã điều chỉnh, thời gian phản hồi trung bình cho từng giai đoạn, và số hoạt động đã hoàn thành. Định dạng này phục vụ phân tích lặp đo.
 
-Cả hai định dạng có mã hóa UTF-8 kèm BOM để tương thích với phần mềm bảng tính, và không chứa họ tên, email, số điện thoại, thời điểm đồng ý hay nội dung mật khẩu. Tên cột được kiểm tra tự động trong bộ kiểm thử.
+Cả hai định dạng có mã hóa UTF-8 kèm BOM để tương thích với phần mềm bảng tính, và không chứa họ tên, email, số điện thoại, mã thẻ đăng nhập, thời điểm đồng ý hay nội dung mật khẩu. Bộ kiểm thử kiểm tra tự động rằng không mã thẻ nào của học sinh xuất hiện trong hai tệp. Tên cột được kiểm tra tự động trong bộ kiểm thử.
 
-**Ví dụ cấu trúc hàng dữ liệu (dạng minh họa, mã giả danh mẫu).**
+**Ví dụ cấu trúc hàng dữ liệu (dạng minh họa, mã mẫu).**
 
 | Trường | Ví dụ | Ghi chú |
 |---|---|---|
-| Mã học sinh | XXXX-XXXX | Do hệ thống cấp |
+| Mã định danh nghiên cứu (cột pseudonym) | RXXXXXXXXX | Ngẫu nhiên, độc lập với mã thẻ, không đăng nhập được |
 | Giai đoạn | pre | Một trong pre, post, delayed |
 | Mã câu | k01 | Câu kiến thức |
 | is_correct | 1 | 1 đúng, 0 sai |
