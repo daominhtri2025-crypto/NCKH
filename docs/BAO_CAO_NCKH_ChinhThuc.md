@@ -2,16 +2,15 @@
 lang: vi-VN
 ---
 
-```{=openxml}
-<w:p><w:pPr><w:spacing w:before="500"/></w:pPr></w:p>
-```
+![KHUNG_BIA](hinh/khung_bia.png){width=21cm height=29.7cm}
 
 ::: {custom-style="Cover Note"}
 **TRƯỜNG THCS HOÀNG SA, PHÂN HIỆU LÝ TỰ TRỌNG**
 :::
 
 ::: {custom-style="Cover Note"}
-CUỘC THI KHOA HỌC KỸ THUẬT DÀNH CHO HỌC SINH TRUNG HỌC CƠ SỞ
+CUỘC THI KHOA HỌC KỸ THUẬT\
+DÀNH CHO HỌC SINH TRUNG HỌC CƠ SỞ
 
 NĂM HỌC 2026 – 2027
 
@@ -19,7 +18,7 @@ Lĩnh vực: Công nghệ thông tin – An toàn thông tin trong giáo dục
 :::
 
 ```{=openxml}
-<w:p><w:pPr><w:spacing w:before="1300"/></w:pPr></w:p>
+<w:p><w:pPr><w:spacing w:before="1500"/></w:pPr></w:p>
 ```
 
 ::: {custom-style="Title"}
@@ -31,7 +30,7 @@ Xây dựng và đánh giá hệ thống web thực hành nhận diện lừa đ
 :::
 
 ```{=openxml}
-<w:p><w:pPr><w:spacing w:before="1300"/></w:pPr></w:p>
+<w:p><w:pPr><w:spacing w:before="1500"/></w:pPr></w:p>
 ```
 
 ::: {custom-style="Cover Note"}
@@ -47,7 +46,7 @@ Hoàng Thị Bảo Oanh
 :::
 
 ```{=openxml}
-<w:p><w:pPr><w:spacing w:before="1300"/></w:pPr></w:p>
+<w:p><w:pPr><w:spacing w:before="1500"/></w:pPr></w:p>
 ```
 
 ::: {custom-style="Cover Note"}
@@ -55,7 +54,7 @@ Hoàng Thị Bảo Oanh
 :::
 
 ```{=openxml}
-<w:p><w:pPr><w:sectPr><w:pgSz w:w="11906" w:h="16838"/><w:pgMar w:top="1134" w:right="1134" w:bottom="1134" w:left="1134" w:header="709" w:footer="709" w:gutter="0"/><w:pgBorders w:offsetFrom="page"><w:top w:val="thinThickThinSmallGap" w:sz="24" w:space="28" w:color="1F3864"/><w:left w:val="thinThickThinSmallGap" w:sz="24" w:space="28" w:color="1F3864"/><w:bottom w:val="thinThickThinSmallGap" w:sz="24" w:space="28" w:color="1F3864"/><w:right w:val="thinThickThinSmallGap" w:sz="24" w:space="28" w:color="1F3864"/></w:pgBorders><w:titlePg/></w:sectPr></w:pPr></w:p>
+<w:p><w:pPr><w:sectPr><w:pgSz w:w="11906" w:h="16838"/><w:pgMar w:top="1418" w:right="1418" w:bottom="1418" w:left="1418" w:header="709" w:footer="709" w:gutter="0"/><w:titlePg/></w:sectPr></w:pPr></w:p>
 ```
 
 <!--TOC-->
