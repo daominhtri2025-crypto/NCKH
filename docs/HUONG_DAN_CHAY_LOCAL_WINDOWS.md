@@ -53,7 +53,23 @@ Lưu ý khi cài **XAMPP**:
 - Nếu Windows Firewall hỏi, chọn **Allow access**.
 - Không cần mở XAMPP Control Panel.
 
-**Rất quan trọng:** sau khi cài xong, **đóng hẳn cửa sổ PowerShell và mở lại** để Windows nhận các phần mềm mới. Rồi kiểm tra:
+**Rất quan trọng:** Windows chỉ cập nhật danh sách đường dẫn (PATH) cho cửa sổ **mới mở**. Cách nhanh nhất là làm mới ngay trong cửa sổ hiện tại bằng lệnh sau (cách khác: đóng hẳn PowerShell rồi mở lại):
+
+```powershell
+$env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
+```
+
+Bước kiểm tra A: ba phần mềm đã được cài vào máy chưa:
+
+```powershell
+Test-Path "C:\Program Files\Git\cmd\git.exe"
+Test-Path "C:\Program Files\nodejs\node.exe"
+Test-Path "C:\xampp\php\php.exe"
+```
+
+**Kết quả đúng:** cả ba dòng đều hiện `True`. Dòng nào hiện `False` nghĩa là phần mềm đó **chưa được cài**: chạy lại đúng lệnh `winget` của phần mềm đó ở trên (đọc kỹ thông báo; nếu Windows hiện hộp thoại xác nhận thì bấm **Yes**), hoặc cài tay theo ghi chú bên dưới.
+
+Bước kiểm tra B: PowerShell đã nhận ra các lệnh chưa:
 
 ```powershell
 git --version
@@ -63,6 +79,16 @@ npm -v
 ```
 
 **Kết quả đúng:** hiện số phiên bản của cả bốn lệnh, ví dụ `git version 2.x`, `v22.x` hoặc `v24.x`, một số phiên bản `npm`, và `PHP 8.2.x`.
+
+> **Nếu ở bước kiểm tra A hiện `True` nhưng `git` vẫn báo không tìm thấy:** chạy thẳng bằng đường dẫn đầy đủ để tiếp tục, không cần chờ sửa PATH:
+>
+> ```powershell
+> & "C:\Program Files\Git\cmd\git.exe" --version
+> ```
+>
+> Ở Bước 3, thay chữ `git` trong lệnh `git clone` bằng `& "C:\Program Files\Git\cmd\git.exe"`. Về sau, đóng hẳn PowerShell (hoặc khởi động lại máy) thì lệnh `git` sẽ chạy bình thường.
+
+> **Thông báo `command not found`** (thay vì `is not recognized`) là thông báo của cửa sổ dòng lệnh kiểu Linux (Git Bash, WSL, hoặc Terminal của VS Code đang chọn bash). Hướng dẫn này chỉ dùng **Windows PowerShell**: mở bằng Start, gõ `PowerShell`. Trong VS Code, chọn `PowerShell` ở danh sách bên cạnh dấu `+` của Terminal.
 
 > **Nếu `winget` báo không nhận ra lệnh:** cài tay ba phần mềm từ trang chủ, mỗi phần mềm chọn mặc định ("Next" đến hết, XAMPP vẫn ở `C:\xampp`): [git-scm.com](https://git-scm.com/download/win), [nodejs.org](https://nodejs.org) (bản **LTS**), [apachefriends.org](https://www.apachefriends.org) (XAMPP **8.2**). Sau đó đóng và mở lại PowerShell, rồi chạy khối kiểm tra ở trên.
 
@@ -229,7 +255,7 @@ Remove-Item Env:DB_NAME
 | Triệu chứng | Nguyên nhân | Cách xử lý |
 |---|---|---|
 | `npm : File ... cannot be loaded because running scripts is disabled` | PowerShell chặn tập lệnh | Chạy lại **Bước 1**, đóng và mở lại PowerShell |
-| `git`, `node` hoặc `npm` "is not recognized" | PowerShell chưa nhận phần mềm vừa cài | Đóng hẳn PowerShell, mở lại. Nếu vẫn lỗi, khởi động lại máy |
+| `git`, `node` hoặc `npm`: `is not recognized` hoặc `command not found` | Cửa sổ chưa nhận phần mềm vừa cài, phần mềm chưa cài được, hoặc đang dùng nhầm Git Bash/WSL | Làm theo **Bước 2** (làm mới PATH, kiểm tra A và B). Dùng đúng cửa sổ Windows PowerShell. Nếu vẫn lỗi, khởi động lại máy |
 | `[LOI] Khong thiet lap duoc CSDL bang user root` | MySQL chưa chạy | Chạy lại **Bước 4**, rồi chạy lại `.\scripts\setup-windows.bat` |
 | `Access denied for user 'root'` | `root` của MySQL đã có mật khẩu (XAMPP mặc định không có) | Gỡ mật khẩu: `& "C:\xampp\mysql\bin\mysqladmin.exe" -u root -pMATKHAUCU password ""`, rồi chạy lại script |
 | `Access denied for user 'antoanso'` | `api\.env` có mật khẩu khác với mật khẩu đã đặt | `Remove-Item api\.env` rồi chạy lại `.\scripts\setup-windows.bat` |
