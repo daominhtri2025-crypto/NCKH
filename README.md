@@ -29,6 +29,8 @@ cd web && npm run build        # kiểm tra kiểu và build giao diện
 cd web && npm run test:unit    # kiểm thử đơn vị bộ đánh giá mật khẩu
 ```
 
+**Chạy trên máy Windows mới:** làm theo [`docs/HUONG_DAN_CHAY_LOCAL_WINDOWS.md`](docs/HUONG_DAN_CHAY_LOCAL_WINDOWS.md) (từng bước, chỉ cần sao chép lệnh).
+
 ## Nguyên tắc nghiên cứu
 
 - Học sinh đăng nhập bằng mã thẻ do hệ thống cấp, không nhập họ tên hay thông tin cá nhân. Dữ liệu nghiên cứu chỉ dùng một mã định danh nghiên cứu ngẫu nhiên, tách biệt với mã đăng nhập, nên tệp dữ liệu không cho phép đăng nhập thay học sinh.

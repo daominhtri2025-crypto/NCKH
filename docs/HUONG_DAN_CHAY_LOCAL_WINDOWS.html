@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="vi" xml:lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Hướng dẫn chạy trên máy Windows mới – An Toàn Số Học
+Đường</title>
+  <style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+
+ul.task-list[class]{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+font-size: inherit;
+width: 0.8em;
+margin: 0 0.8em 0.2em -1.6em;
+vertical-align: middle;
+}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+  <style type="text/css">:root { color-scheme: light; }
+body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans", Arial, sans-serif; line-height: 1.6; color: #0f172a; max-width: 920px; margin: 0 auto; padding: 24px 20px 64px; }
+h1, h2, h3 { line-height: 1.25; color: #0f172a; }
+h1 { font-size: 1.9rem; border-bottom: 3px solid #4f46e5; padding-bottom: .4rem; }
+h2 { font-size: 1.45rem; margin-top: 2.2rem; border-bottom: 1px solid #e2e8f0; padding-bottom: .3rem; }
+h3 { font-size: 1.15rem; margin-top: 1.6rem; color: #3730a3; }
+a { color: #4338ca; }
+table { border-collapse: collapse; width: 100%; margin: 1rem 0; font-size: .95rem; display: block; overflow-x: auto; }
+th, td { border: 1px solid #cbd5e1; padding: 8px 10px; text-align: left; vertical-align: top; }
+th { background: #eef2ff; }
+code { background: #f1f5f9; padding: 1px 5px; border-radius: 5px; font-size: .92em; }
+pre { background: #0f172a; color: #e2e8f0; padding: 14px 16px; border-radius: 10px; overflow-x: auto; }
+pre code { background: transparent; color: inherit; padding: 0; }
+blockquote { margin: 1rem 0; padding: .6rem 1rem; border-left: 4px solid #4f46e5; background: #eef2ff; border-radius: 0 10px 10px 0; }
+figure { margin: 1.2rem auto; text-align: center; }
+figure img, img { max-width: 100%; height: auto; border: 1px solid #e2e8f0; border-radius: 12px; box-shadow: 0 6px 20px -10px rgba(15,23,42,.35); }
+figcaption { font-size: .9rem; color: #475569; margin-top: .4rem; }
+hr { border: 0; border-top: 1px solid #e2e8f0; margin: 2rem 0; }
+@media print { body { max-width: none; padding: 0; } img { box-shadow: none; page-break-inside: avoid; } figure { page-break-inside: avoid; } }
+</style>
+</head>
+<body>
+<h1 id="hướng-dẫn-chạy-an-toàn-số-học-đường-trên-máy-windows-mới">Hướng
+dẫn chạy “An Toàn Số Học Đường” trên máy Windows mới</h1>
+<p><strong>Phạm vi.</strong> Máy Windows 10 hoặc 11 chỉ có ổ
+<strong>C</strong>, chưa cài gì. Thư mục dự án nằm ngoài
+<strong>Desktop</strong>: <code>Desktop\NCKH</code>. Chỉ cần sao chép
+từng khối lệnh, dán vào PowerShell và nhấn Enter.</p>
+<p><strong>Thời gian.</strong> Khoảng 15 đến 25 phút cho lần cài đầu.
+Các lần sau chỉ cần một lệnh (mục “Chạy lại mỗi ngày”).</p>
+<p><strong>Kết quả cuối.</strong> Mở được
+<code>http://localhost:5173</code> trên máy này, đăng nhập được tài
+khoản giáo viên và quản trị, tạo được thẻ học sinh.</p>
+<p><strong>Yêu cầu.</strong> Kết nối Internet. Tài khoản Windows có
+quyền cài phần mềm (Windows sẽ hỏi xác nhận vài lần, bấm
+<strong>Yes</strong>).</p>
+<hr />
+<h2 id="cách-dùng-tài-liệu-này">Cách dùng tài liệu này</h2>
+<ol type="1">
+<li><strong>Mở PowerShell:</strong> bấm nút Start, gõ
+<code>PowerShell</code>, nhấn Enter. Không cần chọn “Run as
+administrator”.</li>
+<li><strong>Chuyển bộ gõ sang tiếng Anh (EN)</strong> trước khi dán hoặc
+gõ lệnh. Bộ gõ tiếng Việt có thể làm hỏng ký tự.</li>
+<li>Sao chép <strong>nguyên khối lệnh</strong>, bấm chuột phải trong cửa
+sổ PowerShell để dán, rồi nhấn Enter. Nếu khối có nhiều dòng, PowerShell
+chạy lần lượt từng dòng.</li>
+<li>Sau mỗi bước, so kết quả với dòng <strong>Kết quả đúng</strong>. Nếu
+khác, xem mục <strong>Xử lý sự cố</strong> ở cuối.</li>
+</ol>
+<hr />
+<h2 id="bước-1.-cho-phép-powershell-chạy-npm">Bước 1. Cho phép
+PowerShell chạy <code>npm</code></h2>
+<p>Windows mới thường chặn tập lệnh của <code>npm</code>. Chạy một
+lần:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">Set-ExecutionPolicy</span> <span class="op">-</span>Scope CurrentUser <span class="op">-</span>ExecutionPolicy RemoteSigned <span class="op">-</span>Force</span></code></pre></div>
+<p><strong>Kết quả đúng:</strong> không hiện lỗi.</p>
+<hr />
+<h2 id="bước-2.-cài-git-node.js-và-xampp">Bước 2. Cài Git, Node.js và
+XAMPP</h2>
+<p>Ba phần mềm: <strong>Git</strong> (lấy mã nguồn),
+<strong>Node.js</strong> (chạy giao diện), <strong>XAMPP</strong> (cung
+cấp PHP và MySQL). Dán lần lượt từng lệnh, chờ xong lệnh này mới dán
+lệnh sau:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>winget install <span class="op">--</span>id Git<span class="op">.</span><span class="fu">Git</span> <span class="op">-</span>e <span class="op">--</span>source winget <span class="op">--</span>accept<span class="op">-</span>package<span class="op">-</span>agreements <span class="op">--</span>accept<span class="op">-</span>source<span class="op">-</span>agreements</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>winget install <span class="op">--</span>id OpenJS<span class="op">.</span><span class="fu">NodeJS</span><span class="op">.</span><span class="fu">LTS</span> <span class="op">-</span>e <span class="op">--</span>source winget <span class="op">--</span>accept<span class="op">-</span>package<span class="op">-</span>agreements <span class="op">--</span>accept<span class="op">-</span>source<span class="op">-</span>agreements</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>winget install <span class="op">--</span>id ApacheFriends<span class="op">.</span><span class="fu">Xampp</span><span class="op">.</span><span class="fu">8</span><span class="op">.</span><span class="fu">2</span> <span class="op">-</span>e <span class="op">--</span>source winget <span class="op">--</span>accept<span class="op">-</span>package<span class="op">-</span>agreements <span class="op">--</span>accept<span class="op">-</span>source<span class="op">-</span>agreements</span></code></pre></div>
+<p>Lưu ý khi cài <strong>XAMPP</strong>:</p>
+<ul>
+<li>Nếu hiện cửa sổ cài đặt, bấm <strong>Next</strong> đến hết,
+<strong>giữ nguyên thư mục <code>C:\xampp</code></strong> (các script
+sau này dùng đúng đường dẫn này).</li>
+<li>Nếu Windows Firewall hỏi, chọn <strong>Allow access</strong>.</li>
+<li>Không cần mở XAMPP Control Panel.</li>
+</ul>
+<p><strong>Rất quan trọng:</strong> sau khi cài xong, <strong>đóng hẳn
+cửa sổ PowerShell và mở lại</strong> để Windows nhận các phần mềm mới.
+Rồi kiểm tra:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>git <span class="op">--</span>version</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>node <span class="op">-</span>v</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>npm <span class="op">-</span>v</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="op">&amp;</span> <span class="st">&quot;C:\xampp\php\php.exe&quot;</span> <span class="op">-</span>v</span></code></pre></div>
+<p><strong>Kết quả đúng:</strong> hiện số phiên bản của cả bốn lệnh, ví
+dụ <code>git version 2.x</code>, <code>v22.x</code> hoặc
+<code>v24.x</code>, một số phiên bản <code>npm</code>, và
+<code>PHP 8.2.x</code>.</p>
+<blockquote>
+<p><strong>Nếu <code>winget</code> báo không nhận ra lệnh:</strong> cài
+tay ba phần mềm từ trang chủ, mỗi phần mềm chọn mặc định (“Next” đến
+hết, XAMPP vẫn ở <code>C:\xampp</code>): <a href="https://git-scm.com/download/win">git-scm.com</a>, <a href="https://nodejs.org">nodejs.org</a> (bản <strong>LTS</strong>), <a href="https://www.apachefriends.org">apachefriends.org</a> (XAMPP
+<strong>8.2</strong>). Sau đó đóng và mở lại PowerShell, rồi chạy khối
+kiểm tra ở trên.</p>
+</blockquote>
+<hr />
+<h2 id="bước-3.-lấy-mã-nguồn-về-desktopnckh">Bước 3. Lấy mã nguồn về
+<code>Desktop\NCKH</code></h2>
+<div class="sourceCode" id="cb6"><pre class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cd</span> <span class="st">&quot;$([Environment]::GetFolderPath(&#39;Desktop&#39;))&quot;</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>git clone <span class="op">-</span>b claude<span class="op">/</span>gifted<span class="op">-</span>brown<span class="op">-</span>mfv1i8 https<span class="op">://</span>github<span class="op">.</span><span class="fu">com</span><span class="op">/</span>daominhtri2025<span class="op">-</span>crypto<span class="op">/</span>NCKH<span class="op">.</span><span class="fu">git</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">cd</span> NCKH</span></code></pre></div>
+<p><strong>Kết quả đúng:</strong> trên Desktop có thư mục
+<strong>NCKH</strong>; dòng lệnh đang ở trong thư mục đó. Nếu hiện cửa
+sổ đăng nhập GitHub, đăng nhập bằng tài khoản có quyền xem kho mã.</p>
+<blockquote>
+<p><strong>Nếu đã có sẵn thư mục NCKH trên Desktop</strong> (chép từ máy
+khác): bỏ qua lệnh <code>git clone</code>, và xóa các tệp riêng của máy
+cũ để tránh sai mật khẩu hoặc gói cũ:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cd</span> <span class="st">&quot;$([Environment]::GetFolderPath(&#39;Desktop&#39;))\NCKH&quot;</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">Remove-Item</span> api\<span class="op">.</span><span class="fu">env</span> <span class="op">-</span>ErrorAction SilentlyContinue</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">Remove-Item</span> web\node_modules <span class="op">-</span>Recurse <span class="op">-</span>Force <span class="op">-</span>ErrorAction SilentlyContinue</span></code></pre></div>
+</blockquote>
+<hr />
+<h2 id="bước-4.-bật-mysql">Bước 4. Bật MySQL</h2>
+<p>Từ thư mục <code>NCKH</code>, chạy:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">Start-Process</span> <span class="op">-</span>WindowStyle Hidden <span class="st">&quot;C:\xampp\mysql\bin\mysqld.exe&quot;</span> <span class="op">-</span>ArgumentList <span class="st">&#39;--defaults-file=C:\xampp\mysql\bin\my.ini&#39;</span><span class="op">,</span><span class="st">&#39;--standalone&#39;</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">Start-Sleep</span> <span class="op">-</span>Seconds 8</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="op">&amp;</span> <span class="st">&quot;C:\xampp\mysql\bin\mysqladmin.exe&quot;</span> <span class="op">-</span>u root status</span></code></pre></div>
+<p>Nếu Windows Firewall hỏi, chọn <strong>Allow access</strong>.</p>
+<p><strong>Kết quả đúng:</strong> một dòng dạng
+<code>Uptime: 8  Threads: 1  Questions: 1 ...</code>. Nếu hiện
+<code>connect to server ... failed</code>, chờ thêm 10 giây rồi chạy lại
+riêng lệnh <code>mysqladmin</code> (dòng cuối).</p>
+<hr />
+<h2 id="bước-5.-tạo-cơ-sở-dữ-liệu-tài-khoản-và-chạy-kiểm-thử">Bước 5.
+Tạo cơ sở dữ liệu, tài khoản và chạy kiểm thử</h2>
+<p>Lệnh này làm tất cả trong một lần: tạo CSDL và người dùng, tạo tệp
+cấu hình <code>api\.env</code>, tạo các bảng dữ liệu, tạo lớp thử
+<code>8A1</code>, tạo hai tài khoản mặc định, rồi chạy bộ kiểm thử tự
+động.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="op">.</span>\scripts\setup<span class="op">-</span>windows<span class="op">.</span><span class="fu">bat</span></span></code></pre></div>
+<p>Mật khẩu CSDL mặc định là <code>Antoanso2026</code> (chỉ dùng cho máy
+cá nhân, được lưu trong <code>api\.env</code>).</p>
+<p><strong>Kết quả đúng:</strong> chạy mất 1 đến 3 phút, có các dòng từ
+<code>[1/6]</code> đến <code>[6/6]</code>, tiếp theo là dòng
+<code>Kết quả: ... đạt, 0 lỗi.</code> và cuối cùng là
+<code>[OK] Thiet lap xong.</code> Chữ tiếng Việt có dấu trong cửa sổ có
+thể hiển thị méo do bảng mã của Windows; không sao, chỉ cần thấy số
+<strong>0</strong> ngay trước chữ “lỗi” và dòng <code>[OK]</code> ở
+cuối.</p>
+<hr />
+<h2 id="bước-6.-cài-gói-cho-giao-diện">Bước 6. Cài gói cho giao
+diện</h2>
+<div class="sourceCode" id="cb10"><pre class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cd</span> web</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>npm install</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">cd</span> <span class="op">..</span></span></code></pre></div>
+<p><strong>Kết quả đúng:</strong> chạy 1 đến 3 phút, cuối có dòng
+<code>found 0 vulnerabilities</code>. Các dòng cảnh báo
+(<code>npm warn</code>) có thể bỏ qua.</p>
+<hr />
+<h2 id="bước-7.-chạy-ứng-dụng">Bước 7. Chạy ứng dụng</h2>
+<div class="sourceCode" id="cb11"><pre class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="op">.</span>\scripts\chay<span class="op">-</span>local<span class="op">.</span><span class="fu">bat</span></span></code></pre></div>
+<p>Lệnh này tự mở <strong>hai cửa sổ đen</strong> (<code>API PHP</code>
+và <code>Giao dien Vite</code>) và mở trình duyệt tại
+<code>http://localhost:5173</code>.</p>
+<p><strong>Kết quả đúng:</strong> trình duyệt hiện trang chủ “Chào em,
+hãy cùng học cách giữ an toàn khi dùng điện thoại!”. Nếu trang trắng,
+chờ vài giây rồi nhấn <strong>F5</strong>.</p>
+<p><strong>Giữ nguyên hai cửa sổ đen</strong> trong lúc dùng ứng dụng.
+Đóng chúng là dừng ứng dụng.</p>
+<blockquote>
+<p><strong>Luôn mở bằng đúng địa chỉ
+<code>http://localhost:5173</code>.</strong> Không dùng
+<code>127.0.0.1</code> hay địa chỉ IP của máy, vì ứng dụng chỉ chấp nhận
+yêu cầu đến từ địa chỉ này (chống giả mạo yêu cầu).</p>
+</blockquote>
+<hr />
+<h2 id="bước-8.-đăng-nhập-thử">Bước 8. Đăng nhập thử</h2>
+<p>Tài khoản mặc định (chỉ để thử trên máy cá nhân):</p>
+<table>
+<thead>
+<tr class="header">
+<th>Vai trò</th>
+<th>Tên đăng nhập</th>
+<th>Mật khẩu</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Quản trị viên</td>
+<td><code>admin</code></td>
+<td><code>Admin@12345</code></td>
+</tr>
+<tr class="even">
+<td>Giáo viên (lớp 8A1)</td>
+<td><code>giaovien1</code></td>
+<td><code>Giaovien@12345</code></td>
+</tr>
+</tbody>
+</table>
+<ol type="1">
+<li>Ở trang chủ, trong khối <strong>Dành cho giáo viên</strong>, bấm
+<strong>Giáo viên đăng nhập</strong>.</li>
+<li>Nhập <code>giaovien1</code> và <code>Giaovien@12345</code>, bấm
+<strong>Đăng nhập</strong>.</li>
+<li>Bấm <strong>Tạo thẻ mới</strong>, nhập <code>3</code>, bấm
+<strong>Tạo thẻ</strong>. Ba mã thẻ dạng <code>XXXX-XXXX</code> hiện ra.
+Ghi lại một mã.</li>
+<li>Bấm <strong>Đăng xuất</strong>. Ở trang chủ, bấm <strong>Em có thẻ
+mã từ giáo viên</strong>, nhập mã vừa ghi, tích ô đồng ý, bấm
+<strong>Kích hoạt và bắt đầu</strong>. Bảng học tập của học sinh hiện
+ra.</li>
+<li>Muốn xem trang quản trị: đăng xuất, đăng nhập bằng
+<code>admin</code> / <code>Admin@12345</code>.</li>
+</ol>
+<p>Khi đăng nhập lần đầu, ứng dụng nhắc đổi mật khẩu. Có thể bỏ qua khi
+thử trên máy cá nhân.</p>
+<hr />
+<h2 id="chạy-lại-mỗi-ngày">Chạy lại mỗi ngày</h2>
+<p>Không cần làm lại các bước 1 đến 6. Mở PowerShell và chạy:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cd</span> <span class="st">&quot;$([Environment]::GetFolderPath(&#39;Desktop&#39;))\NCKH&quot;</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="op">.</span>\scripts\chay<span class="op">-</span>local<span class="op">.</span><span class="fu">bat</span></span></code></pre></div>
+<p>Lệnh tự bật MySQL nếu chưa chạy, rồi mở API, giao diện và trình
+duyệt. Dữ liệu đã tạo lần trước (thẻ, tài khoản, kết quả) vẫn còn.</p>
+<h3 id="dừng-ứng-dụng">Dừng ứng dụng</h3>
+<ol type="1">
+<li>Đóng hai cửa sổ đen <code>API PHP</code> và
+<code>Giao dien Vite</code>.</li>
+<li>Tắt MySQL:</li>
+</ol>
+<div class="sourceCode" id="cb13"><pre class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="op">&amp;</span> <span class="st">&quot;C:\xampp\mysql\bin\mysqladmin.exe&quot;</span> <span class="op">-</span>u root shutdown</span></code></pre></div>
+<hr />
+<h2 id="cập-nhật-khi-có-bản-mới">Cập nhật khi có bản mới</h2>
+<div class="sourceCode" id="cb14"><pre class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cd</span> <span class="st">&quot;$([Environment]::GetFolderPath(&#39;Desktop&#39;))\NCKH&quot;</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>git pull origin claude<span class="op">/</span>gifted<span class="op">-</span>brown<span class="op">-</span>mfv1i8</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="fu">cd</span> web</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>npm install</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="fu">cd</span> <span class="op">..</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="op">&amp;</span> <span class="st">&quot;C:\xampp\php\php.exe&quot;</span> api\bin\migrate<span class="op">.</span><span class="fu">php</span></span></code></pre></div>
+<p>Chạy <code>migrate.php</code> là an toàn, không xóa dữ liệu. Sau đó
+chạy lại ứng dụng như mục trên. Nếu <code>git pull</code> báo có tệp bị
+sửa trên máy, chạy <code>git stash</code> rồi <code>git pull</code>
+lại.</p>
+<hr />
+<h2 id="kiểm-tra-nhanh-tùy-chọn">Kiểm tra nhanh (tùy chọn)</h2>
+<p><strong>Máy chủ có chạy không?</strong> (sau khi đã chạy ứng
+dụng)</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">curl</span><span class="op">.</span><span class="fu">exe</span> http<span class="op">://</span>127<span class="op">.</span><span class="fu">0</span><span class="op">.</span><span class="fu">0</span><span class="op">.</span><span class="fu">1</span><span class="op">:</span>8000<span class="op">/</span>api<span class="op">/</span>health</span></code></pre></div>
+<p><strong>Kết quả đúng:</strong> <code>{&quot;ok&quot;:true}</code></p>
+<p><strong>Chạy lại bộ kiểm thử tự động</strong> (chỉ xóa dữ liệu của
+CSDL kiểm thử, không ảnh hưởng dữ liệu thật):</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="va">$env</span><span class="op">:</span>DB_NAME <span class="op">=</span> <span class="st">&quot;antoanso_test&quot;</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="op">&amp;</span> <span class="st">&quot;C:\xampp\php\php.exe&quot;</span> api\tests\run<span class="op">.</span><span class="fu">php</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="fu">Remove-Item</span> Env<span class="op">:</span>DB_NAME</span></code></pre></div>
+<p><strong>Kết quả đúng:</strong> dòng cuối có <code>0 lỗi</code>.</p>
+<hr />
+<h2 id="xử-lý-sự-cố">Xử lý sự cố</h2>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Triệu chứng</th>
+<th>Nguyên nhân</th>
+<th>Cách xử lý</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>npm : File ... cannot be loaded because running scripts is disabled</code></td>
+<td>PowerShell chặn tập lệnh</td>
+<td>Chạy lại <strong>Bước 1</strong>, đóng và mở lại PowerShell</td>
+</tr>
+<tr class="even">
+<td><code>git</code>, <code>node</code> hoặc <code>npm</code> “is not
+recognized”</td>
+<td>PowerShell chưa nhận phần mềm vừa cài</td>
+<td>Đóng hẳn PowerShell, mở lại. Nếu vẫn lỗi, khởi động lại máy</td>
+</tr>
+<tr class="odd">
+<td><code>[LOI] Khong thiet lap duoc CSDL bang user root</code></td>
+<td>MySQL chưa chạy</td>
+<td>Chạy lại <strong>Bước 4</strong>, rồi chạy lại
+<code>.\scripts\setup-windows.bat</code></td>
+</tr>
+<tr class="even">
+<td><code>Access denied for user &#39;root&#39;</code></td>
+<td><code>root</code> của MySQL đã có mật khẩu (XAMPP mặc định không
+có)</td>
+<td>Gỡ mật khẩu:
+<code>&amp; &quot;C:\xampp\mysql\bin\mysqladmin.exe&quot; -u root -pMATKHAUCU password &quot;&quot;</code>,
+rồi chạy lại script</td>
+</tr>
+<tr class="odd">
+<td><code>Access denied for user &#39;antoanso&#39;</code></td>
+<td><code>api\.env</code> có mật khẩu khác với mật khẩu đã đặt</td>
+<td><code>Remove-Item api\.env</code> rồi chạy lại
+<code>.\scripts\setup-windows.bat</code></td>
+</tr>
+<tr class="even">
+<td>MySQL không lên, báo cổng 3306 đang dùng</td>
+<td>Máy đã có một MySQL khác chạy</td>
+<td>Xem dịch vụ: <code>Get-Service *mysql*</code>. Tắt dịch vụ đó (ví dụ
+<code>Stop-Service MySQL80</code>, chạy PowerShell bằng quyền
+Administrator), rồi làm lại <strong>Bước 4</strong></td>
+</tr>
+<tr class="odd">
+<td>Cửa sổ Vite báo cổng 5173 đang bị dùng, hoặc API báo cổng 8000</td>
+<td>Lần chạy trước chưa tắt hẳn</td>
+<td>Tìm tiến trình:
+<code>Get-NetTCPConnection -LocalPort 5173,8000 \| Select-Object LocalPort,OwningProcess</code>,
+rồi <code>Stop-Process -Id &lt;số OwningProcess&gt; -Force</code>, rồi
+chạy lại</td>
+</tr>
+<tr class="even">
+<td>Trang hiện nhưng đăng nhập báo “Không kết nối được máy chủ”</td>
+<td>Cửa sổ <code>API PHP</code> đã đóng, hoặc MySQL đã tắt</td>
+<td>Chạy <code>curl.exe http://127.0.0.1:8000/api/health</code>. Nếu
+không ra <code>{&quot;ok&quot;:true}</code>, chạy lại
+<code>.\scripts\chay-local.bat</code></td>
+</tr>
+<tr class="odd">
+<td>Đăng nhập báo lỗi về địa chỉ hoặc nguồn yêu cầu</td>
+<td>Mở bằng <code>127.0.0.1</code> hoặc IP thay vì
+<code>localhost</code></td>
+<td>Mở đúng <code>http://localhost:5173</code></td>
+</tr>
+<tr class="even">
+<td><code>[LOI] Chua cai goi giao dien</code> khi chạy
+<code>chay-local.bat</code></td>
+<td>Chưa chạy <code>npm install</code></td>
+<td>Làm <strong>Bước 6</strong></td>
+</tr>
+<tr class="odd">
+<td>Trình duyệt hiện lỗi 401 trong cửa sổ Console (F12)</td>
+<td>Bình thường: ứng dụng kiểm tra phiên khi chưa đăng nhập</td>
+<td>Bỏ qua</td>
+</tr>
+<tr class="even">
+<td>Muốn làm lại từ đầu, xóa sạch dữ liệu thử</td>
+<td></td>
+<td><code>&amp; &quot;C:\xampp\mysql\bin\mysql.exe&quot; -u root -e &quot;DROP DATABASE antoanso_dev; DROP DATABASE antoanso_test;&quot;</code>
+rồi <code>Remove-Item api\.env</code> rồi
+<code>.\scripts\setup-windows.bat</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="ghi-chú-an-toàn">Ghi chú an toàn</h2>
+<ul>
+<li>Hai tài khoản mặc định và mật khẩu CSDL mặc định <strong>chỉ dành
+cho máy cá nhân</strong>. Không dùng lại trên hosting thật; hướng dẫn
+triển khai nằm ở <code>docs/TRIEN_KHAI_INET.md</code>.</li>
+<li>Tệp <code>api\.env</code> chứa mật khẩu CSDL và không được đưa lên
+Git (đã nằm trong <code>.gitignore</code>).</li>
+<li>Dữ liệu thử trên máy này không phải dữ liệu nghiên cứu.</li>
+<li>Tài liệu chi tiết hơn (macOS, Linux, cấu hình thủ công):
+<code>docs/CHAY_CUC_BO.md</code>.</li>
+</ul>
+</body>
+</html>

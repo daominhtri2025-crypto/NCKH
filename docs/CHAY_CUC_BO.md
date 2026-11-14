@@ -1,5 +1,7 @@
 # Chạy và kiểm thử trên máy cá nhân (Local)
 
+> **Máy Windows mới (chỉ ổ C, thư mục ở Desktop):** dùng hướng dẫn từng bước sao chép lệnh tại [`HUONG_DAN_CHAY_LOCAL_WINDOWS.md`](HUONG_DAN_CHAY_LOCAL_WINDOWS.md). Tài liệu dưới đây chi tiết hơn và có cả macOS, Linux.
+
 Tài liệu này hướng dẫn từng lệnh để chạy "An Toàn Số Học Đường" trên máy tính cá nhân, gồm: cài gói phụ thuộc, tạo cơ sở dữ liệu MySQL, chạy API PHP và giao diện Vite, rồi kiểm thử.
 
 Cấu hình cổng mặc định:
