@@ -2,6 +2,10 @@
 lang: vi-VN
 ---
 
+```{=openxml}
+<w:p><w:pPr><w:spacing w:before="500"/></w:pPr></w:p>
+```
+
 ::: {custom-style="Cover Note"}
 **TRƯỜNG THCS HOÀNG SA, PHÂN HIỆU LÝ TỰ TRỌNG**
 :::
@@ -15,7 +19,7 @@ Lĩnh vực: Công nghệ thông tin – An toàn thông tin trong giáo dục
 :::
 
 ```{=openxml}
-<w:p><w:pPr><w:spacing w:before="1000"/></w:pPr></w:p>
+<w:p><w:pPr><w:spacing w:before="1300"/></w:pPr></w:p>
 ```
 
 ::: {custom-style="Title"}
@@ -27,7 +31,7 @@ Xây dựng và đánh giá hệ thống web thực hành nhận diện lừa đ
 :::
 
 ```{=openxml}
-<w:p><w:pPr><w:spacing w:before="1000"/></w:pPr></w:p>
+<w:p><w:pPr><w:spacing w:before="1300"/></w:pPr></w:p>
 ```
 
 ::: {custom-style="Cover Note"}
@@ -43,12 +47,16 @@ Hoàng Thị Bảo Oanh
 :::
 
 ```{=openxml}
-<w:p><w:pPr><w:spacing w:before="1200"/></w:pPr></w:p>
+<w:p><w:pPr><w:spacing w:before="1300"/></w:pPr></w:p>
 ```
 
 ::: {custom-style="Cover Note"}
 **NĂM 2026**
 :::
+
+```{=openxml}
+<w:p><w:pPr><w:sectPr><w:pgSz w:w="11906" w:h="16838"/><w:pgMar w:top="1134" w:right="1134" w:bottom="1134" w:left="1134" w:header="709" w:footer="709" w:gutter="0"/><w:pgBorders w:offsetFrom="page"><w:top w:val="thinThickThinSmallGap" w:sz="24" w:space="28" w:color="1F3864"/><w:left w:val="thinThickThinSmallGap" w:sz="24" w:space="28" w:color="1F3864"/><w:bottom w:val="thinThickThinSmallGap" w:sz="24" w:space="28" w:color="1F3864"/><w:right w:val="thinThickThinSmallGap" w:sz="24" w:space="28" w:color="1F3864"/></w:pgBorders><w:titlePg/></w:sectPr></w:pPr></w:p>
+```
 
 <!--TOC-->
 
