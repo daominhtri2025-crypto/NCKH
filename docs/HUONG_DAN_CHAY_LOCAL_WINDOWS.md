@@ -78,7 +78,7 @@ npm -v
 & "C:\xampp\php\php.exe" -v
 ```
 
-**Kết quả đúng:** hiện số phiên bản của cả bốn lệnh, ví dụ `git version 2.x`, `v22.x` hoặc `v24.x`, một số phiên bản `npm`, và `PHP 8.2.x`.
+**Kết quả đúng:** hiện số phiên bản của cả bốn lệnh, ví dụ `git version 2.x`, `v22.x` hoặc `v24.x`, một số phiên bản `npm`, và `PHP 8.x` (từ 8.2 trở lên). Bản PHP mới như 8.5 dùng được; nếu gặp lỗi lạ chỉ xảy ra trên PHP mới, cài XAMPP 8.2 để đối chiếu.
 
 > **Nếu ở bước kiểm tra A hiện `True` nhưng `git` vẫn báo không tìm thấy:** chạy thẳng bằng đường dẫn đầy đủ để tiếp tục, không cần chờ sửa PATH:
 >
@@ -90,7 +90,7 @@ npm -v
 
 > **Thông báo `command not found`** (thay vì `is not recognized`) là thông báo của cửa sổ dòng lệnh kiểu Linux (Git Bash, WSL, hoặc Terminal của VS Code đang chọn bash). Hướng dẫn này chỉ dùng **Windows PowerShell**: mở bằng Start, gõ `PowerShell`. Trong VS Code, chọn `PowerShell` ở danh sách bên cạnh dấu `+` của Terminal.
 
-> **Nếu `winget` báo không nhận ra lệnh:** cài tay ba phần mềm từ trang chủ, mỗi phần mềm chọn mặc định ("Next" đến hết, XAMPP vẫn ở `C:\xampp`): [git-scm.com](https://git-scm.com/download/win), [nodejs.org](https://nodejs.org) (bản **LTS**), [apachefriends.org](https://www.apachefriends.org) (XAMPP **8.2**). Sau đó đóng và mở lại PowerShell, rồi chạy khối kiểm tra ở trên.
+> **Nếu `winget` báo không nhận ra lệnh** (thường gặp trên Windows 10 cũ, không phải lỗi): bỏ qua ba lệnh `winget` và cài tay ba phần mềm từ trang chủ, mỗi phần mềm chọn mặc định ("Next" đến hết, XAMPP vẫn ở `C:\xampp`): [git-scm.com](https://git-scm.com/download/win), [nodejs.org](https://nodejs.org) (bản **LTS**), [apachefriends.org](https://www.apachefriends.org) (XAMPP bản có **PHP 8.2 trở lên**). Sau đó đóng và mở lại PowerShell, rồi chạy khối kiểm tra ở trên.
 
 ---
 
