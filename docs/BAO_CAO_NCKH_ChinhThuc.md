@@ -9,7 +9,7 @@ lang: vi-VN
 ```
 
 ::: {custom-style="Cover Note"}
-**CUỘC THI KHOA HỌC KỸ THUẬT**\
+**CUỘC THI KHOA HỌC KỸ THUẬT** \
 **DÀNH CHO HỌC SINH TRUNG HỌC CƠ SỞ**
 
 NĂM HỌC 2026 – 2027
@@ -57,7 +57,7 @@ Xây dựng và đánh giá hệ thống web thực hành nhận diện lừa đ
 
 **Phương pháp.** Đề tài kết hợp khảo sát thực trạng bằng ba phiếu (học sinh, giáo viên), thiết kế và xây dựng hệ thống web gồm ba hoạt động thực hành, bộ 16 câu đo kiến thức và hành vi ở ba thời điểm (trước, sau và 28 ngày sau khi học), cùng kiểm thử kỹ thuật tự động. Hệ thống không thu họ tên, email hay số điện thoại; mỗi học sinh có hai mã tách biệt, trong đó mã trong dữ liệu nghiên cứu không dùng để đăng nhập.
 
-**Kết quả.** Hệ thống hoàn chỉnh, đạt 321 kiểm tra tích hợp, 14 kiểm thử đơn vị và 23 bước kiểm thử luồng người dùng. Trong khảo sát, 52% học sinh có người thân hoặc bạn bè từng bị lừa qua mạng; 47% giáo viên từng gặp học sinh bị lừa. Dữ liệu đo trước – sau – theo dõi do hệ thống ghi nhận chưa được thu thập nên đề tài chưa kết luận hiệu quả của hoạt động học tập; khung phân tích cho bốn giả thuyết đã được xác định trước.
+**Kết quả.** Hệ thống hoàn chỉnh, đạt 321 kiểm tra tích hợp, 14 kiểm thử đơn vị và 23 bước kiểm thử luồng người dùng. Trong khảo sát, 52% học sinh có người thân hoặc bạn bè từng bị lừa qua mạng; 47% giáo viên từng gặp học sinh bị lừa. Dữ liệu đo trước – sau – theo dõi trên hệ thống sẽ được thu thập ở giai đoạn tiếp theo, nên đề tài chưa đưa ra kết luận về hiệu quả học tập; khung phân tích cho bốn giả thuyết đã được xác định trước.
 
 **Từ khóa:** an toàn thông tin; giáo dục an toàn số; học sinh trung học cơ sở; đo lường trước – sau – theo dõi; quyền riêng tư theo thiết kế.
 
@@ -103,7 +103,7 @@ Về khoa học, đề tài đề xuất thiết kế đo tách nhận thức v�
 
 ## 2.2. Nghiên cứu và giải pháp hiện có
 
-Lastdrager và cộng sự (2017) đánh giá đào tạo nhận diện lừa đảo cho học sinh tiểu học; theo phần tóm tắt công bố, mức cải thiện tổng thể khoảng 14% ngay sau đào tạo nhưng không còn ở thời điểm bốn tuần sau đó. Đây là căn cứ để đề tài có khảo sát theo dõi sau 28 ngày. Shadish, Cook và Campbell (2002) phân tích các yếu tố làm sai lệch việc suy ra nguyên nhân trong thiết kế không ngẫu nhiên (trưởng thành tự nhiên, sự kiện bên ngoài, hiệu ứng đo lặp lại); đây là giới hạn trực tiếp của đề tài. NIST (2025) và OWASP (2021) là tài liệu tham khảo cho nội dung về mật khẩu, xác thực và cho việc thiết kế hệ thống (kiểm tra quyền ở phía máy chủ); đề tài không đánh giá hệ thống nào bằng các tiêu chuẩn này.
+Lastdrager và cộng sự (2017) đánh giá đào tạo nhận diện lừa đảo cho học sinh tiểu học; theo phần tóm tắt công bố, mức cải thiện tổng thể khoảng 14% ngay sau đào tạo nhưng không còn ở thời điểm bốn tuần sau đó. Đây là căn cứ để đề tài có khảo sát theo dõi sau 28 ngày. Shadish, Cook và Campbell (2002) phân tích các yếu tố làm sai lệch việc suy ra nguyên nhân trong thiết kế không ngẫu nhiên (trưởng thành tự nhiên, sự kiện bên ngoài, hiệu ứng đo lặp lại); đây là cơ sở để đề tài diễn giải kết quả một cách thận trọng (mục 4.4). NIST (2025) và OWASP (2021) là tài liệu tham khảo cho nội dung về mật khẩu, xác thực và cho việc thiết kế hệ thống (kiểm tra quyền ở phía máy chủ); đề tài không đánh giá hệ thống nào bằng các tiêu chuẩn này.
 
 Theo quan sát của nhóm, tài liệu an toàn thông tin cho học sinh thường ở dạng tờ rơi, bài giảng hoặc video, ít có cơ chế đo trước – sau. Phần tổng quan của đề tài tập trung vào các nghiên cứu quốc tế có thiết kế đo lường rõ ràng; việc đối chiếu với các chương trình giáo dục an toàn thông tin đang triển khai trong nước là hướng mở rộng tiếp theo.
 
@@ -193,7 +193,7 @@ Hệ thống có ba vai trò, kiểm tra quyền ở máy chủ cho mọi thao t
 
 ### 3.3.1. Kiểm thử và chạy thử
 
-Nhóm kiểm thử ở bốn mức: kiểm thử tích hợp tự động cho API; kiểm thử đơn vị cho bộ đánh giá mật khẩu; kiểm thử luồng người dùng từ kích hoạt thẻ đến khảo sát theo dõi; kiểm tra giao diện trên trình duyệt ở khổ máy tính và điện thoại. Ngày 14/11/2026, nhóm cài và chạy hệ thống trên một máy tính Windows khác theo hướng dẫn từng bước (XAMPP với PHP 8.5.12, Node.js 24.22.2). Qua ảnh chụp màn hình của nhóm, trang đăng nhập, các mục quản trị, việc giáo viên tạo 20 thẻ và xem trước bản in hai trang A4, và việc học sinh kích hoạt thẻ để vào bảng học tập đều hoạt động đúng thiết kế. Lần chạy thử này chưa gồm việc học sinh làm hết khảo sát và ba hoạt động, tải tệp dữ liệu hay in ra giấy; các nội dung đó được kiểm tra bằng kiểm thử tự động.
+Nhóm kiểm thử ở bốn mức: kiểm thử tích hợp tự động cho API; kiểm thử đơn vị cho bộ đánh giá mật khẩu; kiểm thử luồng người dùng từ kích hoạt thẻ đến khảo sát theo dõi; kiểm tra giao diện trên trình duyệt ở khổ máy tính và điện thoại; kết quả được tổng hợp ở Bảng 7. Ngày 14/11/2026, nhóm cài và chạy hệ thống trên một máy tính Windows khác theo hướng dẫn từng bước (XAMPP với PHP 8.5.12, Node.js 24.22.2). Qua ảnh chụp màn hình của nhóm, trang đăng nhập, các mục quản trị, việc giáo viên tạo 20 thẻ và xem trước bản in hai trang A4, và việc học sinh kích hoạt thẻ để vào bảng học tập đều hoạt động đúng thiết kế. Lần chạy thử này chưa gồm việc học sinh làm hết khảo sát và ba hoạt động, tải tệp dữ liệu hay in ra giấy; các nội dung đó được kiểm tra bằng kiểm thử tự động.
 
 ### 3.3.2. Quy trình triển khai với lớp học
 
@@ -292,7 +292,7 @@ Dữ liệu đo trước – sau – theo dõi do hệ thống ghi nhận **chư
 
 ## 5.1. Kết luận
 
-Đề tài đã khảo sát thực trạng, xây dựng hệ thống web ba hoạt động thực hành về an toàn thông tin cho học sinh trung học cơ sở, kèm mô hình đo kiến thức và hành vi ở ba thời điểm, cơ chế kiểm soát trình tự và công cụ xuất dữ liệu không chứa mã đăng nhập; hệ thống đạt toàn bộ kiểm thử kỹ thuật đã thực hiện. Khảo sát cho thấy học sinh đánh giá việc học nhận diện lừa đảo là rất cần thiết nhưng chưa thật tự tin, và giáo viên cần học liệu hỗ trợ (phạm vi diễn giải nêu ở mục 3.1.3). Đề tài **chưa đưa ra kết luận về hiệu quả của hoạt động học tập** vì dữ liệu đo trước – sau – theo dõi chưa được thu thập; Q1–Q4 là nội dung của giai đoạn nghiên cứu tiếp theo.
+Đề tài đã khảo sát thực trạng, xây dựng hệ thống web ba hoạt động thực hành về an toàn thông tin cho học sinh trung học cơ sở, kèm mô hình đo kiến thức và hành vi ở ba thời điểm, cơ chế kiểm soát trình tự và công cụ xuất dữ liệu không chứa mã đăng nhập; hệ thống đạt toàn bộ kiểm thử kỹ thuật đã thực hiện. Khảo sát cho thấy học sinh đánh giá việc học nhận diện lừa đảo là rất cần thiết nhưng chưa thật tự tin, và giáo viên cần học liệu hỗ trợ (phạm vi diễn giải nêu ở mục 3.1.3). Hiệu quả của hoạt động học tập (Q1–Q4) sẽ được đánh giá ở giai đoạn nghiên cứu tiếp theo theo khung phân tích đã xác định ở Bảng 4.
 
 ## 5.2. Khuyến nghị
 
@@ -320,7 +320,7 @@ Sweeney, L. (2002). k-anonymity: A model for protecting privacy. *International 
 
 **Phiếu A (học sinh, trước khi học; mười câu, câu 0 là xác nhận đồng ý).** (0) Em và phụ huynh đã đọc thông tin nghiên cứu, và phụ huynh đã đồng ý bằng văn bản cho em tham gia chưa? (1) Em đang học khối lớp nào? (2) Em thường dùng thiết bị nào để lên mạng? (chọn nhiều) (3) Mỗi ngày em dùng điện thoại hoặc máy tính khoảng bao lâu để lướt mạng và nhắn tin? (4) Em đã từng gặp loại tin hoặc cuộc gọi nào sau đây? (chọn nhiều) (5) Khi gặp tin nhắn hoặc đường link đáng ngờ, em thường làm gì? (chọn nhiều) (6) Người thân hoặc bạn bè của em đã từng bị lừa qua mạng chưa? (7) Em tự tin đến mức nào khi nhận ra một tin nhắn hoặc cuộc gọi lừa đảo? (8) Theo em, việc học cách nhận diện lừa đảo mạng cần thiết đến mức nào? (9) Em thích học theo cách nào? (chọn nhiều)
 
-**Phiếu B (học sinh, phản hồi sau khi học; bảy câu).** (1) Hoạt động nào em thấy hữu ích nhất? (2) Các hoạt động dễ sử dụng đến mức nào? (3) Phần giải thích sau mỗi lựa chọn rõ ràng đến mức nào? (4) Điều quan trọng nhất em học được là gì? (5) Em có muốn trao đổi thêm về trải nghiệm của mình không? (6) Em có góp ý nào khác không?
+**Phiếu B (học sinh, phản hồi sau khi học; bảy câu, câu 0 là xác nhận đồng ý).** (0) Câu xác nhận đồng ý tham gia, như Phiếu A. (1) Hoạt động nào em thấy hữu ích nhất? (2) Các hoạt động dễ sử dụng đến mức nào? (3) Phần giải thích sau mỗi lựa chọn rõ ràng đến mức nào? (4) Điều quan trọng nhất em học được là gì? (5) Em có muốn trao đổi thêm về trải nghiệm của mình không? (6) Em có góp ý nào khác không?
 
 **Phiếu C (giáo viên; mười một câu).** (0) Thầy/cô đã đọc thông tin nghiên cứu và đồng ý tham gia chưa? (1) Thầy/cô đang dạy khối nào? (chọn nhiều) (2) Theo thầy/cô, học sinh gặp nguy cơ lừa đảo qua mạng ở mức nào? (3) Thầy/cô đã từng gặp trường hợp học sinh bị lừa qua mạng chưa? (4) Thầy/cô tự tin đến mức nào khi hướng dẫn học sinh về an toàn số? (5) Nội dung nào cần ưu tiên nhất? (chọn nhiều) (6) Hình thức tổ chức nào phù hợp nhất với lớp? (chọn nhiều) (7) Rào cản lớn nhất khi triển khai? (chọn nhiều) (8) Thầy/cô có sẵn sàng giới thiệu học sinh sử dụng hệ thống này không? (9) Thầy/cô lo ngại đến mức nào về quyền riêng tư dữ liệu của học sinh? (10) Thầy/cô có góp ý nào khác không?
 
@@ -351,16 +351,7 @@ Câu kiến thức có ba lựa chọn và một đáp án đúng (không liệt
 
 Số liệu tính từ 100 bản hợp lệ mỗi phiếu. Dấu † đánh dấu lựa chọn có trong dữ liệu nhưng không còn trong biểu mẫu hiện hành (biểu mẫu được hoàn thiện diễn đạt trong quá trình thu thập); lựa chọn hiện hành có số 0 là lựa chọn không có người chọn. Câu chọn nhiều có thể cộng lớn hơn 100%; tỷ lệ của lựa chọn cũ và mới không so sánh trực tiếp được.
 
-**Bảng C1. Phiếu A: Người thân hoặc bạn bè từng bị lừa qua mạng chưa?**
-
-| Lựa chọn | Số người chọn | Tỷ lệ (%) |
-|---|---|---|
-| Có | 52 | 52 |
-| Không | 27 | 27 |
-| Em không biết | 0 | 0 |
-| Không biết † | 21 | 21 |
-
-**Bảng C2. Phiếu B: Hoạt động nào em thấy hữu ích nhất?**
+**Bảng C1. Phiếu B: Hoạt động nào em thấy hữu ích nhất?**
 
 | Lựa chọn | Số người chọn | Tỷ lệ (%) |
 |---|---|---|
@@ -371,7 +362,9 @@ Số liệu tính từ 100 bản hợp lệ mỗi phiếu. Dấu † đánh dấ
 | Trò chơi/đố vui † | 18 | 18 |
 | Video hướng dẫn † | 15 | 15 |
 
-**Bảng C3. Phiếu C: Rào cản lớn nhất khi triển khai?**
+Đây là câu hỏi chọn một; tổng các lựa chọn bằng 100 (43 + 12 + 12 + 18 + 15), trong đó 57 bản thuộc các phương án † của phiên bản biểu mẫu trước.
+
+**Bảng C2. Phiếu C: Rào cản lớn nhất khi triển khai?**
 
 | Lựa chọn | Số người chọn | Tỷ lệ (%) |
 |---|---|---|
