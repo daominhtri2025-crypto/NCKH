@@ -55,7 +55,7 @@ Hệ thống **chạy trên trình duyệt, không cài phần mềm** cho học
 ### Câu 9. "Em có dùng AI để làm dự án không? Phần nào do em tự làm?"
 
 **Gợi ý trả lời:**
-Có, và chúng em đã **khai báo trung thực** trong báo cáo (Phụ lục G) và phiếu khai báo công nghệ số: nhóm dùng công cụ **Claude Code** để hỗ trợ viết mã, gỡ lỗi và soạn tài liệu. Quan trọng là **hệ thống không gọi AI khi học sinh sử dụng**, nội dung hoạt động là dữ liệu tĩnh do nhóm soạn. **Số liệu khảo sát được tính trực tiếp từ dữ liệu thu thập**, không lấy từ AI. Các phần chúng em có thể giải thích tới nơi tới chốn gồm: câu hỏi nghiên cứu, thiết kế đo ba thời điểm, vì sao tách hai mã, và các hạn chế.
+Có, và chúng em đã **khai báo trung thực** trong báo cáo (Phụ lục D) và phiếu khai báo công nghệ số: nhóm dùng công cụ **Claude Code** để hỗ trợ viết mã, gỡ lỗi và soạn tài liệu. Quan trọng là **hệ thống không gọi AI khi học sinh sử dụng**, nội dung hoạt động là dữ liệu tĩnh do nhóm soạn. **Số liệu khảo sát được tính trực tiếp từ dữ liệu thu thập**, không lấy từ AI. Các phần chúng em có thể giải thích tới nơi tới chốn gồm: câu hỏi nghiên cứu, thiết kế đo ba thời điểm, vì sao tách hai mã, và các hạn chế.
 
 *Chuẩn bị bắt buộc:* trước ngày thi, **cả nhóm đọc lại và tự giải thích được** từng phần: luồng kích hoạt thẻ, ba hoạt động, hai mã, cách đo. Nếu không giải thích được phần nào, hãy nói thật và tập trung vào phần mình hiểu. Chỉ trả lời "do nhóm tự làm" khi đúng sự thật.
 
@@ -116,5 +116,5 @@ Về dữ liệu: **không thu họ tên, email, số điện thoại**; chỉ t
 - [ ] Đối chiếu số liệu khảo sát với bảng gốc (một số lựa chọn có số người chọn trùng nhau).
 - [ ] Bổ sung thông tin cách chọn mẫu và thời điểm sửa biểu mẫu để trả lời Câu 4 chắc chắn.
 - [ ] Nếu kịp, thu dữ liệu thử nhỏ để có ít nhất bản mô tả trước–sau (chỉ báo cáo mô tả, không kết luận).
-- [ ] Cả nhóm đọc lại báo cáo, Phụ lục G, và thử giải thích mã nguồn/luồng hoạt động bằng lời của mình (Câu 9).
+- [ ] Cả nhóm đọc lại báo cáo, Phụ lục D, và thử giải thích mã nguồn/luồng hoạt động bằng lời của mình (Câu 9).
 - [ ] Mở thử bản trình chiếu poster trên đúng thiết bị sẽ dùng khi thi; chuẩn bị bản dự phòng.
