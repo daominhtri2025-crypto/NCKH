@@ -1,6 +1,6 @@
 # Bộ tài liệu chuẩn bị phòng vệ: "An toàn số học đường"
 
-Tài liệu này đóng vai Hội đồng giám khảo, đặt câu hỏi phản biện và gợi ý trả lời, khớp với báo cáo 13 trang, dàn ý slide 5 trang và kịch bản thuyết trình hai học sinh. Nguyên tắc: **trả lời thẳng, có bằng chứng, trung thực và nêu hướng phát triển**. Mọi con số lấy từ báo cáo. Không nhắc tên trường, học sinh hay giáo viên.
+Tài liệu này đóng vai Hội đồng giám khảo, đặt câu hỏi phản biện và gợi ý trả lời, khớp với báo cáo 13 trang, poster 4 trang và kịch bản thuyết trình hai học sinh. Nguyên tắc: **trả lời thẳng, có bằng chứng, trung thực và nêu hướng phát triển**. Mọi con số lấy từ báo cáo. Không nhắc tên trường, học sinh hay giáo viên.
 
 **Cách dùng:** đọc câu hỏi, tự trả lời thành tiếng 30–45 giây, rồi so với gợi ý. Nhớ **ý chính in đậm**, nói bằng lời của mình.
 
