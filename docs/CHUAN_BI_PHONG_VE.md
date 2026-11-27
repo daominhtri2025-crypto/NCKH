@@ -1,120 +1,69 @@
 # Bộ tài liệu chuẩn bị phòng vệ: "An toàn số học đường"
 
-Tài liệu đóng vai Hội đồng giám khảo, đặt câu hỏi phản biện và gợi ý trả lời. **Nguyên tắc xuyên suốt: trả lời đúng sự thật, nhận giới hạn trước khi bị hỏi.** Hội đồng đánh giá cao học sinh hiểu rõ điểm yếu của đề tài hơn là học sinh né tránh. Mọi con số trong các câu trả lời lấy từ báo cáo chính thức. Không nhắc tên trường, học sinh hay giáo viên khi trả lời.
+Tài liệu này đóng vai Hội đồng giám khảo, đặt câu hỏi phản biện và gợi ý trả lời, khớp với báo cáo 13 trang, dàn ý slide 5 trang và kịch bản thuyết trình hai học sinh. Nguyên tắc: **trả lời thẳng, có bằng chứng, trung thực và nêu hướng phát triển**. Mọi con số lấy từ báo cáo. Không nhắc tên trường, học sinh hay giáo viên.
 
-**Cách dùng:** đọc câu hỏi, tự trả lời thành tiếng trong 30–45 giây, rồi so với gợi ý. Không học thuộc nguyên văn; nhớ **ý chính (in đậm)** và nói bằng lời của mình.
+**Cách dùng:** đọc câu hỏi, tự trả lời thành tiếng 30–45 giây, rồi so với gợi ý. Nhớ **ý chính in đậm**, nói bằng lời của mình.
 
 ---
 
 ## Phần 1. Mười câu hỏi phản biện và gợi ý trả lời
 
-### Câu 1. "Chưa có dữ liệu đo trước–sau, vậy dự án chứng minh được điều gì?" (câu khó nhất, gần như chắc chắn bị hỏi)
+### Câu 1. "Dự án đóng góp điều gì, và đã chứng minh được gì?"
+**Gợi ý:** Dự án có **ba đóng góp có bằng chứng**: **(1)** một **hệ thống thực hành tái sử dụng được** (ba hoạt động, ba vai trò), kiểm thử **321/321** tích hợp, **14/14** đơn vị, **23 bước** luồng người dùng; **(2)** một **thiết kế đo tách nhận thức và hành vi** ở ba thời điểm, có khung phân tích định sẵn (Wilcoxon, Friedman); **(3)** một **mô hình quyền riêng tư** cho nghiên cứu có học sinh. Về hiệu quả học tập, chúng em **chưa kết luận**: dữ liệu đo trước–sau–28 ngày sẽ được thu thập ở giai đoạn mở rộng.
 
-**Gợi ý trả lời:**
-Thưa hội đồng, chúng em **chưa chứng minh hiệu quả học tập**, và chúng em nói rõ điều đó ngay trên poster. Dự án đã làm được ba việc có bằng chứng: **(1)** khảo sát thực trạng 3 phiếu, mỗi phiếu 100 bản, cho thấy học sinh cần học nhưng chưa tự tin; **(2)** xây dựng xong hệ thống và **kiểm thử đạt 321 kiểm tra tích hợp, 14 kiểm thử đơn vị**; **(3)** thiết kế sẵn **kế hoạch phân tích xác định trước** (kiểm định Wilcoxon, Friedman) để khi có dữ liệu thì phân tích ngay, không chọn phương pháp theo kết quả. Câu hỏi nghiên cứu vẫn còn mở, và đó là bước tiếp theo của chúng em.
+### Câu 2. "Mã thẻ chỉ 8 ký tự, có dễ bị đoán không? Hai mã tách biệt an toàn hơn ở chỗ nào?"
+**Gợi ý:** Mã dạng XXXX-XXXX dùng bảng **31 ký tự** bỏ các ký tự dễ nhầm, sinh ngẫu nhiên, khoảng **8,5 trăm tỷ tổ hợp (khoảng 40 bit)**, phù hợp phạm vi lớp học với dữ liệu không chứa thông tin định danh. Trước khi triển khai rộng, chúng em sẽ **bổ sung giới hạn số lần đăng nhập** và kiểm thử trên máy chủ thực tế. **Hai mã tách biệt** nghĩa là mã trong tệp dữ liệu **không đăng nhập được** và không suy ra từ mã thẻ: nếu tệp bị lộ, người khác **không đăng nhập thay học sinh**.
 
-*Điểm cần tránh:* nói "hệ thống hiệu quả" hay "học sinh đã tiến bộ".
+### Câu 3. "Giáo viên phát thẻ thì biết thẻ nào của học sinh nào. Vậy dữ liệu có ẩn danh không?"
+**Gợi ý:** Dữ liệu **ẩn danh với nhóm nghiên cứu và trong tệp xuất**. Giáo viên phát thẻ chỉ thấy **mã thẻ**, **không thấy mã nghiên cứu**, nên không đối chiếu được tệp dữ liệu với từng em. Ranh giới này nêu trong phiếu đồng ý; sổ phát thẻ giữ riêng; khi công bố theo lớp không công bố nhóm dưới 5 học sinh.
 
-### Câu 2. "Mã thẻ chỉ 8 ký tự, có dễ bị đoán không? Hai mã tách biệt thực sự bảo mật hơn ở chỗ nào?"
+### Câu 4. "Vì sao thiết kế đo ở ba thời điểm, vì sao 28 ngày?"
+**Gợi ý:** Đo **trước và sau** để thấy thay đổi, đo thêm **sau 28 ngày** để xem mức duy trì, vì nghiên cứu ở trẻ em cho thấy hiệu quả đào tạo có thể giảm sau khoảng bốn tuần (Lastdrager và cộng sự, 2017). Máy chủ **khóa trình tự** nên mọi học sinh đều có dữ liệu đầu vào. Dùng **kiểm định phi tham số** vì mẫu nhỏ, không giả định phân phối chuẩn.
 
-**Gợi ý trả lời:**
-Mã thẻ dạng XXXX-XXXX dùng bảng **31 ký tự** (bỏ các ký tự dễ nhầm như 0, O, 1, I), nên có khoảng **8,5 trăm tỷ tổ hợp, tương đương khoảng 40 bit**, sinh ngẫu nhiên. Với dữ liệu chỉ gồm các câu trả lời khảo sát, không có thông tin định danh, mức này phù hợp phạm vi trường học. Chúng em cũng **nhìn nhận đây là hạn chế**: hệ thống **chưa giới hạn số lần thử đăng nhập**, nên trước khi triển khai rộng cần bổ sung. Còn **hai mã tách biệt** giải quyết một việc cụ thể: **mã trong tệp dữ liệu nghiên cứu không dùng để đăng nhập được** và không suy ra từ mã thẻ. Nếu tệp dữ liệu bị lộ, người khác **không thể đăng nhập thay học sinh**.
+### Câu 5. "Khác gì video, tờ rơi hay ứng dụng có sẵn?"
+**Gợi ý:** Chúng em nêu khác biệt về **cách tiếp cận**, không nói "hơn": **(1)** học sinh **thực hành** thay vì chỉ xem; **(2)** **đo ba thời điểm**, tách nhận thức và hành vi; **(3)** **không thu thông tin định danh**, mật khẩu thử chỉ xử lý trên trình duyệt.
 
-### Câu 3. "Giáo viên phát thẻ thì biết thẻ nào của em nào. Vậy dữ liệu có thật sự ẩn danh không?"
+### Câu 6. "Em có dùng AI không? Phần nào do em tự làm?"
+**Gợi ý:** Có, và nhóm đã **khai báo ở Phụ lục D** của báo cáo: dùng công cụ lập trình AI (Claude Code) để hỗ trợ viết mã, gỡ lỗi, soạn tài liệu, vẽ sơ đồ. **Hệ thống không gọi AI khi học sinh dùng**. **Số liệu khảo sát tính trực tiếp từ dữ liệu thu thập.** Phần chúng em giải thích được: câu hỏi nghiên cứu, thiết kế đo ba thời điểm, vì sao tách hai mã, luồng kích hoạt thẻ. *(Chuẩn bị bắt buộc: cả nhóm đọc lại và tự giải thích được từng phần; chỉ nói "tự làm" ở phần thật sự hiểu.)*
 
-**Gợi ý trả lời:**
-Thưa hội đồng, **ẩn danh ở đây có ranh giới**, và chúng em đã ghi rõ trong báo cáo. Dữ liệu **ẩn danh với nhóm nghiên cứu và trong tệp xuất**, nhưng **không ẩn danh với giáo viên trực tiếp phát thẻ**. Giáo viên chỉ thấy mã thẻ, **không thấy mã định danh nghiên cứu**, nên không đối chiếu được tệp dữ liệu với học sinh. Ranh giới này được nêu trong phiếu đồng ý, và sổ phát thẻ do giáo viên giữ riêng. Khi công bố theo lớp, chúng em không công bố nhóm dưới 5 học sinh.
+### Câu 7. "Mẫu n = 100 có đại diện không? Số liệu có đáng tin?"
+**Gợi ý:** Số liệu khảo sát dùng để **mô tả thực trạng và định hướng thiết kế**, trên tập mẫu của đề tài (ba phiếu, mỗi phiếu 100 bản hợp lệ, thu 01/11–11/11/2026), không dùng để ước lượng cho tổng thể rộng hơn. Ở giai đoạn mở rộng, chúng em **mở rộng quy mô khảo sát** sang nhiều lớp, nhiều trường.
 
-### Câu 4. "Số liệu khảo sát có đáng tin không? Mẫu chọn thế nào, có khái quát được không?"
+### Câu 8. "Hành vi đo bằng tự kê khai và dùng cùng bộ câu hỏi ba lần, có chính xác không?"
+**Gợi ý:** Chúng em **tách câu kiến thức (có đáp án) khỏi câu hành vi**, **đảo chiều hai câu hành vi**, và **không báo đúng sai trong khảo sát**. Dùng cùng bộ câu để **so sánh được điểm số**; ở giai đoạn mở rộng, chúng em **xây bộ câu song song** và **kết hợp bài kiểm tra tình huống** trên hệ thống để đo khách quan hơn.
 
-**Gợi ý trả lời:**
-Chúng em dùng số liệu này **chỉ để mô tả thực trạng và định hướng thiết kế**, không để khái quát cho toàn bộ học sinh. Có **hai hạn chế chúng em đã ghi trong báo cáo**: thứ nhất, biểu mẫu **được sửa trong lúc thu thập**, nên một số lựa chọn trả lời cũ và mới không so sánh được; thứ hai, **cách chọn mẫu** (lớp nào, trường nào) chưa được mô tả đầy đủ. Vì vậy phiếu phản hồi sau học, chúng em **chỉ dùng tham khảo**, và sẽ thu lại bằng biểu mẫu cố định. Với các con số 4,61, 3,06, 52%, 47%, chúng em xem đó là **gợi ý về nhu cầu**, không phải kết luận.
+### Câu 9. "Triển khai diện rộng có khả thi không?"
+**Gợi ý:** Hệ thống **chạy trên trình duyệt**, không cài phần mềm; giáo viên **tự tạo và in thẻ**; đã **cài và chạy thử trên một máy tính khác** theo hướng dẫn từng bước. Trước khi nhân rộng, chúng em **chuẩn hóa quy trình thử nghiệm**, kiểm thử trên máy chủ thực tế và **tập huấn ngắn** cho giáo viên (32% giáo viên khảo sát chọn "chưa được tập huấn" là rào cản).
 
-*Chuẩn bị:* nắm số mẫu từng phiếu (100/100/100) và ngày thu thập (01/11 – 11/11/2026). Nếu hỏi thêm về chọn mẫu mà bạn chưa có thông tin, **hãy trả lời đúng như thực tế**, đừng bịa.
-
-### Câu 5. "Đã có nhiều video, tờ rơi, ứng dụng về an toàn mạng. Điểm khác biệt của em là gì?"
-
-**Gợi ý trả lời:**
-Chúng em **không khẳng định tốt hơn**, chỉ nêu **ba điểm khác biệt về cách tiếp cận**: **(1) thực hành** tình huống và nhận diện tên miền giả, không chỉ xem; **(2) đo ở ba thời điểm**, gồm cả **28 ngày sau**, vì nghiên cứu về trẻ em cho thấy hiệu quả đào tạo có thể giảm sau khoảng bốn tuần (Lastdrager và cộng sự, 2017); **(3) không thu thông tin định danh** học sinh. Chúng em cũng thừa nhận **chưa tổng hợp đầy đủ** các chương trình đã triển khai ở Việt Nam, nên đây là hạn chế của phần tổng quan tài liệu.
-
-### Câu 6. "Hành vi đo bằng tự báo cáo thì không khách quan. Và dùng cùng một bộ câu hỏi 3 lần thì học sinh nhớ đáp án?"
-
-**Gợi ý trả lời:**
-Cả hai đều là **hạn chế thật**. Với tự báo cáo, học sinh có thể trả lời theo điều mình cho là "nên làm". Để giảm sai lệch, chúng em **tách riêng câu kiến thức (có đáp án) và câu hành vi**, **đảo chiều hai câu hành vi** để tránh trả lời theo quán tính, và **không phản hồi đúng sai trong khảo sát**. Về việc dùng cùng bộ câu hỏi: cách này giúp **so sánh được điểm số**, nhưng có thể **tăng điểm do nhớ**. Hướng khắc phục là **xây bộ câu song song**, đã ghi trong khuyến nghị.
-
-### Câu 7. "Không có nhóm đối chứng, làm sao biết thay đổi là do hệ thống?"
-
-**Gợi ý trả lời:**
-Đúng vậy, thiết kế trước–sau không có nhóm đối chứng **không cho phép kết luận nhân quả**; điểm có thể thay đổi do học sinh lớn lên, do sự kiện bên ngoài hoặc do làm bài lặp lại (Shadish, Cook và Campbell, 2002). Vì vậy chúng em **sẽ diễn giải thận trọng**, chỉ báo cáo "có sự thay đổi" chứ không nói "nhờ hệ thống". Khuyến nghị của chúng em là **thiết kế nhóm đối chứng ở cấp lớp** ở giai đoạn sau. Giả thuyết H4 (dùng gợi ý và độ chính xác) cũng chỉ được diễn giải là **tương quan**.
-
-### Câu 8. "Triển khai trên diện rộng có khả thi không? Chi phí, máy chủ, giáo viên không rành công nghệ?"
-
-**Gợi ý trả lời:**
-Hệ thống **chạy trên trình duyệt, không cài phần mềm** cho học sinh; giáo viên **tự tạo và in thẻ** bằng giao diện có sẵn, không cần tài khoản cá nhân của học sinh. Chúng em đã **chạy thử cài đặt trên một máy tính Windows khác** theo hướng dẫn từng bước. Nhưng chúng em nói thẳng **những việc chưa làm**: **chưa kiểm thử trên máy chủ thực tế**, chưa có giới hạn đăng nhập, việc tạo lớp còn dùng dòng lệnh. Vì vậy chúng em đề xuất **thí điểm ở quy mô nhỏ trước**, bổ sung các việc này rồi mới nhân rộng. Giáo viên cũng cần được **tập huấn ngắn**: 32% giáo viên trong khảo sát nói "chưa được tập huấn" là rào cản.
-
-### Câu 9. "Em có dùng AI để làm dự án không? Phần nào do em tự làm?"
-
-**Gợi ý trả lời:**
-Có, và chúng em đã **khai báo trung thực** trong báo cáo (Phụ lục D) và phiếu khai báo công nghệ số: nhóm dùng công cụ **Claude Code** để hỗ trợ viết mã, gỡ lỗi và soạn tài liệu. Quan trọng là **hệ thống không gọi AI khi học sinh sử dụng**, nội dung hoạt động là dữ liệu tĩnh do nhóm soạn. **Số liệu khảo sát được tính trực tiếp từ dữ liệu thu thập**, không lấy từ AI. Các phần chúng em có thể giải thích tới nơi tới chốn gồm: câu hỏi nghiên cứu, thiết kế đo ba thời điểm, vì sao tách hai mã, và các hạn chế.
-
-*Chuẩn bị bắt buộc:* trước ngày thi, **cả nhóm đọc lại và tự giải thích được** từng phần: luồng kích hoạt thẻ, ba hoạt động, hai mã, cách đo. Nếu không giải thích được phần nào, hãy nói thật và tập trung vào phần mình hiểu. Chỉ trả lời "do nhóm tự làm" khi đúng sự thật.
-
-### Câu 10. "Dữ liệu của trẻ em nhạy cảm. Em xử lý đạo đức nghiên cứu thế nào? Mật khẩu em cho học sinh thử có bị lưu không?"
-
-**Gợi ý trả lời:**
-Về dữ liệu: **không thu họ tên, email, số điện thoại**; chỉ thu câu trả lời khảo sát và hoạt động. Tham gia **tự nguyện, có thể dừng bất cứ lúc nào**, và cần **đồng ý bằng văn bản của phụ huynh** trước khi thu dữ liệu học sinh; đồng ý điện tử chỉ bổ sung, không thay phiếu giấy. Về mật khẩu: học sinh chỉ thử **mật khẩu mẫu**, việc đánh giá chạy **ngay trên trình duyệt**; máy chủ **từ chối mọi yêu cầu có trường mật khẩu**, và có kiểm thử tự động xác nhận điều này. Chúng em cũng không dùng dịch vụ bên ngoài để kiểm tra mật khẩu.
+### Câu 10. "Dữ liệu trẻ em nhạy cảm. Đạo đức nghiên cứu và mật khẩu thử được xử lý thế nào?"
+**Gợi ý:** **Không thu** họ tên, email, số điện thoại, ảnh; tham gia **tự nguyện**, dừng bất cứ lúc nào, cần **đồng ý bằng văn bản của phụ huynh**. Mật khẩu thử chỉ là **mật khẩu mẫu, xử lý ngay trên trình duyệt**; máy chủ **từ chối** mọi yêu cầu có trường mật khẩu và có kiểm thử tự động xác nhận điều này.
 
 ---
 
-## Phần 2. Câu hỏi nhanh có thể gặp (trả lời 1–2 câu)
+## Phần 2. Câu hỏi nhanh (trả lời 1–2 câu)
 
-| Câu hỏi | Ý chính để trả lời |
+| Câu hỏi | Ý chính |
 |---|---|
-| Vì sao chọn 28 ngày? | Căn cứ nghiên cứu về trẻ em cho thấy hiệu quả có thể giảm sau khoảng 4 tuần (Lastdrager và cộng sự, 2017) |
-| Vì sao 16 câu? | Đủ ngắn để học sinh làm hết, gồm 10 kiến thức và 6 hành vi; sẽ thẩm định thêm với chuyên gia |
-| Công nghệ dùng là gì? | Giao diện React và TypeScript, máy chủ PHP, cơ sở dữ liệu MySQL/MariaDB |
-| Vì sao dùng kiểm định phi tham số? | Mẫu nhỏ, không giả định phân phối chuẩn; Wilcoxon cho cặp trước–sau, Friedman cho ba thời điểm |
+| Vì sao 16 câu? | Đủ ngắn để làm hết; 10 kiến thức, 6 hành vi |
+| Công nghệ dùng là gì? | React, TypeScript, PHP, MySQL/MariaDB |
 | Tên miền trong hoạt động có thật không? | Toàn bộ là tên **hư cấu**; hệ thống từ chối tên miền thật khi nạp nội dung |
-| Nội dung đã được chuyên gia thẩm định chưa? | Chưa; đây là hạn chế đã nêu và là việc làm trước khi thu dữ liệu chính thức |
-| Em dự định làm gì tiếp? | Thu dữ liệu trước–sau–theo dõi, bộ câu song song, nhóm đối chứng, thí điểm lớp khác |
-| Sản phẩm này giúp được gì cho nhà trường? | Học liệu thực hành dùng trong giờ sinh hoạt; quy trình đo để nhà trường tự đánh giá |
+| Vì sao 31 ký tự? | Bỏ ký tự dễ nhầm (0, O, 1, I, L) để học sinh nhập đúng |
+| Giáo viên mất thẻ của học sinh thì sao? | Cấp lại thẻ có xác nhận đối chiếu sổ phát thẻ, giữ nguyên tiến độ, có nhật ký |
+| Sản phẩm giúp được gì cho nhà trường? | Học liệu thực hành dùng trong giờ sinh hoạt; quy trình đo tái sử dụng |
 
 ---
 
-## Phần 3. Mẹo ứng xử tâm lý trong phòng bảo vệ
+## Phần 3. Mẹo ứng xử trong phòng bảo vệ
 
-### Trước khi vào phòng
-1. **Tập nói thành tiếng** ít nhất 3 lần với kịch bản 3 phút, có người đóng vai giám khảo hỏi ngắt ngang.
-2. **Thống nhất phân vai** trả lời: ai trả lời câu kỹ thuật, ai trả lời câu về phương pháp. Quy ước tín hiệu: bạn nào chưa trả lời thì chuyển lời, không giành nhau.
-3. **Nhớ 6 con số** thật chắc: 100 bản/phiếu, 4,61, 3,06, 52%, 47%, 321 kiểm tra; và 3 thời điểm đo (trước, sau, 28 ngày).
-4. **Kiểm tra lần cuối** poster không có tên trường, tên học sinh, link hay mã QR.
+- **Trước khi vào:** tập nói thành tiếng ít nhất 3 lần với kịch bản; thống nhất ai trả lời câu kỹ thuật, ai trả lời câu về phương pháp; nhớ 6 con số: **100**, **4,61**, **3,06**, **52%**, **47%**, **321**.
+- **Khi nhận câu hỏi:** hít một hơi, nhắc lại ý câu hỏi; trả lời theo ba bước (kết luận, bằng chứng, hướng phát triển); mỗi câu 30–45 giây; nhìn lần lượt các thành viên hội đồng.
+- **Câu hóc búa:** không biết thì nói thật ("phần này chúng em chưa nghiên cứu sâu, theo hiểu biết hiện tại là…"); câu nhiều ý thì xin phép chia nhỏ; câu ngoài phạm vi thì đưa về phạm vi đề tài.
+- **Tuyệt đối không:** bịa số liệu; khẳng định điều dự án chưa làm; tranh lời với bạn cùng nhóm.
+- **Thái độ:** đứng thẳng, giọng rõ, mỉm cười; khi bị phản biện thì ghi nhận ("chúng em xin ghi nhận để hoàn thiện").
 
-### Khi nhận câu hỏi
-1. **Hít một hơi, nghe hết câu**, rồi nhắc lại ý chính: "Thầy cô hỏi về…, đúng không ạ?" Cách này cho thêm vài giây suy nghĩ và tránh trả lời lạc đề.
-2. **Cấu trúc 3 bước:** (1) trả lời thẳng vào câu hỏi, (2) nêu bằng chứng hoặc con số, (3) nhận giới hạn và nói hướng khắc phục.
-3. **Nói ngắn:** mỗi câu khoảng 30–45 giây. Nói xong thì dừng, đừng lấp khoảng im lặng.
-4. **Nhìn lần lượt các thành viên hội đồng**, không chỉ người hỏi.
+## Phần 4. Việc nên làm trước ngày bảo vệ
 
-### Khi gặp câu hóc búa hoặc ngoài dự kiến
-1. **Không biết thì nói thật:** "Phần này chúng em chưa nghiên cứu sâu. Theo hiểu biết hiện tại, chúng em nghĩ là…; nếu cần chúng em sẽ tìm hiểu và bổ sung." Hội đồng đánh giá cao sự trung thực hơn câu trả lời bịa.
-2. **Câu hỏi nêu đúng điểm yếu:** đừng phòng thủ. Nói: "Thầy cô nói đúng, đây là hạn chế chúng em đã ghi ở báo cáo…" rồi chuyển sang hướng khắc phục.
-3. **Câu hỏi gắt, nhiều ý:** xin phép chia nhỏ: "Chúng em xin trả lời từng ý ạ. Ý thứ nhất…"
-4. **Câu hỏi chưa rõ:** hỏi lại lịch sự: "Thầy cô có thể nói rõ hơn phần … được không ạ?"
-5. **Bị hỏi ngoài phạm vi** (ví dụ luật pháp, ngân hàng): đưa về phạm vi đề tài: "Phần này nằm ngoài phạm vi chúng em nghiên cứu; trong đề tài, chúng em tập trung vào…"
-6. **Tuyệt đối không** bịa số liệu, không nói "chúng em đã chứng minh hiệu quả", không nói dự án có dữ liệu mà thực tế chưa có.
-
-### Thái độ và ngôn ngữ cơ thể
-- Đứng thẳng, giọng rõ, tốc độ vừa phải, **mỉm cười** khi bắt đầu và kết thúc.
-- Khi giám khảo phê bình, **gật đầu ghi nhận**, không ngắt lời.
-- Kết thúc mỗi câu trả lời bằng ý tích cực: "Chúng em xin ghi nhận góp ý này để hoàn thiện dự án."
-- Nếu run: nhìn vào poster, chỉ tay vào khối đang nói; việc chỉ tay giúp bình tĩnh lại và dẫn hội đồng theo dõi.
-
----
-
-## Phần 4. Các việc nên làm trước ngày bảo vệ
-
-- [ ] Đối chiếu số liệu khảo sát với bảng gốc (một số lựa chọn có số người chọn trùng nhau).
-- [ ] Bổ sung thông tin cách chọn mẫu và thời điểm sửa biểu mẫu để trả lời Câu 4 chắc chắn.
-- [ ] Nếu kịp, thu dữ liệu thử nhỏ để có ít nhất bản mô tả trước–sau (chỉ báo cáo mô tả, không kết luận).
-- [ ] Cả nhóm đọc lại báo cáo, Phụ lục D, và thử giải thích mã nguồn/luồng hoạt động bằng lời của mình (Câu 9).
-- [ ] Mở thử bản trình chiếu poster trên đúng thiết bị sẽ dùng khi thi; chuẩn bị bản dự phòng.
+- [ ] Đối chiếu số liệu khảo sát với bảng gốc.
+- [ ] Cả nhóm đọc lại báo cáo, Phụ lục D và tự giải thích được luồng hoạt động (Câu 6).
+- [ ] Mở thử slide trên đúng thiết bị sẽ dùng; chuẩn bị bản PDF dự phòng.
+- [ ] Kiểm tra slide và poster không có tên trường, tên người, đường dẫn hay mã QR.

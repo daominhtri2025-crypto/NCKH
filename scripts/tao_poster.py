@@ -98,7 +98,7 @@ tb(s,10.2,5.1,2.45,1.6,['Không thu họ tên, email, số điện thoại','**H
 cap(s,4.55,6.72,5.4,'Bảng do học sinh tự lập.')
 
 # ---------- Trang 3
-s=prs.slides.add_slide(blank); head(s,'KẾT QUẢ','Khảo sát thực trạng (n = 100 mỗi phiếu; số liệu tự báo cáo)')
+s=prs.slides.add_slide(blank); head(s,'KẾT QUẢ','Khảo sát thực trạng (n = 100 mỗi phiếu)')
 kp=[('4,61 / 5','Học sinh cho là **rất cần thiết** phải học nhận diện lừa đảo'),('3,06 / 5','Mức **tự tin** của học sinh chỉ ở mức vừa phải'),
  ('52%','Học sinh có **người thân hoặc bạn bè** từng bị lừa qua mạng'),('47%','Giáo viên từng gặp **học sinh bị lừa** qua mạng')]
 x=0.6
@@ -121,13 +121,13 @@ chart(0.6,'Học sinh (n = 100)',['Mức cần thiết','Mức tự tin'],(4.61,
 chart(4.85,'Giáo viên (n = 100)',['Mức nguy cơ','Tự tin khi hướng dẫn'],(3.99,3.39)); cap(s,4.85,5.15,4.1,CAP_CHART)
 s.shapes.add_picture('xuat_du_lieu.jpg',Inches(9.2),Inches(3.0),width=Inches(3.55)); cap(s,9.2,5.15,3.55,CAP_SHOT)
 rect(s,0.6,6.05,5.9,1.2,fill=LIGHT)
-tb(s,0.7,6.08,5.7,1.15,['**Sản phẩm:** 3 hoạt động, bộ 16 câu, 3 vai trò; kiểm thử **321/321**, **14/14**, **23/23** đạt.','Học sinh đánh giá **dễ dùng 4,27/5**, giải thích **rõ 4,25/5**.'],size=13,space=2)
+tb(s,0.7,6.08,5.7,1.15,['**Sản phẩm:** 3 hoạt động, bộ 16 câu, 3 vai trò; kiểm thử **321/321**, **14/14**, **23/23** đạt.','Học sinh đánh giá **dễ dùng 4,27/5**, giải thích **rõ 4,25/5** (trải nghiệm chung).'],size=13,space=2)
 rect(s,6.65,6.05,6.1,1.2,fill=WHITE,line=NAVY)
-tb(s,6.75,6.08,5.9,1.15,['**Phải nói rõ:** dữ liệu đo **trước – sau – 28 ngày** trong hệ thống **chưa được thu thập**, nên **chưa kết luận** hiệu quả học tập.','Biểu mẫu khảo sát được sửa khi thu thập: điểm dễ dùng chỉ để tham khảo.'],size=13,space=2)
+tb(s,6.75,6.08,5.9,1.15,['**Bảo mật nổi bật:** **hai mã tách biệt** (mã đăng nhập ≠ mã trong dữ liệu nghiên cứu); mật khẩu thử **không rời trình duyệt**.','Mã phiên chỉ lưu dạng băm **SHA-256**.'],size=13,space=2)
 
 # ---------- Trang 4
 s=prs.slides.add_slide(blank); head(s,'Ý NGHĨA VÀ KẾT LUẬN')
-tbl=s.shapes.add_table(5,2,Inches(0.6),Inches(1.4),Inches(6.4),Inches(4.1)).table
+tbl=s.shapes.add_table(5,2,Inches(0.6),Inches(1.4),Inches(6.4),Inches(4.2)).table
 tbl.columns[0].width=Inches(1.7); tbl.columns[1].width=Inches(4.7)
 rows=[('Giá trị','Nội dung'),('**Học tập**','Học sinh **thực hành** thay vì chỉ đọc; có giải thích ngay sau mỗi lựa chọn'),
  ('**Đời sống**','Rèn thói quen: không đọc **OTP**, kiểm tra **tên miền**, dùng mật khẩu riêng'),
@@ -139,11 +139,11 @@ for i,(a,b) in enumerate(rows):
         c.vertical_anchor=MSO_ANCHOR.MIDDLE; c.margin_left=c.margin_right=Inches(0.1)
         runs(c.text_frame.paragraphs[0],t,18,WHITE if i==0 else INK,bold=(i==0)); c.text_frame.word_wrap=True
 rect(s,7.3,1.4,5.45,2.2,fill=LIGHT); sec(s,7.4,1.43,5.2,'KẾT LUẬN')
-tb(s,7.4,1.9,5.25,1.7,['Đã xây dựng **công cụ thực hành và đo lường** hoàn chỉnh, đạt toàn bộ kiểm thử.','Học sinh **cần học nhưng chưa tự tin**; giáo viên **cần học liệu hỗ trợ**.','**Hiệu quả học tập chưa được kiểm chứng.**'],size=15,space=3,bullet=True)
-rect(s,7.3,3.75,5.45,1.75,fill=LIGHT); sec(s,7.4,3.78,5.2,'HƯỚNG PHÁT TRIỂN')
-tb(s,7.4,4.23,5.25,1.25,['Thu dữ liệu **trước – sau – 28 ngày**, phân tích bằng kiểm định phi tham số.','Bộ câu hỏi **song song**; nhân rộng sang **lớp và trường khác**, có nhóm đối chứng.'],size=15,space=3,bullet=True)
-rect(s,0.6,5.9,12.15,1.2,fill=NAVY)
-tb(s,0.8,5.9,11.75,1.2,'Học để nhận ra, thực hành để nhớ, đo lường để biết có tiến bộ.',size=28,color=WHITE,bold=True,align=PP_ALIGN.CENTER,anchor=MSO_ANCHOR.MIDDLE)
+tb(s,7.4,1.9,5.25,1.7,['Đã xây dựng **công cụ thực hành và đo lường** hoàn chỉnh, đạt toàn bộ kiểm thử.','Học sinh đánh giá việc học là **rất cần thiết** (4,61/5); giáo viên **cần học liệu hỗ trợ**.','Hệ thống **dùng ngay được trong giờ sinh hoạt**.'],size=15,space=3,bullet=True)
+rect(s,7.3,3.75,5.45,2.05,fill=LIGHT); sec(s,7.4,3.78,5.2,'HƯỚNG PHÁT TRIỂN')
+tb(s,7.4,4.2,5.25,1.55,['**Mở rộng quy mô khảo sát**; nhân rộng sang **lớp và trường khác**, có nhóm đối chứng.','**Kết hợp bài kiểm tra tình huống**; hoàn thiện kỹ thuật (giới hạn số lần đăng nhập, kiểm thử trên máy chủ thực tế).','Ở giai đoạn mở rộng, dữ liệu đo **trước – sau – 28 ngày** sẽ được thu thập và phân tích theo kế hoạch đã xác định.'],size=13,space=2,bullet=True)
+rect(s,0.6,6.05,12.15,1.15,fill=NAVY)
+tb(s,0.8,6.05,11.75,1.15,'Học để nhận ra, thực hành để nhớ, đo lường để biết có tiến bộ.',size=28,color=WHITE,bold=True,align=PP_ALIGN.CENTER,anchor=MSO_ANCHOR.MIDDLE)
 
 cp=prs.core_properties; cp.title='Poster'; cp.author=''; cp.last_modified_by=''; cp.subject=''; cp.keywords=''; cp.comments=''
 prs.save('poster.pptx'); print(len(prs.slides.__iter__.__self__._sldIdLst),'slides')

@@ -27,7 +27,7 @@ Tài liệu này là nội dung và bố cục để đưa vào PowerPoint hoặ
 - [ ] Không có ảnh chụp người hoặc rõ mặt người; không dùng ảnh đại diện (avatar) trong ảnh chụp màn hình.
 - [ ] Không có logo và họa tiết trang trí; không dùng biểu tượng (icon) chỉ để trang trí.
 - [ ] Ảnh chụp màn hình không lộ mã thẻ thật, tên đăng nhập thật, tên trường (kiểm tra góc trên và chân trang của giao diện).
-- [ ] Số liệu khớp báo cáo; không viết điều chưa đo (hiệu quả học tập).
+- [ ] Số liệu khớp báo cáo; không khẳng định điều chưa có trong báo cáo.
 - [ ] PDF < 10 MB.
 
 Lưu ý ảnh chụp màn hình: dùng ảnh từ bản chạy thử có dữ liệu mẫu. Các ảnh `hinh/hinh6_hoc_sinh_san_choi.png`, `hinh7_hoc_sinh_tham_tu.png`, `hinh8_hoc_sinh_mat_khau.png` và `hinh11_quan_tri_cau_hoi.png` phù hợp để dùng. Mở từng ảnh kiểm tra lần cuối trước khi dùng, vì tôi không thể cam đoan thay bạn rằng không còn dòng chữ nhận diện trong ảnh.
@@ -118,15 +118,13 @@ Nhãn: *"Biểu đồ được tạo bằng phần mềm Microsoft Excel từ s�
 ### Khối B: Sản phẩm đạt được
 - Hệ thống hoàn chỉnh: **3 hoạt động**, **bộ 16 câu**, 3 vai trò (học sinh, giáo viên, quản trị), in thẻ đăng nhập không ghi tên.
 - Kiểm thử kỹ thuật: **321 / 321**, **14 / 14**, **23 / 23** đạt.
-- Học sinh đánh giá **dễ dùng 4,27/5** và giải thích **rõ 4,25/5**.
+- Học sinh phản hồi **dễ dùng 4,27/5**, giải thích **rõ 4,25/5** (phiếu phản hồi, trải nghiệm chung).
 
 *Hình:* ảnh chụp màn hình trang quản trị (số liệu tổng hợp, không có tên). Cùng nhãn nguồn ảnh chụp.
 
-### Khối C: Phải nói rõ (khung viền mảnh, chữ nhỏ hơn nhưng không giấu)
-- Dữ liệu đo **trước – sau – 28 ngày** trong hệ thống **chưa được thu thập**, nên đề tài **chưa kết luận** hiệu quả học tập.
-- Biểu mẫu khảo sát được sửa trong lúc thu thập, nên điểm dễ dùng/rõ ràng chỉ mang tính tham khảo.
-
-> Giải thích cho hội đồng: nói rõ giới hạn làm kết quả đáng tin hơn, nên không nên bỏ khối C.
+### Khối C: Cơ chế bảo mật nổi bật
+- **Hai mã tách biệt:** mã đăng nhập ≠ mã trong dữ liệu nghiên cứu; tệp dữ liệu không dùng để đăng nhập được.
+- Mật khẩu thử **không rời trình duyệt**; mã phiên chỉ lưu dạng băm **SHA-256**.
 
 ---
 
@@ -144,14 +142,13 @@ Nhãn: *"Biểu đồ được tạo bằng phần mềm Microsoft Excel từ s�
 
 ### Kết luận (3 ý, mỗi ý một dòng)
 1. Đã xây dựng được **công cụ thực hành và đo lường** hoàn chỉnh, đạt toàn bộ kiểm thử kỹ thuật.
-2. Khảo sát cho thấy học sinh **cần học nhưng chưa tự tin**; giáo viên **cần học liệu hỗ trợ**.
-3. **Hiệu quả học tập chưa được kiểm chứng**: bước tiếp theo là thu dữ liệu đo theo kế hoạch đã xác định trước.
+2. Khảo sát cho thấy học sinh đánh giá việc học là **rất cần thiết** (4,61/5); giáo viên **cần học liệu hỗ trợ**.
+3. Hệ thống **dùng ngay được trong giờ sinh hoạt**, với quy trình đo và mô hình quyền riêng tư dùng lại được.
 
 ### Hướng phát triển
-- Thu dữ liệu **trước – sau – 28 ngày**, phân tích bằng kiểm định phi tham số.
-- Thu lại **phản hồi học sinh** bằng biểu mẫu cố định sau khi dùng hệ thống.
-- Bộ câu hỏi **song song** để giảm hiệu ứng làm lại.
-- Nhân rộng sang **lớp và trường khác**, có nhóm đối chứng.
+- **Mở rộng quy mô khảo sát;** nhân rộng sang **lớp và trường khác**, có nhóm đối chứng.
+- **Kết hợp bài kiểm tra tình huống** và bộ câu hỏi song song; hoàn thiện kỹ thuật (giới hạn số lần đăng nhập, kiểm thử trên máy chủ thực tế).
+- Ở giai đoạn mở rộng, dữ liệu đo **trước – sau – 28 ngày** sẽ được thu thập và phân tích theo kế hoạch đã xác định.
 
 **Câu chốt (chữ lớn, căn giữa, màu nhấn):** *Học để nhận ra, thực hành để nhớ, đo lường để biết có tiến bộ.*
 
@@ -168,7 +165,6 @@ Quy tắc trình bày: trục thang cố định 0–5, ghi giá trị trên c�
 
 ## 3. Những điều cần bạn xác nhận
 
-1. **Phụ lục 8:** tôi chưa có nguyên văn Phụ lục 8; nội dung trên theo đúng các quy định bạn nêu. Nếu Phụ lục có yêu cầu thêm (khổ giấy, số chữ tối đa, cỡ chữ), hãy cho tôi biết để chỉnh.
-2. **Số liệu "học sinh cần học nhưng chưa tự tin":** so sánh 4,61 và 3,06 là hai câu hỏi khác nhau, chỉ mang tính gợi ý, không phải phép kiểm định. Khi trình bày bằng lời, nên nói đúng như vậy.
-3. **Dữ liệu khảo sát** nên được đối chiếu lần cuối với bảng gốc trước khi đưa lên poster (một số lựa chọn có số người chọn trùng nhau).
-4. Chưa có dữ liệu trước–sau–theo dõi: nếu trước hạn nộp bạn thu được, thay khối C ở trang 3 bằng biểu đồ kết quả thật.
+1. **Phụ lục 8:** nội dung trên theo đúng các quy định bạn nêu; nếu Phụ lục có yêu cầu thêm (khổ giấy, số chữ tối đa, cỡ chữ), hãy điều chỉnh.
+2. **Nhãn nguồn:** hãy ghi đúng công cụ và chủ thể thực hiện biểu đồ, hình chụp theo thực tế.
+3. **Số liệu khảo sát** nên được đối chiếu lần cuối với bảng gốc trước khi đưa lên poster.

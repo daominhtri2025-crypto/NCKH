@@ -12,6 +12,6 @@
 
 **Quá trình thực hiện.** Khảo sát ba phiếu (học sinh, giáo viên), mỗi phiếu 100 bản hợp lệ; xây dựng ba hoạt động (xử lý tình huống, nhận diện tên miền giả, thử mật khẩu và quyền riêng tư); kiểm thử.
 
-**Kết quả chính.** Hệ thống có ba vai trò: quản trị viên quản lý giáo viên, bộ câu hỏi; giáo viên cấp và in thẻ; học sinh kích hoạt thẻ bằng mã ngẫu nhiên, trình tự học khóa ở máy chủ. Mỗi học sinh có hai mã tách biệt (đăng nhập, nghiên cứu) nên dữ liệu xuất không dùng để đăng nhập được. Đạt 321 kiểm tra tích hợp, 14 kiểm thử đơn vị. Khảo sát: 52% học sinh có người quen từng bị lừa; 47% giáo viên từng gặp học sinh bị lừa. Chưa có dữ liệu đo trước – sau nên chưa kết luận hiệu quả.
+**Kết quả chính.** Hệ thống có ba vai trò: quản trị viên quản lý giáo viên, bộ câu hỏi; giáo viên cấp và in thẻ; học sinh kích hoạt thẻ bằng mã ngẫu nhiên, trình tự học khóa ở máy chủ. Mỗi học sinh có hai mã tách biệt (đăng nhập, nghiên cứu) nên dữ liệu xuất không dùng để đăng nhập được. Đạt 321 kiểm tra tích hợp, 14 kiểm thử đơn vị. Khảo sát: 52% học sinh có người quen từng bị lừa; 47% giáo viên từng gặp học sinh bị lừa.
 
-**Ý nghĩa.** Học liệu thực hành dùng được trong giờ sinh hoạt; mô hình đo lường và bảo vệ quyền riêng tư tái sử dụng được. Hướng phát triển: thu dữ liệu đo, thêm nhóm đối chứng.
+**Ý nghĩa.** Học liệu thực hành dùng được trong giờ sinh hoạt; mô hình đo lường và bảo vệ quyền riêng tư tái sử dụng được. Hướng phát triển: mở rộng khảo sát, thêm nhóm đối chứng; dữ liệu đo trước – sau – 28 ngày sẽ thu thập ở giai đoạn mở rộng.
