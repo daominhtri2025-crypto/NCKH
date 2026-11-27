@@ -5,7 +5,6 @@
 // Tùy chọn (biến môi trường):
 //   SMOKE_BASE=http://localhost:5173   địa chỉ đi qua proxy Vite (mặc định), hoặc http://127.0.0.1:8000 để gọi thẳng API
 //   SMOKE_CLASS=8A1                    mã lớp (dùng cho thông báo hướng dẫn)
-//   SMOKE_ADMIN_TOKEN=...              nếu có, kiểm tra thêm chức năng xuất CSV
 //
 // Yêu cầu: Node.js 18 trở lên (có sẵn fetch). Không cần thư viện ngoài.
 
@@ -18,7 +17,6 @@ const content = (name) => JSON.parse(readFileSync(join(here, '..', 'api', 'conte
 
 const BASE = (process.env.SMOKE_BASE || 'http://localhost:5173').replace(/\/$/, '');
 const CLASS = process.env.SMOKE_CLASS || '8A1';
-const ADMIN_TOKEN = process.env.SMOKE_ADMIN_TOKEN || '';
 
 let passed = 0;
 let failed = 0;
@@ -176,16 +174,8 @@ async function main() {
   check('Delayed-test khóa và có ngày mở dự kiến (mặc định 28 ngày)',
     delayed?.status === 'locked' && !!delayed?.available_at, JSON.stringify(delayed));
 
-  if (ADMIN_TOKEN) {
-    section('11. Xuất dữ liệu nghiên cứu (CSV)');
-    const csv = await call('GET', '/admin/export/wide.csv', { headers: { 'X-Admin-Token': ADMIN_TOKEN } });
-    check('Xuất wide CSV bằng token quản trị (200)', csv.status === 200);
-    check('CSV có dòng của học sinh thử nghiệm', typeof csv.body === 'string' && csv.body.includes(code));
-    check('CSV không chứa cột định danh thật', typeof csv.body === 'string' && !/email|phone|ho_ten/i.test(csv.body.split('\n')[0]));
-  } else {
-    section('11. Xuất dữ liệu (bỏ qua)');
-    console.log('  - Đặt SMOKE_ADMIN_TOKEN để kiểm tra chức năng xuất CSV.');
-  }
+  section('11. Xuất dữ liệu (bỏ qua)');
+  console.log('  - Việc xuất CSV (kể cả kiểm tra tệp không chứa mã thẻ đăng nhập) được kiểm thử trong bộ kiểm thử tích hợp: DB_NAME=antoanso_test php api/tests/run.php');
 
   console.log(`\nKết quả: ${passed} đạt, ${failed} lỗi.`);
   if (failed > 0) {
