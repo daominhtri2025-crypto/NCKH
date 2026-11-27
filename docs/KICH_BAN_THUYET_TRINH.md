@@ -1,95 +1,79 @@
-# Kịch bản thuyết trình poster 4 trang (khoảng 4 phút 45 giây, hai học sinh luân phiên)
+# Kịch bản thuyết trình poster 4 trang (3 phút, hai học sinh luân phiên)
 
-Quy ước: **HS A** và **HS B** là hai học sinh trình bày. Chữ thường là **lời nói**; chữ nghiêng trong ngoặc vuông là *[chỉ dẫn thao tác]*, không đọc thành tiếng. Kịch bản bám sát từng khối trên poster 4 trang trình chiếu (tiêu đề, thẻ số liệu, biểu đồ, bảng, khung nội dung), nên người nói chỉ tay đúng vị trí đang nhắc tới. Không nhắc tên trường, tên người, đường dẫn hay mã QR.
+Quy ước: **HS A** và **HS B** là hai học sinh trình bày. Chữ thường là **lời nói**; chữ nghiêng trong ngoặc vuông là *[chỉ dẫn thao tác]*, không đọc thành tiếng. Kịch bản bám sát từng khối trên poster 4 trang trình chiếu, nên chỉ tay đúng vị trí đang nhắc tới. Không nhắc tên trường, tên người, đường dẫn hay mã QR. Tốc độ chuẩn khoảng 145 chữ mỗi phút; mỗi trang một thông điệp, mỗi thông điệp một con số "chốt".
 
-| Trang poster | Nội dung trên poster | Người nói | Thời gian |
+| Trang poster | Thông điệp chốt | Người nói | Thời gian |
 |---|---|---|---|
-| 1 | Tên dự án, Mục tiêu, Phương pháp, sơ đồ sáu bước | HS A | 0:00 – 1:00 |
-| 2 | Quá trình thực hiện 4 bước, bảng ba hoạt động, khung quyền riêng tư | HS B | 1:00 – 2:05 |
-| 3 | Kết quả: bốn thẻ số liệu, hai biểu đồ, khối Sản phẩm, khối Bảo mật | HS A rồi HS B | 2:05 – 3:30 |
-| 4 | Ý nghĩa và kết luận: bảng giá trị, Kết luận, Hướng phát triển, câu chốt | HS A rồi HS B | 3:30 – 4:45 |
+| 1 | Vấn đề thật, giải pháp thực hành và đo được | HS A | 0:00 – 0:45 |
+| 2 | Làm đủ quy trình, kiểm thử 321/321, quyền riêng tư | HS B | 0:45 – 1:25 |
+| 3 | Nhu cầu có thật (4,61; 52%), hai mã tách biệt | HS A rồi HS B | 1:25 – 2:20 |
+| 4 | Giá trị, kết luận, hướng phát triển | HS A rồi HS B | 2:20 – 3:00 |
 
 ---
 
-## Trang 1. Tên dự án, mục tiêu, phương pháp (HS A, 0:00 – 1:00)
+## Trang 1. Vấn đề và mục tiêu (HS A, 0:00 – 0:45)
 
-*[Đứng thẳng, nhìn hội đồng, mỉm cười. Tay hướng về dòng tiêu đề lớn ở đầu poster.]*
+*[Đứng thẳng, nhìn hội đồng, mỉm cười; tay hướng về tiêu đề lớn.]*
 
-**HS A:** Kính chào hội đồng giám khảo. Dự án của chúng em là **"An toàn số học đường"**, lĩnh vực **Công nghệ thông tin, An toàn thông tin trong giáo dục**: hệ thống web thực hành nhận diện **lừa đảo trực tuyến** cho học sinh THCS.
+**HS A:** Kính chào hội đồng. Dự án của chúng em là **"An toàn số học đường"**, hệ thống web thực hành nhận diện **lừa đảo trực tuyến** cho học sinh THCS.
 
-*[Chỉ vào khối "Mục tiêu" bên trái.]*
+*[Chỉ vào khối "Mục tiêu".]*
 
-Học sinh dùng mạng mỗi ngày nhưng ít được **thực hành** nhận diện lừa đảo, và việc học hiếm khi được **đo**. Mục tiêu của chúng em là một công cụ **thực hành và đo lường** mà **không thu thông tin định danh** học sinh.
+Học sinh dùng mạng mỗi ngày nhưng ít được **thực hành** nhận diện lừa đảo, và việc học hiếm khi được **đo**. Mục tiêu của chúng em: một công cụ **thực hành và đo lường**, **không thu thông tin định danh**.
 
-*[Chỉ sang khối "Phương pháp" bên phải.]*
+*[Chỉ dọc sơ đồ sáu ô ở cuối trang.]*
 
-Phương pháp: **khảo sát** ba phiếu, mỗi phiếu **100 bản hợp lệ**; xây dựng hệ thống **ba hoạt động**; đo ở **ba thời điểm** bằng bộ **16 câu** (10 kiến thức, 6 hành vi); công nghệ **React, PHP, MySQL**.
+Mỗi học sinh đi qua sáu bước: **kích hoạt thẻ**, **đầu vào**, **ba hoạt động**, **sau học**, chờ **28 ngày**, **theo dõi**, với cùng bộ **16 câu hỏi** ở ba thời điểm đo.
 
-*[Chỉ dọc theo sơ đồ sáu ô ở cuối trang, từ trái sang phải.]*
+*[Chuyển lời cho HS B.]*
 
-Sơ đồ này là hành trình của một học sinh: **kích hoạt thẻ**, **đầu vào**, **ba hoạt động**, **sau học**, chờ **28 ngày**, **theo dõi**. Ba ô đậm là ba thời điểm đo.
+## Trang 2. Quá trình thực hiện (HS B, 0:45 – 1:25)
 
-*[Quay sang HS B, chuyển lời, nhẹ nhàng đưa tay về phía trang 2.]*
+*[Chỉ nhanh bốn thẻ hàng trên, rồi bảng ba hoạt động.]*
 
-## Trang 2. Quá trình thực hiện (HS B, 1:00 – 2:05)
+**HS B:** Chúng em đi **bốn bước**: khảo sát thực trạng, thiết kế, xây dựng và kiểm thử. Hệ thống có **ba hoạt động**: **Sân chơi tình huống**, như trong ảnh này; **Thám tử không gian mạng**, phân biệt địa chỉ thật giả bằng cách **đọc tên miền từ phải sang trái**; và **Phòng thí nghiệm tài khoản**, thử mật khẩu ngay trên trình duyệt.
 
-*[HS B chỉ lần lượt bốn thẻ ở hàng trên, từ trái sang phải.]*
+*[Nhấn mạnh con số.]*
 
-**HS B:** Quá trình gồm **bốn bước**: **khảo sát thực trạng**; **thiết kế** với sáu yêu cầu, trong đó có khóa trình tự ở máy chủ và không thu danh tính; **xây dựng ba hoạt động**; và **kiểm thử** với **321** kiểm tra tích hợp, **14** kiểm thử đơn vị, **23** bước luồng người dùng, tất cả đều đạt.
+Kiểm thử đạt **321 trên 321** kiểm tra tích hợp, **14 trên 14** kiểm thử đơn vị và **23 bước** luồng người dùng.
 
-*[Chỉ vào bảng ba hoạt động ở giữa hàng dưới, và ảnh chụp màn hình bên trái.]*
+*[Chỉ khung xanh đậm bên phải.]*
 
-Bảng này là ba hoạt động. **Sân chơi tình huống** có năm kịch bản, như ảnh bên cạnh, mỗi lựa chọn có giải thích ngay. **Thám tử không gian mạng** phân loại **mười hai địa chỉ** bằng cách **đọc tên miền từ phải sang trái**. **Phòng thí nghiệm tài khoản** cho thử mật khẩu và làm checklist quyền riêng tư.
-
-*[Chỉ vào khung xanh đậm bên phải, "Bảo vệ quyền riêng tư".]*
-
-Khung này là điều chúng em coi trọng: **không thu họ tên, email, số điện thoại**; **hai mã tách biệt**; mật khẩu thử **không rời trình duyệt**.
+Và **không thu họ tên, email, số điện thoại**.
 
 *[Chuyển lời cho HS A.]*
 
-## Trang 3. Kết quả (HS A rồi HS B, 2:05 – 3:30)
+## Trang 3. Kết quả (HS A rồi HS B, 1:25 – 2:20)
 
-*[HS A chỉ vào bốn thẻ số liệu ở hàng trên, nhấn mạnh từng con số.]*
+*[HS A chỉ bốn thẻ số liệu, nhấn từng con số.]*
 
-**HS A:** Kết quả khảo sát, **100 bản mỗi phiếu**: học sinh đánh giá việc học này **rất cần thiết, 4,61 trên 5**, nhưng mức **tự tin** chỉ **3,06**; **52%** có người quen từng bị lừa qua mạng; **47%** giáo viên từng gặp học sinh bị lừa.
+**HS A:** Khảo sát **100 bản mỗi phiếu** cho thấy học sinh đánh giá việc học này **rất cần thiết, 4,61 trên 5**, nhưng mức tự tin chỉ **3,06**. **52%** có người quen từng bị lừa qua mạng; **47%** giáo viên từng gặp học sinh bị lừa.
 
-*[Chỉ vào biểu đồ bên trái rồi biểu đồ ở giữa.]*
+*[Chỉ hai biểu đồ cột, rồi chuyển lời.]*
 
-Biểu đồ trái là khoảng cách giữa **cần thiết** và **tự tin** của học sinh; biểu đồ giữa là giáo viên, nguy cơ **3,99**, tự tin khi hướng dẫn **3,39**. Hai con số của học sinh đến từ hai câu hỏi khác nhau, nên chỉ là gợi ý rằng các em cần học nhưng chưa thật tự tin.
+Giáo viên cũng đánh giá nguy cơ **3,99**. Các em cần học, và thầy cô cần công cụ hỗ trợ.
 
-*[Chuyển lời. HS B chỉ vào khối "Sản phẩm" ở góc dưới bên trái.]*
+*[HS B chỉ khung "Bảo mật nổi bật".]*
 
-**HS B:** Khối Sản phẩm: **ba hoạt động, bộ 16 câu, ba vai trò** (học sinh, giáo viên, quản trị viên), kiểm thử **321/321, 14/14, 23/23**. Học sinh phản hồi **dễ dùng 4,27**, giải thích **rõ 4,25**.
-
-*[Chỉ vào ảnh chụp màn hình bên phải.]*
-
-Ảnh bên phải là màn hình quản trị viên **xuất dữ liệu ẩn danh**, không có họ tên hay mã thẻ.
-
-*[Chỉ vào khung viền đen "Bảo mật nổi bật".]*
-
-Khung cạnh đó nhắc điểm nổi bật: nhờ **hai mã tách biệt**, ai có tệp dữ liệu cũng **không đăng nhập thay học sinh được**; mã phiên chỉ lưu dạng **băm SHA-256**. Giáo viên phát thẻ không thấy mã nghiên cứu nên không đối chiếu được tệp với từng em.
+**HS B:** Điểm chúng em tâm đắc nhất là **hai mã tách biệt**: mã thẻ chỉ để đăng nhập, mã nghiên cứu chỉ có trong dữ liệu và **không đăng nhập được**. Vì vậy ai có tệp dữ liệu cũng **không thể đăng nhập thay học sinh**. Giáo viên phát thẻ không thấy mã nghiên cứu, nên không đối chiếu được từng em.
 
 *[Chuyển sang trang 4.]*
 
-## Trang 4. Ý nghĩa và kết luận (HS A rồi HS B, 3:30 – 4:45)
+## Trang 4. Ý nghĩa và hướng phát triển (HS A rồi HS B, 2:20 – 3:00)
 
-*[HS A chỉ vào bảng bốn dòng bên trái.]*
+*[HS A chỉ bảng giá trị, rồi khối "Kết luận".]*
 
-**HS A:** Bảng bên trái nêu bốn giá trị: **học tập** bằng thực hành; **đời sống**, rèn thói quen không đọc **OTP**, kiểm tra **tên miền**; **khoa học**, mô hình đo **tách nhận thức và hành vi**; **quyền riêng tư**, nghiên cứu với học sinh **không thu danh tính**.
+**HS A:** Về ý nghĩa, học sinh **thực hành thay vì chỉ đọc**, rèn thói quen không đọc **mã OTP** và kiểm tra **tên miền**. Chúng em đã có **công cụ hoàn chỉnh**, **dùng ngay được trong giờ sinh hoạt**.
 
-*[Chỉ vào khối "Kết luận".]*
+*[Chuyển lời; HS B chỉ khối "Hướng phát triển".]*
 
-Kết luận: chúng em đã xây dựng **công cụ thực hành và đo lường** hoàn chỉnh, đạt toàn bộ kiểm thử, **dùng ngay được trong giờ sinh hoạt**.
+**HS B:** Tiếp theo, chúng em **mở rộng quy mô khảo sát**, nhân rộng sang **lớp và trường khác**, có nhóm đối chứng; ở giai đoạn mở rộng, dữ liệu đo **trước, sau và 28 ngày sau** sẽ được thu thập và phân tích theo kế hoạch đã xác định.
 
-*[Chuyển lời. HS B chỉ vào khối "Hướng phát triển".]*
+*[Chỉ dải xanh đậm; cả hai nhìn hội đồng.]*
 
-**HS B:** Hướng phát triển: **mở rộng quy mô khảo sát**, nhân rộng sang **lớp và trường khác**, có nhóm đối chứng; **kết hợp bài kiểm tra tình huống**; hoàn thiện kỹ thuật như giới hạn số lần đăng nhập. Và ở giai đoạn mở rộng, dữ liệu đo **trước, sau và 28 ngày sau** sẽ được thu thập và phân tích theo kế hoạch đã xác định.
+**HS A:** *Học để nhận ra,* **HS B:** *thực hành để nhớ, đo lường để biết có tiến bộ.* Chúng em xin cảm ơn hội đồng.
 
-*[Chỉ vào dải xanh đậm ở cuối trang; cả hai nhìn hội đồng, nói lần lượt hai nửa câu.]*
-
-**HS A:** *Học để nhận ra,* **HS B:** *thực hành để nhớ, đo lường để biết có tiến bộ.* Chúng em xin cảm ơn hội đồng và sẵn sàng trả lời câu hỏi.
-
-*[Cúi đầu nhẹ, mỉm cười, đứng sẵn tại chỗ để nhận câu hỏi.]*
+*[Cúi đầu nhẹ, mỉm cười, đứng sẵn để nhận câu hỏi.]*
 
 ---
 
@@ -112,4 +96,4 @@ Quy tắc: nhắc lại ý câu hỏi, trả lời thẳng, nêu bằng chứng 
 
 **Mẹo xử lý câu ngoài dự kiến:** nhắc lại câu hỏi để có thêm vài giây; nếu chưa chắc, nói "phần này chúng em chưa nghiên cứu sâu, theo hiểu biết hiện tại là…"; không bịa số liệu; câu nào đúng phần mình hiểu thì nhận trả lời, không tranh lời với bạn.
 
-**Nếu thiếu giờ:** bỏ câu về sáu yêu cầu thiết kế ở trang 2 và câu "Hai con số của học sinh…" ở trang 3; giữ nguyên các con số và câu hướng phát triển.
+**Giữ đúng giờ:** nếu sắp quá 3 phút, bỏ câu "Giáo viên cũng đánh giá nguy cơ 3,99…" ở trang 3; không bỏ con số 4,61, 52%, 321/321 và câu hướng phát triển. Các chi tiết còn lại (sáu yêu cầu thiết kế, 4,27/4,25, SHA-256, ba vai trò) dành cho phần hỏi đáp.
