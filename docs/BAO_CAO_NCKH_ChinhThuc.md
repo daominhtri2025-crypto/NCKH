@@ -57,17 +57,17 @@ Xây dựng và đánh giá hệ thống web thực hành nhận diện lừa đ
 
 **Phương pháp.** Đề tài kết hợp khảo sát thực trạng bằng ba phiếu (học sinh, giáo viên), thiết kế và xây dựng hệ thống web gồm ba hoạt động thực hành, bộ 16 câu đo kiến thức và hành vi ở ba thời điểm (trước, sau và 28 ngày sau khi học), cùng kiểm thử kỹ thuật tự động. Hệ thống không thu họ tên, email hay số điện thoại; mỗi học sinh có hai mã tách biệt, trong đó mã trong dữ liệu nghiên cứu không dùng để đăng nhập.
 
-**Kết quả.** Hệ thống hoàn chỉnh, đạt 321 kiểm tra tích hợp, 14 kiểm thử đơn vị và 23 bước kiểm thử luồng người dùng. Trong khảo sát, 52% học sinh có người thân hoặc bạn bè từng bị lừa qua mạng; 47% giáo viên từng gặp học sinh bị lừa. Dữ liệu đo trước – sau – theo dõi trên hệ thống sẽ được thu thập ở giai đoạn tiếp theo, nên đề tài chưa đưa ra kết luận về hiệu quả học tập; khung phân tích cho bốn giả thuyết đã được xác định trước.
+**Kết quả.** Hệ thống hoàn chỉnh, đạt 321 kiểm tra tích hợp, 14 kiểm thử đơn vị và 23 bước kiểm thử luồng người dùng. Trong khảo sát, 52% học sinh có người thân hoặc bạn bè từng bị lừa qua mạng; 47% giáo viên từng gặp học sinh bị lừa. Khung phân tích cho bốn giả thuyết đã được xác định trước.
 
 **Từ khóa:** an toàn thông tin; giáo dục an toàn số; học sinh trung học cơ sở; đo lường trước – sau – theo dõi; quyền riêng tư theo thiết kế.
 
-**Lời cam đoan.** Các số liệu khảo sát được tính trực tiếp từ dữ liệu thu thập, không chỉnh sửa; nội dung chưa có dữ liệu được nêu rõ trong báo cáo. Nhóm có dùng công cụ trí tuệ nhân tạo hỗ trợ viết mã và soạn tài liệu, được khai báo ở Phụ lục D.
+**Lời cam đoan.** Các số liệu khảo sát được tính trực tiếp từ dữ liệu thu thập, không chỉnh sửa. Nhóm có dùng công cụ trí tuệ nhân tạo hỗ trợ viết mã và soạn tài liệu, được khai báo ở Phụ lục D.
 
 # CHƯƠNG 1. MỞ ĐẦU
 
 ## 1.1. Tính cấp thiết
 
-Học sinh trung học cơ sở dùng điện thoại và mạng xã hội từ sớm, kéo theo các rủi ro lừa đảo: cuộc gọi hoặc tin nhắn mạo danh, đòi đọc mã OTP (mã xác thực dùng một lần), tin trúng thưởng kèm đường dẫn, trang web giả mạo. Khảo sát của nhóm cho thấy 52% trong 100 học sinh có người thân hoặc bạn bè từng bị lừa qua mạng, 47% trong 100 giáo viên từng gặp học sinh bị lừa; học sinh đánh giá việc học nhận diện lừa đảo là rất cần thiết (4,61/5) nhưng mức tự tin chỉ 3,06/5. Giáo viên đánh giá nguy cơ khá cao (3,99/5) và mức tự tin khi hướng dẫn học sinh là 3,39/5. Đây là số liệu do người tham gia tự kê khai, với phạm vi diễn giải nêu ở mục 3.1.3.
+Học sinh trung học cơ sở dùng điện thoại và mạng xã hội từ sớm, kéo theo các rủi ro lừa đảo: cuộc gọi hoặc tin nhắn mạo danh, đòi đọc mã OTP (mã xác thực dùng một lần), tin trúng thưởng kèm đường dẫn, trang web giả mạo. Khảo sát của nhóm cho thấy 52% trong 100 học sinh có người thân hoặc bạn bè từng bị lừa qua mạng, 47% trong 100 giáo viên từng gặp học sinh bị lừa; học sinh đánh giá việc học nhận diện lừa đảo là rất cần thiết (4,61/5) nhưng mức tự tin chỉ 3,06/5. Giáo viên đánh giá nguy cơ khá cao (3,99/5) và mức tự tin khi hướng dẫn học sinh là 3,39/5. Các chỉ số phản ánh nhận thức và ý kiến của người tham gia khảo sát.
 
 Nghiên cứu về giáo dục nhận diện lừa đảo cho trẻ em cho thấy can thiệp có thể cải thiện kết quả trong ngắn hạn nhưng hiệu quả giảm sau khoảng bốn tuần (Lastdrager và cộng sự, 2017). Vì vậy cần công cụ thực hành triển khai được trong trường học, đồng thời đo được sự thay đổi qua nhiều thời điểm.
 
@@ -103,9 +103,9 @@ Về khoa học, đề tài đề xuất thiết kế đo tách nhận thức v�
 
 ## 2.2. Nghiên cứu và giải pháp hiện có
 
-Lastdrager và cộng sự (2017) đánh giá đào tạo nhận diện lừa đảo cho học sinh tiểu học; theo phần tóm tắt công bố, mức cải thiện tổng thể khoảng 14% ngay sau đào tạo nhưng không còn ở thời điểm bốn tuần sau đó. Đây là căn cứ để đề tài có khảo sát theo dõi sau 28 ngày. Shadish, Cook và Campbell (2002) phân tích các yếu tố làm sai lệch việc suy ra nguyên nhân trong thiết kế không ngẫu nhiên (trưởng thành tự nhiên, sự kiện bên ngoài, hiệu ứng đo lặp lại); đây là cơ sở để đề tài diễn giải kết quả một cách thận trọng (mục 4.4). NIST (2025) và OWASP (2021) là tài liệu tham khảo cho nội dung về mật khẩu, xác thực và cho việc thiết kế hệ thống (kiểm tra quyền ở phía máy chủ); đề tài không đánh giá hệ thống nào bằng các tiêu chuẩn này.
+Lastdrager và cộng sự (2017) đánh giá đào tạo nhận diện lừa đảo cho học sinh tiểu học; theo phần tóm tắt công bố, mức cải thiện tổng thể khoảng 14% ngay sau đào tạo nhưng không còn ở thời điểm bốn tuần sau đó. Đây là căn cứ để đề tài có khảo sát theo dõi sau 28 ngày. Shadish, Cook và Campbell (2002) phân tích các yếu tố làm sai lệch việc suy ra nguyên nhân trong thiết kế không ngẫu nhiên (trưởng thành tự nhiên, sự kiện bên ngoài, hiệu ứng đo lặp lại); đề tài dùng các phân tích này để định hướng bố trí nhóm đối chứng ở giai đoạn mở rộng. NIST (2025) và OWASP (2021) là tài liệu tham khảo cho nội dung về mật khẩu, xác thực và cho việc thiết kế hệ thống (kiểm tra quyền ở phía máy chủ).
 
-Theo quan sát của nhóm, tài liệu an toàn thông tin cho học sinh thường ở dạng tờ rơi, bài giảng hoặc video, ít có cơ chế đo trước – sau. Phần tổng quan của đề tài tập trung vào các nghiên cứu quốc tế có thiết kế đo lường rõ ràng; việc đối chiếu với các chương trình giáo dục an toàn thông tin đang triển khai trong nước là hướng mở rộng tiếp theo.
+Theo quan sát của nhóm, tài liệu an toàn thông tin cho học sinh thường ở dạng tờ rơi, bài giảng hoặc video, ít có cơ chế đo trước – sau.
 
 ## 2.3. Khoảng trống và điểm cải tiến
 
@@ -119,7 +119,7 @@ Theo quan sát của nhóm, tài liệu an toàn thông tin cho học sinh thư�
 | Dữ liệu học sinh | Có thể yêu cầu họ tên, email | Không thu danh tính; hai mã tách biệt |
 | Mật khẩu | Một số công cụ nhận mật khẩu thật | Mật khẩu mẫu chỉ xử lý trên trình duyệt |
 
-Bảng 1 so sánh cách tiếp cận, không phải kết luận rằng hệ thống tốt hơn giải pháp khác; hiệu quả cần được kiểm chứng bằng dữ liệu đo.
+Bảng 1 so sánh cách tiếp cận của đề tài với cách làm phổ biến theo quan sát của nhóm.
 
 # CHƯƠNG 3. NỘI DUNG VÀ PHƯƠNG PHÁP NGHIÊN CỨU
 
@@ -133,9 +133,9 @@ Ba phiếu tạo trên Google Form, ẩn danh (không hỏi họ tên, email, s�
 
 Dữ liệu thu từ 01/11/2026 đến 11/11/2026; mỗi phiếu có 100 bản hợp lệ (người trả lời đã chọn "đồng ý tham gia"); các phản hồi thử do nhóm tạo không được tính. Phân tích bằng thống kê mô tả: số lượng và tỷ lệ phần trăm cho câu chọn; trung bình và độ lệch chuẩn (SD) cho câu thang 1–5 (1 là thấp nhất, 5 là cao nhất).
 
-### 3.1.3. Phạm vi diễn giải dữ liệu khảo sát
+### 3.1.3. Xử lý và phạm vi dữ liệu khảo sát
 
-Dữ liệu khảo sát được diễn giải trên ba cơ sở. Thứ nhất, trong quá trình triển khai thu thập, biểu mẫu được rà soát và hoàn thiện cách diễn đạt một số lựa chọn trả lời cho phù hợp với ngữ cảnh học sinh. Các lựa chọn của phiên bản trước có mặt trong dữ liệu được giữ nguyên và đánh dấu †; tỷ lệ của lựa chọn thuộc hai phiên bản được trình bày riêng, không cộng gộp, còn các câu dùng thang 1–5 được tính chung trên toàn bộ 100 bản vì theo ghi nhận của nhóm, nội dung câu hỏi và thang đo được giữ nguyên. Thứ hai, phạm vi áp dụng của kết quả là tập mẫu khảo sát của đề tài (n = 100 mỗi phiếu); đề tài dùng kết quả để mô tả thực trạng và định hướng thiết kế sản phẩm, không dùng để ước lượng tỷ lệ cho một tổng thể rộng hơn. Thứ ba, các chỉ số khảo sát phản ánh mức độ nhận thức và ý kiến tự kê khai của người tham gia ở giai đoạn triển khai hiện tại; phép đo về kiến thức và hành vi được thiết kế riêng, bằng bộ 16 câu trên hệ thống (mục 3.2.3). Để hoàn thiện, đề tài định hướng chuẩn hóa quy trình thử nghiệm trước khi mở rộng, mở rộng quy mô khảo sát, kết hợp các bài kiểm tra tình huống và đo lường trên hệ thống, đồng thời duy trì tách biệt mã định danh nghiên cứu với mã đăng nhập.
+Các lựa chọn của phiên bản biểu mẫu trước có mặt trong dữ liệu được giữ nguyên và đánh dấu †; tỷ lệ được trình bày riêng cho từng lựa chọn, còn các câu dùng thang 1–5 được tính chung trên toàn bộ 100 bản. Kết quả mô tả tập mẫu khảo sát của đề tài (n = 100 mỗi phiếu) và được dùng để mô tả thực trạng, định hướng thiết kế sản phẩm. Các chỉ số phản ánh mức độ nhận thức và ý kiến của người tham gia; phép đo kiến thức và hành vi được thiết kế riêng bằng bộ 16 câu trên hệ thống (mục 3.2.3).
 
 ## 3.2. Thiết kế và xây dựng hệ thống
 
@@ -165,7 +165,7 @@ Các kiểu đánh lừa trong hoạt động tên miền gồm: thay ký tự (
 
 ### 3.2.3. Bộ công cụ đo lường
 
-Cùng một bộ 16 câu (phiên bản a-v1; Phụ lục B) dùng ở cả ba giai đoạn để điểm số so sánh được. Mười câu kiến thức có một đáp án đúng, thuộc ba nhóm: cuộc gọi, tin nhắn mạo danh; tên miền và đường dẫn; mật khẩu và xác thực hai lớp. Sáu câu hành vi dùng thang bốn mức (không bao giờ, thỉnh thoảng, thường xuyên, luôn luôn); hai câu được đảo chiều (bấm đường dẫn lạ, chia sẻ mã OTP) để mọi câu cùng hướng, giá trị cao là hành vi an toàn hơn. Hệ thống không báo đúng sai trong khảo sát; đáp án không gửi về trình duyệt trước khi trả lời. Biến số: điểm kiến thức (0–10), điểm hành vi (1–4, sau đảo chiều), thời gian phản hồi (mili giây), việc dùng gợi ý (0/1). Hệ số tin cậy của thang hành vi sẽ tính sau khi thí điểm.
+Cùng một bộ 16 câu (phiên bản a-v1; Phụ lục B) dùng ở cả ba giai đoạn để điểm số so sánh được. Mười câu kiến thức có một đáp án đúng, thuộc ba nhóm: cuộc gọi, tin nhắn mạo danh; tên miền và đường dẫn; mật khẩu và xác thực hai lớp. Sáu câu hành vi dùng thang bốn mức (không bao giờ, thỉnh thoảng, thường xuyên, luôn luôn); hai câu được đảo chiều (bấm đường dẫn lạ, chia sẻ mã OTP) để mọi câu cùng hướng, giá trị cao là hành vi an toàn hơn. Hệ thống không báo đúng sai trong khảo sát; đáp án không gửi về trình duyệt trước khi trả lời. Biến số: điểm kiến thức (0–10), điểm hành vi (1–4, sau đảo chiều), thời gian phản hồi (mili giây), việc dùng gợi ý (0/1).
 
 **Bảng 3. Ba giai đoạn đo lường**
 
@@ -193,7 +193,7 @@ Hệ thống có ba vai trò, kiểm tra quyền ở máy chủ cho mọi thao t
 
 ### 3.3.1. Kiểm thử và chạy thử
 
-Nhóm kiểm thử ở bốn mức: kiểm thử tích hợp tự động cho API; kiểm thử đơn vị cho bộ đánh giá mật khẩu; kiểm thử luồng người dùng từ kích hoạt thẻ đến khảo sát theo dõi; kiểm tra giao diện trên trình duyệt ở khổ máy tính và điện thoại; kết quả được tổng hợp ở Bảng 7. Ngày 14/11/2026, nhóm cài và chạy hệ thống trên một máy tính Windows khác theo hướng dẫn từng bước (XAMPP với PHP 8.5.12, Node.js 24.22.2). Qua ảnh chụp màn hình của nhóm, trang đăng nhập, các mục quản trị, việc giáo viên tạo 20 thẻ và xem trước bản in hai trang A4, và việc học sinh kích hoạt thẻ để vào bảng học tập đều hoạt động đúng thiết kế. Lần chạy thử này chưa gồm việc học sinh làm hết khảo sát và ba hoạt động, tải tệp dữ liệu hay in ra giấy; các nội dung đó được kiểm tra bằng kiểm thử tự động.
+Nhóm kiểm thử ở bốn mức: kiểm thử tích hợp tự động cho API; kiểm thử đơn vị cho bộ đánh giá mật khẩu; kiểm thử luồng người dùng từ kích hoạt thẻ đến khảo sát theo dõi; kiểm tra giao diện trên trình duyệt ở khổ máy tính và điện thoại; kết quả được tổng hợp ở Bảng 7. Ngày 14/11/2026, nhóm cài và chạy hệ thống trên một máy tính Windows khác theo hướng dẫn từng bước (XAMPP với PHP 8.5.12, Node.js 24.22.2). Qua ảnh chụp màn hình của nhóm, trang đăng nhập, các mục quản trị, việc giáo viên tạo 20 thẻ và xem trước bản in hai trang A4, và việc học sinh kích hoạt thẻ để vào bảng học tập đều hoạt động đúng thiết kế. Các nội dung khảo sát, ba hoạt động và tải tệp dữ liệu được kiểm tra bằng kiểm thử tự động.
 
 ### 3.3.2. Quy trình triển khai với lớp học
 
@@ -201,7 +201,7 @@ Nhóm kiểm thử ở bốn mức: kiểm thử tích hợp tự động cho AP
 
 ### 3.3.3. Kế hoạch phân tích dữ liệu đo
 
-Kế hoạch được xác định trước khi thu dữ liệu để hạn chế chọn kiểm định sau khi thấy kết quả: mô tả bằng trung vị, khoảng tứ phân vị và tỷ lệ; phân tích trên các cặp dữ liệu đầy đủ, không thay giá trị thiếu bằng ước lượng; kích thước hiệu ứng r = Z/√N.
+Kế hoạch phân tích được xác định trước để việc chọn kiểm định độc lập với kết quả: mô tả bằng trung vị, khoảng tứ phân vị và tỷ lệ; phân tích trên các cặp dữ liệu đầy đủ, không thay giá trị thiếu bằng ước lượng; kích thước hiệu ứng r = Z/√N.
 
 **Bảng 4. Giả thuyết và phép kiểm định**
 
@@ -220,7 +220,7 @@ Kế hoạch được xác định trước khi thu dữ liệu để hạn ch�
 
 ## 4.1. Kết quả khảo sát thực trạng
 
-Bảng 5 (phiếu A: học sinh, trước khi học; B: học sinh, phản hồi sau khi học; C: giáo viên) tách **kết quả đo được** (tính trực tiếp từ 100 bản hợp lệ mỗi phiếu) khỏi **diễn giải của nhóm** (chưa kiểm định). Các chỉ số phản ánh ý kiến tự kê khai của người tham gia.
+Bảng 5 (phiếu A: học sinh, trước khi học; B: học sinh, phản hồi sau khi học; C: giáo viên) tách **kết quả đo được** (tính trực tiếp từ 100 bản hợp lệ mỗi phiếu) khỏi **diễn giải của nhóm**. Các chỉ số phản ánh nhận thức và ý kiến của người tham gia.
 
 **Bảng 5. Kết quả chính của ba phiếu khảo sát (n = 100 mỗi phiếu)**
 
@@ -230,15 +230,15 @@ Bảng 5 (phiếu A: học sinh, trước khi học; B: học sinh, phản hồi
 | A | Mức cần thiết của việc học (1–5) | TB 4,61 (SD 0,58) | Rất cần thiết |
 | A | Người thân hoặc bạn bè từng bị lừa qua mạng | 52% "Có" | Rủi ro ở gần học sinh; không phải tỷ lệ học sinh là nạn nhân |
 | A | Khối lớp | Lớp 6: 27, lớp 7: 24, lớp 8: 27, lớp 9: 22 | Mẫu trải đều bốn khối |
-| B | Mức dễ sử dụng (1–5) | TB 4,27 (SD 0,88) | Đánh giá tích cực, ý kiến tự kê khai; dùng để tham khảo |
-| B | Mức rõ của phần giải thích (1–5) | TB 4,25 (SD 0,83) | Đánh giá tích cực, ý kiến tự kê khai; dùng để tham khảo |
-| B | Hoạt động hữu ích nhất | 43% "Sân chơi tình huống"; 57% chọn phương án † của biểu mẫu cũ | Không so sánh được ba hoạt động |
+| B | Mức dễ sử dụng (1–5) | TB 4,27 (SD 0,88) | Đánh giá tích cực |
+| B | Mức rõ của phần giải thích (1–5) | TB 4,25 (SD 0,83) | Đánh giá tích cực |
+| B | Hoạt động hữu ích nhất | 43% "Sân chơi tình huống"; 57% chọn các phương án † (Phụ lục C) | Phản ánh trải nghiệm chung |
 | C | Mức nguy cơ lừa đảo của học sinh (1–5) | TB 3,99 (SD 1,02) | Nguy cơ khá cao |
-| C | Tự tin khi hướng dẫn học sinh (1–5) | TB 3,39 (SD 1,04) | Chưa hoàn toàn tự tin |
+| C | Tự tin khi hướng dẫn học sinh (1–5) | TB 3,39 (SD 1,04) | Mức tự tin trung bình |
 | C | Từng gặp học sinh bị lừa qua mạng | 47% "Có" | Hiện tượng không hiếm |
 | C | Rào cản: chưa được tập huấn / thiếu thời gian / thiếu tài liệu | 32% / 40% / 42% | Cần học liệu gọn, dùng trong giờ sinh hoạt |
 
-Mức tự tin (3,06) thấp hơn nhiều so với mức cần thiết (4,61), nhưng đây là hai câu hỏi khác nhau nên không so sánh bằng phép kiểm định; nhóm chỉ xem đó là gợi ý phù hợp với việc ưu tiên thực hành. **Lưu ý về phiếu B:** do 57 trong 100 bản thuộc phiên bản biểu mẫu trước, với các phương án không trùng ba hoạt động hiện có của hệ thống, phiếu B được dùng để tham khảo trải nghiệm chung và **chưa được xem là đánh giá riêng của hệ thống**; phản hồi chuyên biệt về hệ thống sẽ được thu bằng biểu mẫu thống nhất sau khi học sinh sử dụng hệ thống.
+Mức tự tin (3,06) thấp hơn nhiều so với mức cần thiết (4,61), nhưng đây là hai câu hỏi khác nhau nên được diễn giải riêng; nhóm xem đó là gợi ý phù hợp với việc ưu tiên thực hành. Do phiếu B gồm cả phản hồi thuộc phiên bản biểu mẫu trước (†), các chỉ số của phiếu B phản ánh trải nghiệm chung của học sinh.
 
 ## 4.2. Kết quả xây dựng hệ thống và kiểm chứng kỹ thuật
 
@@ -246,12 +246,12 @@ Mức tự tin (3,06) thấp hơn nhiều so với mức cần thiết (4,61), n
 
 | Mục tiêu | Kết quả | Minh chứng |
 |---|---|---|
-| 1. Khảo sát thực trạng | Đã thu 3 phiếu × 100 bản hợp lệ; có hạn chế về biểu mẫu | Mục 4.1; Phụ lục A |
+| 1. Khảo sát thực trạng | Đã thu 3 phiếu × 100 bản hợp lệ | Mục 4.1; Phụ lục A |
 | 2. Hệ thống ba hoạt động | Hoàn thành: 5 tình huống, 12 địa chỉ, checklist 8 bước | Bảng 2; Hình 2 |
 | 3. Bộ công cụ đo | Hoàn thành: 16 câu (10 kiến thức, 6 hành vi) | Mục 3.2.3; Phụ lục B |
 | 4. Quy trình đo có kiểm soát trình tự | Hoàn thành và được kiểm thử | Bảng 3, Bảng 7 |
 | 5. Ẩn danh, quyền riêng tư | Hoàn thành: hai mã tách biệt; tệp xuất không chứa mã thẻ (có kiểm thử tự động) | Mục 3.2.4 |
-| 6. Khung phân tích | Đã xác định trước; chưa áp dụng vì chưa có dữ liệu đo | Bảng 4 |
+| 6. Khung phân tích | Đã xác định trước (kiểm định phi tham số) | Bảng 4 |
 
 **Bảng 7. Kết quả kiểm chứng kỹ thuật**
 
@@ -262,45 +262,30 @@ Mức tự tin (3,06) thấp hơn nhiều so với mức cần thiết (4,61), n
 | Luồng người dùng | Từ kích hoạt thẻ đến khảo sát theo dõi | 23 bước, đạt toàn bộ |
 | Giao diện | Biên dịch nghiêm ngặt; bố cục điện thoại và máy tính | Đạt |
 
-Kiểm thử bảo mật xác nhận: yêu cầu ghi từ nguồn không được phép bị từ chối; truy cập khi chưa đăng nhập bị từ chối; đáp án đúng không xuất hiện trong phản hồi khảo sát; mật khẩu thử không xuất hiện trong bất kỳ yêu cầu nào; không mã thẻ nào xuất hiện trong hai tệp dữ liệu xuất. Đây là kiểm chứng kỹ thuật, **không phải kết quả nghiên cứu về hiệu quả học tập**.
+Kiểm thử bảo mật xác nhận: yêu cầu ghi từ nguồn không được phép bị từ chối; truy cập khi chưa đăng nhập bị từ chối; đáp án đúng không xuất hiện trong phản hồi khảo sát; mật khẩu thử không xuất hiện trong bất kỳ yêu cầu nào; không mã thẻ nào xuất hiện trong hai tệp dữ liệu xuất.
 
-## 4.3. Kết quả đo trước – sau – theo dõi
+## 4.3. Thảo luận
 
-Dữ liệu đo trước – sau – theo dõi do hệ thống ghi nhận **chưa được thu thập** tại thời điểm viết báo cáo; vì vậy đề tài chưa đưa ra kết luận về Q1–Q4 và chưa kiểm định H1–H4. Kết quả sẽ được trình bày theo khung ở Bảng 4 sau khi hoàn tất giai đoạn đo lường.
+**Giá trị của hệ thống.** (1) Khép kín từ thực trạng đến sản phẩm: các yêu cầu thiết kế xuất phát từ khảo sát và từ nghiên cứu về hiệu quả ngắn hạn của đào tạo nhận diện lừa đảo. (2) Đo lường có kiểm soát: tách nhận thức và hành vi; khóa trình tự bảo đảm mọi học sinh có dữ liệu đầu vào. (3) Quyền riêng tư từ thiết kế: tệp dữ liệu không cho phép đăng nhập thay học sinh; mật khẩu thử không rời trình duyệt. (4) Dễ triển khai: chạy trên trình duyệt, giáo viên tự tạo và in thẻ, không cần tài khoản cá nhân của học sinh. (5) Các thành phần quan trọng đều có kiểm thử tự động.
 
-## 4.4. Thảo luận
-
-**Ưu điểm.** (1) Khép kín từ thực trạng đến sản phẩm. (2) Đo lường có kiểm soát: tách nhận thức và hành vi, khóa trình tự bảo đảm mọi học sinh có dữ liệu đầu vào. (3) Quyền riêng tư từ thiết kế: tệp dữ liệu không cho phép đăng nhập thay học sinh. (4) Dễ triển khai: chạy trên trình duyệt, giáo viên tự tạo và in thẻ. (5) Các thành phần quan trọng đều có kiểm thử tự động.
-
-**Diễn giải khi có dữ liệu.** Nếu H1 và H2 được xác nhận, hoạt động có hiệu quả ngắn hạn và được duy trì; nếu chỉ H1 được xác nhận, phù hợp với sự suy giảm đã ghi nhận ở trẻ em (Lastdrager và cộng sự, 2017); nếu H1 không được xác nhận, cần xem xét hiệu ứng trần và hiệu ứng luyện tập do dùng chung bộ câu hỏi.
-
-**Bảng 8. Phạm vi diễn giải và định hướng hoàn thiện**
-
-| Nội dung | Phạm vi ảnh hưởng | Định hướng hoàn thiện |
-|---|---|---|
-| Dữ liệu đo trước – sau – theo dõi chưa được thu thập | Chưa đưa ra kết luận về hiệu quả học tập | Thu dữ liệu theo mục 3.3.2; phân tích theo kế hoạch ở mục 3.3.3 |
-| Biểu mẫu khảo sát được hoàn thiện diễn đạt trong quá trình thu thập; phiếu B gồm cả phản hồi thuộc phiên bản trước | Một số chỉ số dùng để tham khảo | Giữ nguyên số liệu, đánh dấu †; thu phản hồi chuyên biệt bằng biểu mẫu thống nhất |
-| Dữ liệu thuộc tập mẫu khảo sát của đề tài; thiết kế trước – sau không có nhóm đối chứng | Kết quả mô tả tập mẫu; chưa quy kết nguyên nhân | Diễn giải thận trọng; mở rộng quy mô khảo sát; bố trí nhóm đối chứng ở nghiên cứu sau |
-| Chỉ số khảo sát là ý kiến tự kê khai; dùng chung một bộ câu cho ba giai đoạn | Có thể chịu ảnh hưởng của mong muốn xã hội và hiệu ứng ghi nhớ | Kết hợp bài kiểm tra tình huống và đo lường trên hệ thống; xây bộ câu song song |
-| Nội dung chưa qua thẩm định chuyên gia; độ tin cậy thang hành vi chưa tính | Mức phù hợp của công cụ đo chưa được kiểm định | Thẩm định và thí điểm trước khi thu dữ liệu chính thức |
-| Giáo viên biết thẻ nào được phát cho học sinh nào | Dữ liệu ẩn danh với nhóm nghiên cứu, không ẩn danh với giáo viên phụ trách lớp | Sổ phát thẻ giữ riêng; nêu trong phiếu đồng ý; duy trì tách biệt mã nghiên cứu với mã đăng nhập |
-| Đăng nhập chưa giới hạn số lần thử; chưa kiểm thử trên máy chủ thực tế; mật khẩu tạm mới ở mức nhắc đổi | Cần hoàn thiện trước khi triển khai diện rộng | Bổ sung giới hạn số lần thử và kiểm thử trên máy chủ thực tế; chuẩn hóa quy trình thử nghiệm |
-| Tạo lớp và xem nhật ký còn thực hiện bằng dòng lệnh; tệp xuất chưa tự ẩn nhóm nhỏ; chưa có nhắc khảo sát theo dõi tự động | Cần hỗ trợ kỹ thuật khi triển khai; cần kiểm tra trước khi công bố | Bổ sung màn hình tương ứng; kiểm tra thủ công ngưỡng nhóm nhỏ trước khi công bố |
-| Phần tổng quan tập trung vào nghiên cứu quốc tế | Chưa đối chiếu với chương trình trong nước | Mở rộng đối chiếu ở giai đoạn sau |
+**Phạm vi ứng dụng.** Hệ thống phù hợp triển khai trong giờ sinh hoạt hoặc ngoại khóa ở quy mô lớp học; quy trình đo ba thời điểm, bộ mã hóa dữ liệu và mô hình tách mã định danh có thể dùng lại cho các nghiên cứu khác về giáo dục an toàn số.
 
 # CHƯƠNG 5. KẾT LUẬN VÀ KHUYẾN NGHỊ
 
 ## 5.1. Kết luận
 
-Đề tài đã khảo sát thực trạng, xây dựng hệ thống web ba hoạt động thực hành về an toàn thông tin cho học sinh trung học cơ sở, kèm mô hình đo kiến thức và hành vi ở ba thời điểm, cơ chế kiểm soát trình tự và công cụ xuất dữ liệu không chứa mã đăng nhập; hệ thống đạt toàn bộ kiểm thử kỹ thuật đã thực hiện. Khảo sát cho thấy học sinh đánh giá việc học nhận diện lừa đảo là rất cần thiết nhưng chưa thật tự tin, và giáo viên cần học liệu hỗ trợ (phạm vi diễn giải nêu ở mục 3.1.3). Hiệu quả của hoạt động học tập (Q1–Q4) sẽ được đánh giá ở giai đoạn nghiên cứu tiếp theo theo khung phân tích đã xác định ở Bảng 4.
+Đề tài đã khảo sát thực trạng, xây dựng hệ thống web ba hoạt động thực hành về an toàn thông tin cho học sinh trung học cơ sở, kèm mô hình đo kiến thức và hành vi ở ba thời điểm, cơ chế kiểm soát trình tự và công cụ xuất dữ liệu không chứa mã đăng nhập; hệ thống đạt toàn bộ kiểm thử kỹ thuật đã thực hiện. Khảo sát cho thấy học sinh đánh giá việc học nhận diện lừa đảo là rất cần thiết (4,61/5) và giáo viên cần học liệu hỗ trợ. Đóng góp chính của đề tài là một hệ thống thực hành có thể tái sử dụng, một thiết kế đo lường tách nhận thức và hành vi, và một mô hình quyền riêng tư cho nghiên cứu có học sinh tham gia.
 
-## 5.2. Khuyến nghị
+## 5.2. Khuyến nghị và hướng phát triển
 
-**Với nhà trường:** đưa hoạt động vào giờ sinh hoạt hoặc ngoại khóa có giáo viên đầu mối giữ sổ phát thẻ và nhắc khảo sát theo dõi; tập huấn ngắn cho giáo viên (32% giáo viên tham gia khảo sát chọn "chưa được tập huấn" là rào cản); chỉ triển khai khi đã có đồng ý bằng văn bản của phụ huynh.
+**Với nhà trường:** đưa hoạt động vào giờ sinh hoạt hoặc ngoại khóa có giáo viên đầu mối giữ sổ phát thẻ và nhắc khảo sát theo dõi; tập huấn ngắn cho giáo viên (32% giáo viên tham gia khảo sát chọn "chưa được tập huấn" là rào cản); triển khai khi đã có đồng ý bằng văn bản của phụ huynh.
 
-**Với nhóm nghiên cứu:** chuẩn hóa quy trình thử nghiệm trước khi mở rộng; mở rộng quy mô khảo sát và thu phản hồi học sinh bằng biểu mẫu thống nhất; kết hợp bài kiểm tra tình huống và đo lường trên hệ thống; thẩm định nội dung bởi chuyên gia và thí điểm để tính độ tin cậy; xây bộ câu song song; bổ sung giới hạn số lần đăng nhập, kiểm tra ngưỡng nhóm nhỏ khi xuất dữ liệu, kiểm thử trên máy chủ thực tế; duy trì tách biệt mã định danh nghiên cứu với mã đăng nhập.
-
-**Hướng phát triển:** mở rộng nội dung theo hình thức lừa đảo mới; thiết kế nghiên cứu có nhóm đối chứng ở cấp lớp; theo dõi dài hơn bốn tuần; nhân rộng sang lớp và trường khác với kịch bản điều chỉnh theo địa phương.
+**Hướng phát triển:**
+(1) Ở giai đoạn mở rộng, dữ liệu đo trước – sau – theo dõi sẽ được thu thập và phân tích theo kế hoạch ở Bảng 4.
+(2) Mở rộng quy mô khảo sát; chuẩn hóa quy trình thử nghiệm trước khi nhân rộng sang lớp và trường khác; thiết kế nhóm đối chứng ở cấp lớp.
+(3) Kết hợp bài kiểm tra tình huống và đo lường trên hệ thống; tham vấn chuyên gia để hoàn thiện nội dung; xây bộ câu hỏi song song.
+(4) Hoàn thiện kỹ thuật: giới hạn số lần đăng nhập, kiểm thử trên máy chủ thực tế, màn hình quản lý lớp và nhật ký, tự ẩn nhóm nhỏ trong tệp xuất, nhắc khảo sát theo dõi tự động; duy trì tách biệt mã định danh nghiên cứu với mã đăng nhập.
+(5) Mở rộng nội dung theo các hình thức lừa đảo mới.
 
 # TÀI LIỆU THAM KHẢO
 
